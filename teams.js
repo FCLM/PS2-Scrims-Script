@@ -15,7 +15,7 @@ function team(teamTag) {
         var teamPlayers = [];
         body.outfit_list[0].members.forEach(function(result) {
             teamPlayers.push({
-                id: result.character_id,
+                character_id: result.character_id,
                 name: result.name.first
             });
         });
