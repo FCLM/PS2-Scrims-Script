@@ -1,0 +1,12 @@
+# idea
+.idea
+
+# npm
+node_modules
+*.log
+
+# databases
+*.sqlite3
+
+#config
+/api_key.js
