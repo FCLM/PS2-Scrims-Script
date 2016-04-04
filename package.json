@@ -20,7 +20,7 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/fclm/PS2Farmers"
+    "url": "https://github.com/FCLM/PS2-Scrims-Script"
   },
   "keywords": [
     "Planetside",
@@ -29,7 +29,7 @@
   "author": "DylanNZ, M0N0NZ, Dalordish, FCLM",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/fclm/PS2Farmers/issues"
+    "url": "https://github.com/FCLM/PS2-Scrims-Scriptissues"
   },
-  "homepage": "https://github.com/fclm/PS2Farmers#readme"
+  "homepage": "https://github.com/FCLM/PS2-Scrims-Script#readme"
 }
