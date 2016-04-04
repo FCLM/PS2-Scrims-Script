@@ -45,8 +45,8 @@ function startup() {
       // start websocket now ?
 
       // test an item
-      // var item_test = items.lookupItem(7214);
-      // console.log(item_test._id + ' - ' + item_test.name);
+      var item_test = items.lookupItem(131254);
+      console.log(item_test._id + ' - ' + item_test.name);
     } else {
       console.error('Items did not initialise!!');
     }

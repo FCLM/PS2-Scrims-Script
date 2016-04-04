@@ -39,7 +39,10 @@ function initialise() {
 }
 
 function lookupItem(item_id) {
-  return items['item_' + item_id];
+  if (items.hasOwnProperty('item_' + item_id)) {
+    return items['item_' + item_id];
+  }
+  return JSON.parse(mItemTemplate);
 }
 
 exports.initialise = initialise;
