@@ -1,8 +1,9 @@
 /**
  * Created by Dylan on 03-Apr-16.
  */
-var api_key = require('./api_key.KEY');
-var teams = require('./teams.js');
+var api_key = require('./api_key.js'),
+    teams   = require('./teams.js'),
+    items   = require('./items.js');
 
 var WebSocket = require('ws');
 var teamOneScore = 0, teamTwoScore = 0;
@@ -21,16 +22,16 @@ function dealWithTheData(data) {
 
 function itsPlayerData(data) {
     //deals with adding points to the correct player & team
-    if (data.payload.attacker_weapon_id == ) {
+    if (data.payload.attacker_weapon_id == '?') { // todo here
         //deal with rocket kills
         rocketKill(data);
-    } else if() {
+    } else if(false) { // todo here
         //if killer loadout is a max :(
         maxKiller(data);
-    } else if() {
+    } else if(false) { // todo here
         //if player killed someone in a max
         maxKilled(data);
-    } else if (data.payload.attacker_weapon_id == ) {
+    } else if (data.payload.attacker_weapon_id == '?') { // todo here
         //deal with +1 kills
         plusOneKill(data);
     } else {
@@ -55,7 +56,7 @@ function itsFacilityData(data) {
 }
 
 function createStream(teamOne, teamTwo, facilityID) {
-    var ws = new WebSocket('wss://push.planetside2.com/streaming?environment=ps2&service-id=s:' + api_key);
+    var ws = new WebSocket('wss://push.planetside2.com/streaming?environment=ps2&service-id=s:' + api_key.KEY);
 
     ws.on('open', function open() {
         //team1 subscribing
@@ -91,3 +92,20 @@ function createStream(teamOne, teamTwo, facilityID) {
     });
 
 }
+
+function startup() {
+  items.initialise().then(function(result) {
+    if (result) {
+      console.log('Items are initialised');
+      // start websocket now ?
+
+      // test an item
+      var item_test = items.lookupItem(7214);
+      console.log(item_test._id + ' - ' + item_test.name);
+    } else {
+      console.error('Items did not initialise!!');
+    }
+  });
+}
+
+startup();

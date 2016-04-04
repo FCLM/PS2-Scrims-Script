@@ -1,8 +1,7 @@
 /**
  * Created by Dylan on 03-Apr-16.
  */
-var api_key = require('./api_key.KEY');
-var request = require('request');
+var api_key = require('./api_key.js');
 var prequest = require('prequest');
 var Q = require('q');
 
@@ -11,7 +10,7 @@ var Q = require('q');
 function team(teamTag) {
     var response = Q.defer();
     teamTag = teamTag.toLowerCase();
-    prequest('https://census.daybreakgames.com/s:' + api_key + '/get/ps2/outfit/?alias_lower='+ teamTag + '&c:resolve=member_character(name)').then(function (body) {
+    prequest('https://census.daybreakgames.com/s:' + api_key.KEY + '/get/ps2/outfit/?alias_lower='+ teamTag + '&c:resolve=member_character(name)').then(function (body) {
         var teamPlayers = [];
         body.outfit_list[0].members.forEach(function(result) {
             teamPlayers.push({
