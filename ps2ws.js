@@ -1,12 +1,13 @@
 /**
  * Created by Dylan on 03-Apr-16.
  */
-var api_key = require('./api_key.js');
-var teams = require('./teams.js');
+var api_key = require('./api_key.js'),
+    teams   = require('./teams.js'),
+    items   = require('./items.js');
 
 var WebSocket = require('ws');
 function createStream(teamOne, teamTwo, facilityID) {
-    var ws = new WebSocket('wss://push.planetside2.com/streaming?environment=ps2&service-id=s:' + api_key);
+    var ws = new WebSocket('wss://push.planetside2.com/streaming?environment=ps2&service-id=s:' + api_key.KEY);
 
     ws.on('open', function open() {
         //team1 subscribing
@@ -36,3 +37,20 @@ function createStream(teamOne, teamTwo, facilityID) {
     });
 
 }
+
+function startup() {
+  items.initialise().then(function(result) {
+    if (result) {
+      console.log('Items are initialised');
+      // start websocket now ?
+
+      // test an item
+      // var item_test = items.lookupItem(7214);
+      // console.log(item_test._id + ' - ' + item_test.name);
+    } else {
+      console.error('Items did not initialise!!');
+    }
+  });
+}
+
+startup();
