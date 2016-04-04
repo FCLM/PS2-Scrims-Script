@@ -1,7 +1,7 @@
 /**
  * Created by Dylan on 03-Apr-16.
  */
-var api_key = require('./api_key.js');
+var api_key = require('./api_key.KEY');
 var request = require('request');
 var prequest = require('prequest');
 var Q = require('q');

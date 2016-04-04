@@ -1,7 +1,7 @@
 /**
  * Created by Dylan on 03-Apr-16.
  */
-var api_key = require('./api_key.js');
+var api_key = require('./api_key.KEY');
 var teams = require('./teams.js');
 
 var WebSocket = require('ws');
