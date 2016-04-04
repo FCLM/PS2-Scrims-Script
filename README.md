@@ -6,5 +6,5 @@ Install with
 $ npm install
 ```
 
-Created by FCLM - Dylannz, mononz, dalordish
+Created by FCLM - DylanNZ, Mononz, Dalordish
 

@@ -7,8 +7,6 @@ var api_key = require('./api_key.js'),
 
 var WebSocket = require('ws');
 var teamOneScore = 0, teamTwoScore = 0;
-var rockets = [];
-var max = [];
 
 
 function dealWithTheData(data) {
@@ -22,23 +20,7 @@ function dealWithTheData(data) {
 
 function itsPlayerData(data) {
     //deals with adding points to the correct player & team
-    if (data.payload.attacker_weapon_id == '?') { // todo here
-        //deal with rocket kills
-        rocketKill(data);
-    } else if(false) { // todo here
-        //if killer loadout is a max :(
-        maxKiller(data);
-    } else if(false) { // todo here
-        //if player killed someone in a max
-        maxKilled(data);
-    } else if (data.payload.attacker_weapon_id == '?') { // todo here
-        //deal with +1 kills
-        plusOneKill(data);
-    } else {
-        //must be a standard +2
-        plusTwoKill(data);
-    }
-    //store data
+
 
 }
 
