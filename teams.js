@@ -7,7 +7,7 @@ var Q = require('q');
 
 //https://census.daybreakgames.com/get/ps2/outfit/?alias=FCLM&c:resolve=member_character(name)&c:hide=time_created
 
-function team(teamTag) {
+function fetchTeamData(teamTag) {
     var response = Q.defer();
     teamTag = teamTag.toLowerCase();
     prequest('https://census.daybreakgames.com/s:' + api_key.KEY + '/get/ps2/outfit/?alias_lower='+ teamTag + '&c:resolve=member_character(name)').then(function (body) {
@@ -30,7 +30,7 @@ function team(teamTag) {
     });
     return response.promise;
 }
-function fetchTeamData(teamOneTag, teamTwoTag) {
+/*function fetchTeamData(teamOneTag, teamTwoTag) {
     var response = Q.defer();
     var teamOneObject, teamTwoObject;
     var promises = []
@@ -41,8 +41,8 @@ function fetchTeamData(teamOneTag, teamTwoTag) {
         teamOneObject = results[0].value;
         teamTwoObject = results[1].value;
         console.log(teamOneObject.name + '\t\t' + teamOneObject.outfit_id + '\n' + teamTwoObject.name + '\t\t' + teamTwoObject.outfit_id);
-       return response.promise;
+        return response.promise;
     });
-}
+}*/
 
 exports.fetchTeamData = fetchTeamData;

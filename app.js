@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var ps2ws = require('./ps2ws.js');
 var teams = require('./teams.js');
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -58,8 +59,27 @@ app.use(function(err, req, res, next) {
 });
 
 
-function checkTeams(one, two) {
-  teams.fetchTeamData(one, two);
-}
+function start(one, two, f) {
+  //match variables
+  var teamOneTag = one,
+      teamTwoTag = two,
+      facility = f;
+
+  var response = Q.defer();
+  var teamOneObject, teamTwoObject;
+  var promises = []
+  promises.push(teams.fetchTeamData(teamOneTag));
+  promises.push(teams.fetchTeamData(teamTwoTag));
+
+  Q.allSettled(promises).then(function (results) {
+    teamOneObject = results[0].value;
+    teamTwoObject = results[1].value;
+    console.log(teamOneObject.name + '\t\t' + teamOneObject.outfit_id + '\n' + teamTwoObject.name + '\t\t' + teamTwoObject.outfit_id);
+    ps2ws.startUp(teamOneObject, teamTwoObject, facility);
+    return response.promise;
+  });
+  }
 
 module.exports = app;
+
+start('Fclm', 'Rsnc', '202');
