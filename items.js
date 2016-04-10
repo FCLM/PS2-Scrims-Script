@@ -17,7 +17,7 @@ var category_map = {
   '8':   { 'category' : 'Carbine',                    points : 2 },
   '9':   { 'category' : 'AV MAX (Left)',              points : 1 },
   '10':  { 'category' : 'AI MAX (Left)',              points : 1 },
-  '11':  { 'category' : 'Sniper Rifle',               points : 1 },
+  '11':  { 'category' : 'Sniper Rifle',               points : 2 },
   '12':  { 'category' : 'Scout Rifle',                points : 2 },
   '13':  { 'category' : 'Rocket Launcher',            points : 1 },
   '14':  { 'category' : 'Heavy Gun',                  points : 1 },
@@ -81,6 +81,7 @@ var mItemTemplate = JSON.stringify({
   desc:  '',
   image: 0
 });
+
 function initialise() {
   var response = Q.defer();
   var url = 'https://census.daybreakgames.com/s:' + api_key.KEY + '/get/ps2/item?item_type_id=26&c:limit=5000&c:hide=,skill_set_id,is_vehicle_weapon,item_type_id,faction_id,max_stack_size,image_set_id,image_path,is_default_attachment&c:lang=en';

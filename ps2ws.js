@@ -9,20 +9,48 @@ var api_key = require('./api_key.js'),
 var config = require('./config');
 
 var teamOneScore = 0, teamTwoScore = 0;
-var teamOne, teamTwo, facilityID;
+var teamOne, teamOneObject, teamTwoObject, teamTwo, facilityID;
 
 var time = Date.now();
+
+var memberTemplate = JSON.stringify({
+  name : '',
+  points : 0,
+  netScore : 0,
+  kills : 0,
+  deaths : 0
+});
+
+function teamObject(team) {
+  // Create a new indexable team object
+  var outfit_obj = {
+    alias : team.alias,
+    outfit_id : team.outfit_id,
+    name : team.name,
+    faction : 0,
+    points : 0,
+    net : 0,
+    kills : 0,
+    deaths : 0,
+    members : {}
+  };
+  team.members.forEach(function(member) {
+    var obj = JSON.parse(memberTemplate);
+    obj.name = member.name;
+    if (!outfit_obj.hasOwnProperty(member.character_id)) {
+      outfit_obj[member.character_id] = obj;
+    }
+  });
+  return outfit_obj;
+}
 
 function dealWithTheData(raw) {
   raw = raw.replace(': :', ':');
   var data = JSON.parse(raw).payload;
   if (data.name == "Death") {
-    //itsPlayerData(data);
-    var item = items.lookupItem(data.attacker_weapon_id);
-    var points = items.lookupPointsfromCategory(item.category_id);
-    console.log(data.attacker_character_id + ' killed ' + data.character_id + ' for ' + points + ' points (' + item.name + ')');
+    itsPlayerData(data);
   } else {
-    //itsFacilityData(data);
+    itsFacilityData(data);
   }
 }
 
@@ -47,18 +75,20 @@ function findPoints(data) {
 
 function itsPlayerData(data) {
   //deals with adding points to the correct player & team
-  var points = findPoints(data);
+  var item = items.lookupItem(data.attacker_weapon_id);
+  var points = items.lookupPointsfromCategory(item.category_id);
+  console.log(data.attacker_character_id + ' killed ' + data.character_id + ' for ' + points + ' points (' + item.name + ')');
+
   teamOne.members.forEach(function (data) {
-    if (data.payload.attacker_character_id == teamOne.members.character_id) {
+    if (data.attacker_character_id == teamOne.members.character_id) {
 
     }
   });
   teamTwo.members.forEach(function (data) {
-    if (data.payload.attacker_character_id == teamTwo.members.character_id) {
-
+    if (data.attacker_character_id == teamTwo.members.character_id) {
+      //teamTwoScore += points; console.log(teamTwoScore);
     }
   });
-
 }
 
 function itsFacilityData(data) {
@@ -120,7 +150,9 @@ function startUp(tOne, tTwo, fID) {
       console.log('=======================================================');
       // start websocket now ?
       teamOne = tOne;
+      teamOneObject = teamObject(teamOne);
       teamTwo = tTwo;
+      teamTwoObject= teamObject(teamTwo);
       facilityID = fID;
       if (config.DEBUG) {
         debugWebSocket();
