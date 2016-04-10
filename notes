@@ -13,28 +13,4 @@ RECEIVED: {"payload":{"duration_held":"1211","event_name":"FacilityControl","fac
     "service":"event","type":"serviceMessage"}
 Base capture on Miller
 
-Heartbeats starts with "online" subscribed data starts with "payload", also type is "heartbeat" v "serviceMessage"
-
-data to store/pay attention to (for Kills/Deaths):
-    attacker_character_id
-    attacker_weapon_id
-    character_id
-    event_name
-
-Data to store/pay attention to (for Facility Captures):
-    facility_id
-    outfit_id (could just use this as we aren't paying attention to factions as of yet)
-    new_faction_id
-    old_faction_id
-    event_name
-
-
-to check after checking payload/online
-
-    event_name
-
-if "death"  ->
-
-else if "facilityControl"  ->
-
 

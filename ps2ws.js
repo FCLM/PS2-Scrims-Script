@@ -50,8 +50,8 @@ function dealWithTheData(raw) {
   var data = JSON.parse(raw).payload;
   if (data.name == "Death") {
     itsPlayerData(data);
-  } else {
-    itsFacilityData(data);
+//  } else {
+//    itsFacilityData(data);
   }
 }
 
@@ -107,7 +107,7 @@ function itsPlayerData(data) {
     teamOneObject.members[data.character_id].deaths++;
     console.log(teamTwoObject.members[data.attacker_character_id].name + ' --> ' + teamOneObject.members[data.character_id].name + ' for ' + points + ' points (' + item.name + ')');
   }
-  console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+  console.log(teamOneObject + ' ' + teamTwoObject);
 }
 
 function itsFacilityData(data) {
@@ -155,7 +155,7 @@ function createStream() {
     // flags.masked will be set if the data was masked.
     if (data.indexOf("payload") == 2) {
       if (data.indexOf('"event_name":"FacilityControl"') == -1 || data.indexOf('"facility_id":"' + config.config.base + '"') > -1) {
-        actUponData(data)
+        dealWithTheData(data);
       }
     }
     /*if (data.type == "serviceMessage") {
@@ -167,7 +167,7 @@ function createStream() {
 }
 
 function actUponData(data) {
-  console.log((Date.now() - time) + ' ' + data);
+  //console.log((Date.now() - time) + ' ' + data);
 }
 
 function startUp(tOne, tTwo, fID) {

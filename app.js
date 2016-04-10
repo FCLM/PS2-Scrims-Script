@@ -89,7 +89,7 @@ function start(one, two, f) {
     ps2ws.startUp(teamOneObject, teamTwoObject, facility);
     return response.promise;
   });
-  }
+}
 
 module.exports = app;
 
