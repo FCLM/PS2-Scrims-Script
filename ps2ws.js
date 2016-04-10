@@ -70,40 +70,60 @@ function createStream() {
     ws.on('open', function open() {
         //team1 subscribing
         //{"service":"event","action":"subscribe","characters":["5428010618035589553"],"eventNames":["Death"]}
-        teamOne.members.forEach(function () {
-            ws.send('{"service":"event","action":"subscribe","characters":["' + teamOne.members.character_id +'"],"eventNames":["Death"]}');
-            console.log('Sent: {"service":"event","action":"subscribe","characters":["' + teamOne.members.character_id +'"],"eventNames":["Death"]}')
+
+        teamOne.members.forEach(function (member) {
+        ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}');
+        console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}')
         });
 
         //team2 subscribing
 
-        teamTwo.members.forEach(function () {
-            ws.send('{"service":"event","action":"subscribe","characters":["' + teamOne.members.character_id + '"],"eventNames":["Death"]}');
-            console.log('Sent: {"service":"event","action":"subscribe","characters":["' + teamOne.members.character_id + '"],"eventNames":["Death"]}');
+
+        teamTwo.members.forEach(function (member) {
+        ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}');
+        console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}')
         });
 
         //facility Subscribing
-        ws.send('{"service":"event","action":"subscribe","worlds":["1","10","13","17","19","25"],"eventNames":["FacilityControl"]}');
-        console.log('Sent: {"service":"event","action":"subscribe","characters":["' + teamOne.members.character_id + '"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","worlds":["19"],"eventNames":["FacilityControl"]}');
+
         //not correct currently - subscribes to all, i guess it could just be that and then if the facility is the right one then add points to corresponding team
 
-        //
+        //stuff for FCLM v JOKE 10/4/16
+        ws.send('{"service":"event","action":"subscribe","characters":["' + 'TIWxTheDeliManeTR' +'"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + 'TIWxAuxiMoronTR' +'"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + 'TIWxBrodoFragginsTR' +'"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + 'TIWxIDGBlueTR' +'"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + 'TIWxG7303HTR' +'"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + 'TIWxPiecesofpizzaTR' +'"],"eventNames":["Death"]}');
+
+        ws.send('{"service":"event","action":"subscribe","characters":["' + 'FCLMxSpudlesVS' +'"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + 'FCLMxSlimeHunterVS' +'"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + 'FCLMxPractice1VS' +'"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + 'FCLMxSutt0wnzVS' +'"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + 'FCLMxRipplingVS' +'"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + 'FCLMxEmsiriVS' +'"],"eventNames":["Death"]}');
+
+        ws.send('{"service":"event","action":"subscribe","worlds":["19"],"eventNames":["FacilityControl"]}');
+
+
     });
 
     ws.on('message', function (data, flags) {
         // flags.binary will be set if a binary data is received.
         // flags.masked will be set if the data was masked.
         console.log('Recieved: ' + data);
-        if (data.payload.type == "serviceMessage") {
+    /*    if (data.payload.type == "serviceMessage") {
             dealWithTheData(data);
         }
-        //store the data somewhere - possibly a txt file in case something gets disputed
+    */    //store the data somewhere - possibly a txt file in case something gets disputed
+
     });
 
 }
 
 function startUp(tOne, tTwo, fID) {
-  items.initialise().then(function(result) {
+  /*items.initialise().then(function(result) {
     if (result) {
       console.log('Items are initialised');
       // start websocket now ?
@@ -117,9 +137,11 @@ function startUp(tOne, tTwo, fID) {
     } else {
       console.error('Items did not initialise!!');
     }
-  });
+  });*/
+    teamOne = tOne;
+    teamTwo = tTwo;
+    facilityID = fID;
+    createStream();
 }
-
-startup();
 
 exports.startUp = startUp;
