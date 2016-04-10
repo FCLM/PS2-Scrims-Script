@@ -8,8 +8,9 @@ var api_key = require('./api_key.js'),
 
 var config = require('./config');
 
-var teamOneScore = 0, teamTwoScore = 0;
+
 var teamOne, teamOneObject, teamTwoObject, teamTwo, facilityID;
+var captures = 0;
 
 var time = Date.now();
 
@@ -92,11 +93,21 @@ function itsPlayerData(data) {
 
 function itsFacilityData(data) {
   //deals with adding points to the correct team
-  if (data.payload.outfit_id == teamOne.outfit_id) {
-    teamOneScore += 10;
-  } else if (data.payload.outfit_id == teamTwo.outfit_id) {
-    teamTwoScore += 10;
+
+  if (data.outfit_id == teamOneObject.outfit_id) {
+    if (captures == 0) {
+      teamOneObject.points += 10;
+    } else {
+      teamOneObject.points += 25;
+    }
+  } else if (data.outfit_id == teamTwoObject.outfit_id) {
+    if (captures == 0) {
+      teamTwoObject.points += 10;
+    } else {
+      teamTwoObject.points += 25;
+    }
   }
+  captures++;
   //else it was captured by neither outfit and they deserve no points
   //currently doesn't deal with recaps :/
 }
