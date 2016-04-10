@@ -144,7 +144,8 @@ function debugWebSocket() {
       var data = JSON.parse(raw).payload;
       if (data.name == "Death") {
         var item = items.lookupItem(data.attacker_weapon_id);
-        console.log(data.attacker_character_id + ' killed ' + data.character_id + ' with ' + item.name);
+        var points = items.lookupPointsfromCategory(item.category_id);
+        console.log(data.attacker_character_id + ' killed ' + data.character_id + ' for ' + points + ' points (' + item.name + ')');
       } else {
         //itsFacilityData(data);
       }
