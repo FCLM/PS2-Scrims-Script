@@ -68,8 +68,7 @@ function findPoints(data) {
   // Must be IvI
   else {
     var weaponID = items.lookupItem(data.payload.attacker_weapon_id);
-    var points = items.lookupPointsfromCategory(weaponID);
-    return points;
+    return items.lookupPointsfromCategory(weaponID);
   }
 }
 
