@@ -39,7 +39,7 @@ function teamObject(team) {
     var obj = JSON.parse(memberTemplate);
     obj.name = member.name;
     if (!outfit_obj.hasOwnProperty(member.character_id)) {
-      outfit_obj[member.character_id] = obj;
+      outfit_obj.members[member.character_id] = obj;
     }
   });
   return outfit_obj;
@@ -91,8 +91,8 @@ function itsPlayerData(data) {
     //add kill/death to correct players
     teamOneObject.members[data.attacker_character_id].kills++;
     teamTwoObject.members[data.character_id].deaths++;
-  }
-  if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
+    console.log(teamOneObject.members[data.attacker_character_id].name + ' -->  ' + teamTwoObject.members[data.character_id].name + ' for ' + points + ' points (' + item.name + ')');
+  } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
     //add points/lower net score for correct teams
     teamTwoObject.points += points;
     teamOneObject.netScore -= points;
@@ -105,7 +105,9 @@ function itsPlayerData(data) {
     //add kill/death to correct players
     teamTwoObject.members[data.attacker_character_id].kills++;
     teamOneObject.members[data.character_id].deaths++;
+    console.log(teamTwoObject.members[data.attacker_character_id].name + ' --> ' + teamOneObject.members[data.character_id].name + ' for ' + points + ' points (' + item.name + ')');
   }
+  console.log(teamOneObject.points + ' ' + teamTwoObject.points);
 }
 
 function itsFacilityData(data) {
