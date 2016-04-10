@@ -6,7 +6,10 @@ var api_key = require('./api_key.js'),
     items   = require('./items.js'),
     WebSocket = require('ws');
 
-var teamOneScore = 0, teamTwoScore = 0;
+var teamOneScore = 0,
+    teamTwoScore = 0,
+    teamOneNetScore = 0,
+    teamTwoNetScore = 0;
 var teamOne, teamTwo, facilityID;
 
 function dealWithTheData(data) {
@@ -42,27 +45,33 @@ function itsPlayerData(data) {
     var points = findPoints(data);
     teamOne.members.forEach(function (data) {
         if (data.payload.attacker_character_id == teamOne.members.character_id) {
-
+            teamOneScore += points;
+            teamTwoNetScore -= points;
+            console.log('Team One player killed a Team Two player + ' + points + ' points: ' + teamOneScore);
         }
     });
     teamTwo.members.forEach(function (data) {
         if (data.payload.attacker_character_id == teamTwo.members.character_id) {
-
+            teamOneScore += points;
+            teamOneNetScore -= points;
+            console.log('Team Two player killed a Team One player + ' + points +' points: ' + teamTwoScore);
         }
     });
-
+    
 }
 
 function itsFacilityData(data) {
     //deals with adding points to the correct team
     if (data.payload.outfit_id == teamOne.outfit_id) {
         teamOneScore += 10;
+        console.log('Team One capped the base + 10 Points: ' + teamOneScore);
     } else if (data.payload.outfit_id == teamTwo.outfit_id) {
         teamTwoScore += 10;
+        console.log('Team Two capped the base + 10 Points: ' + teamTwoScore);
     }
     //else it was captured by neither outfit and they deserve no points
     //currently doesn't deal with recaps :/
-    }
+}
 
 function createStream() {
     var ws = new WebSocket('wss://push.planetside2.com/streaming?environment=ps2&service-id=s:' + api_key.KEY);
@@ -70,18 +79,19 @@ function createStream() {
     ws.on('open', function open() {
         // team1 subscribing
         teamOne.members.forEach(function (member) {
-        ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}');
-        console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}')
+            ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}');
+            //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}')
         });
-        
+
         // team2 subscribing
         teamTwo.members.forEach(function (member) {
-        ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}');
-        console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}')
+            ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}');
+            //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}')
         });
 
         // facility Subscribing
         ws.send('{"service":"event","action":"subscribe","worlds":["19"],"eventNames":["FacilityControl"]}');
+        //console.log('Sent: {"service":"event","action":"subscribe","worlds":["19"],"eventNames":["FacilityControl"]}');
         //not correct currently - subscribes to all, i guess it could just be that and then if the facility is the right one then add points to corresponding team
 
     });

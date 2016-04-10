@@ -62,7 +62,7 @@ app.use(function(err, req, res, next) {
 });
 
 
-function start(one, two, f) {
+/*function startApp(one, two, f) {
   //match variables
   var teamOneTag = one,
       teamTwoTag = two,
@@ -82,7 +82,8 @@ function start(one, two, f) {
     return response.promise;
   });
   }
-
+*/
 module.exports = app;
+//module.exports = startApp();
 
-start('Flcm', 'j0k2', '202');
+//startApp('Flcm', 'j0k2', '202');
