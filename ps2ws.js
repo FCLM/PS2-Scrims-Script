@@ -48,7 +48,7 @@ function teamObject(team) {
 function dealWithTheData(raw) {
   raw = raw.replace(': :', ':');
   var data = JSON.parse(raw).payload;
-  if (data.name == "Death") {
+  if (data.event_name == "Death") {
     itsPlayerData(data);
 //  } else {
 //    itsFacilityData(data);
@@ -77,8 +77,8 @@ function itsPlayerData(data) {
   //deals with adding points to the correct player & team
   var item = items.lookupItem(data.attacker_weapon_id);
   var points = items.lookupPointsfromCategory(item.category_id);
-  console.log(data.attacker_character_id + ' killed ' + data.character_id + ' for ' + points + ' points (' + item.name + ')');
   if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
+    // Standard IvI
     //add points/lower net score for correct teams
     teamOneObject.points += points;
     teamTwoObject.netScore -= points;
@@ -92,7 +92,9 @@ function itsPlayerData(data) {
     teamOneObject.members[data.attacker_character_id].kills++;
     teamTwoObject.members[data.character_id].deaths++;
     console.log(teamOneObject.members[data.attacker_character_id].name + ' -->  ' + teamTwoObject.members[data.character_id].name + ' for ' + points + ' points (' + item.name + ')');
+    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
+    // Standard IvI
     //add points/lower net score for correct teams
     teamTwoObject.points += points;
     teamOneObject.netScore -= points;
@@ -106,8 +108,12 @@ function itsPlayerData(data) {
     teamTwoObject.members[data.attacker_character_id].kills++;
     teamOneObject.members[data.character_id].deaths++;
     console.log(teamTwoObject.members[data.attacker_character_id].name + ' --> ' + teamOneObject.members[data.character_id].name + ' for ' + points + ' points (' + item.name + ')');
+    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+  } else if ((data.attacker_character_id) && (data.character_id)) {
+    // Suicides lolol
+    
   }
-  console.log(teamOneObject + ' ' + teamTwoObject);
+
 }
 
 function itsFacilityData(data) {
@@ -158,9 +164,6 @@ function createStream() {
         dealWithTheData(data);
       }
     }
-    /*if (data.type == "serviceMessage") {
-     dealWithTheData(data);
-     }*/
     //store the data somewhere - possibly a txt file in case something gets disputed
   });
 

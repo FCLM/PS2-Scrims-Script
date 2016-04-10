@@ -125,7 +125,7 @@ function lookupPointsFromCategory(id) {
     return category_map[id].points;
   } else {
     console.error('missing category: ' + id);
-    return null;
+    return 0;
   }
 }
 
