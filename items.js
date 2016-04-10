@@ -81,6 +81,7 @@ var mItemTemplate = JSON.stringify({
   desc:  '',
   image: 0
 });
+
 function initialise() {
   var response = Q.defer();
   var url = 'https://census.daybreakgames.com/s:' + api_key.KEY + '/get/ps2/item?item_type_id=26&c:limit=5000&c:hide=,skill_set_id,is_vehicle_weapon,item_type_id,faction_id,max_stack_size,image_set_id,image_path,is_default_attachment&c:lang=en';
@@ -91,7 +92,7 @@ function initialise() {
       // check if item response from dbg has each json key before updating our template
       if (item.hasOwnProperty('item_id'))
         obj._id = item.item_id;
-      if (item.hasOwnPoperty('item_category_id'))
+      if (item.hasOwnProperty('item_category_id'))
         obj.category_id = item.item_category_id;
       if (item.hasOwnProperty('name'))
         obj.name = item.name.en;

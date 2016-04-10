@@ -38,3 +38,13 @@ if "death"  ->
 else if "facilityControl"  ->
 
 
+
+Facilities:
+'Fallbridge Chemical': (270000)
+'Wokuk Shipping Dock': (210002)
+'The Stronghold': (6500)
+'Pale Canyon Chemical': (239000)
+'Ghanan Southern Crossing': (305010)
+'Nettlemire': (283000)
+'Rime Analytics': (244610)
+'Heyoka Chemical': (206002)
