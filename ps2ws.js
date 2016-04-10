@@ -134,10 +134,20 @@ function startUp(tOne, tTwo, fID) {
 
 function debugWebSocket() {
   var round = config.debug.round;
-  var counter = 0;
+  var counter = 15000;
   var i = setInterval(function(){
     if (round.hasOwnProperty('' + counter)) {
-      console.log(config.debug.round['' + counter])
+      //console.log(config.debug.round['' + counter]);
+
+      var raw = config.debug.round['' + counter];
+      raw = raw.replace(': :', ':');
+      var data = JSON.parse(raw).payload;
+      if (data.name == "Death") {
+        var item = items.lookupItem(data.attacker_weapon_id);
+        console.log(data.attacker_character_id + ' killed ' + data.character_id + ' with ' + item.name);
+      } else {
+        //itsFacilityData(data);
+      }
     }
     counter++;
     if(counter === 600000) {
