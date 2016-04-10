@@ -30,7 +30,7 @@ function teamObject(team) {
     name : team.name,
     faction : 0,
     points : 0,
-    net : 0,
+    netScore : 0,
     kills : 0,
     deaths : 0,
     members : {}
@@ -78,17 +78,34 @@ function itsPlayerData(data) {
   var item = items.lookupItem(data.attacker_weapon_id);
   var points = items.lookupPointsfromCategory(item.category_id);
   console.log(data.attacker_character_id + ' killed ' + data.character_id + ' for ' + points + ' points (' + item.name + ')');
-
-  teamOne.members.forEach(function (data) {
-    if (data.attacker_character_id == teamOne.members.character_id) {
-
-    }
-  });
-  teamTwo.members.forEach(function (data) {
-    if (data.attacker_character_id == teamTwo.members.character_id) {
-      //teamTwoScore += points; console.log(teamTwoScore);
-    }
-  });
+  if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
+    //add points/lower net score for correct teams
+    teamOneObject.points += points;
+    teamTwoObject.netScore -= points;
+    //add kill/death to correct teams
+    teamOneObject.kills++;
+    teamTwoObject.deaths++;
+    //add points/lower net score for correct players
+    teamOneObject.members[data.attacker_character_id].points += points;
+    teamTwoObject.members[data.character_id].netScore -= points;
+    //add kill/death to correct players
+    teamOneObject.members[data.attacker_character_id].kills++;
+    teamTwoObject.members[data.character_id].deaths++;
+  }
+  if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
+    //add points/lower net score for correct teams
+    teamTwoObject.points += points;
+    teamOneObject.netScore -= points;
+    //add kill/death to correct teams
+    teamTwoObject.kills++;
+    teamOneObject.deaths++;
+    //add points/lower net score for correct players
+    teamTwoObject.members[data.attacker_character_id].points += points;
+    teamOneObject.members[data.character_id].netScore -= points;
+    //add kill/death to correct players
+    teamTwoObject.members[data.attacker_character_id].kills++;
+    teamOneObject.members[data.character_id].deaths++;
+  }
 }
 
 function itsFacilityData(data) {
