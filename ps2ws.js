@@ -13,12 +13,16 @@ var teamOne, teamTwo, facilityID;
 
 var time = Date.now();
 
-function dealWithTheData(data) {
-  //decides whether it is player data or facility data
-  if (data.payload.event_name == "Death") {
-    itsPlayerData(data);
+function dealWithTheData(raw) {
+  raw = raw.replace(': :', ':');
+  var data = JSON.parse(raw).payload;
+  if (data.name == "Death") {
+    //itsPlayerData(data);
+    var item = items.lookupItem(data.attacker_weapon_id);
+    var points = items.lookupPointsfromCategory(item.category_id);
+    console.log(data.attacker_character_id + ' killed ' + data.character_id + ' for ' + points + ' points (' + item.name + ')');
   } else {
-    itsFacilityData(data);
+    //itsFacilityData(data);
   }
 }
 
@@ -137,18 +141,7 @@ function debugWebSocket() {
   var counter = 15000;
   var i = setInterval(function(){
     if (round.hasOwnProperty('' + counter)) {
-      //console.log(config.debug.round['' + counter]);
-
-      var raw = config.debug.round['' + counter];
-      raw = raw.replace(': :', ':');
-      var data = JSON.parse(raw).payload;
-      if (data.name == "Death") {
-        var item = items.lookupItem(data.attacker_weapon_id);
-        var points = items.lookupPointsfromCategory(item.category_id);
-        console.log(data.attacker_character_id + ' killed ' + data.character_id + ' for ' + points + ' points (' + item.name + ')');
-      } else {
-        //itsFacilityData(data);
-      }
+      dealWithTheData(config.debug.round['' + counter]);
     }
     counter++;
     if(counter === 600000) {
