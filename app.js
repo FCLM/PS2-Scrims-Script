@@ -11,6 +11,8 @@ var teams = require('./teams.js');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
+var config = require('./config');
+
 var app = express();
 
 // view engine setup
@@ -73,12 +75,17 @@ function start(one, two, f) {
   promises.push(teams.fetchTeamData(teamTwoTag));
 
   Q.allSettled(promises).then(function (results) {
-    console.log('T1 - ' + JSON.stringify(results[0].value));
-    console.log('T2 - ' + JSON.stringify(results[1].value));
-    teamOneObject = results[0].value;
-    teamTwoObject = results[1].value;
-    //console.log(teamOneObject.outfit_id + ' ' + teamOneObject.name);
-    //console.log(teamTwoObject.outfit_id + ' ' + teamTwoObject.name);
+    if (config.DEBUG) {
+      console.log('T1 - ' + config.debug.team1);
+      console.log('T2 - ' + config.debug.team2);
+      teamOneObject = JSON.parse(config.debug.team1);
+      teamTwoObject = JSON.parse(config.debug.team2);
+    } else {
+      console.log('T1 - ' + JSON.stringify(results[0].value));
+      console.log('T2 - ' + JSON.stringify(results[1].value));
+      teamOneObject = results[0].value;
+      teamTwoObject = results[1].value;
+    }
     ps2ws.startUp(teamOneObject, teamTwoObject, facility);
     return response.promise;
   });
@@ -87,4 +94,4 @@ function start(one, two, f) {
 module.exports = app;
 
 //start('7ROI', 'HBSS', '202');
-start(ps2ws.config.team1, ps2ws.config.team2, ps2ws.config.base);
+start(config.config.team1, config.config.team2, config.config.base);

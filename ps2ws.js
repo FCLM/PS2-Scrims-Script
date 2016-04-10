@@ -2,19 +2,14 @@
  * Created by Dylan on 03-Apr-16.
  */
 var api_key = require('./api_key.js'),
-  teams   = require('./teams.js'),
-  items   = require('./items.js'),
-  WebSocket = require('ws'),
-  fs = require('fs');
+    teams   = require('./teams.js'),
+    items   = require('./items.js'),
+    WebSocket = require('ws');
+
+var config = require('./config');
 
 var teamOneScore = 0, teamTwoScore = 0;
 var teamOne, teamTwo, facilityID;
-
-var config = {
-  base:  244610, // rime 244610, heyoka 206002
-  team1: 'FLCM',
-  team2: 'J0K2'
-};
 
 var time = Date.now();
 
@@ -75,7 +70,6 @@ function itsFacilityData(data) {
 
 function createStream() {
   var ws = new WebSocket('wss://push.planetside2.com/streaming?environment=ps2&service-id=s:' + api_key.KEY);
-
   ws.on('open', function open() {
     //team1 subscribing
     //{"service":"event","action":"subscribe","characters":["5428010618035589553"],"eventNames":["Death"]}
@@ -83,7 +77,6 @@ function createStream() {
       ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}');
       //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}')
     });
-
     //team2 subscribing
     teamTwo.members.forEach(function (member) {
       ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
@@ -98,8 +91,8 @@ function createStream() {
     // flags.binary will be set if a binary data is received.
     // flags.masked will be set if the data was masked.
     if (data.indexOf("payload") == 2) {
-      if (data.indexOf('"event_name":"FacilityControl"') == -1 || data.indexOf('"facility_id":"' + config.base + '"') > -1) {
-        console.log((Date.now() - time) + ' ' + data);
+      if (data.indexOf('"event_name":"FacilityControl"') == -1 || data.indexOf('"facility_id":"' + config.config.base + '"') > -1) {
+        actUponData(data)
       }
     }
     /*if (data.type == "serviceMessage") {
@@ -108,6 +101,10 @@ function createStream() {
     //store the data somewhere - possibly a txt file in case something gets disputed
   });
 
+}
+
+function actUponData(data) {
+  console.log((Date.now() - time) + ' ' + data);
 }
 
 function startUp(tOne, tTwo, fID) {
@@ -121,7 +118,11 @@ function startUp(tOne, tTwo, fID) {
       teamOne = tOne;
       teamTwo = tTwo;
       facilityID = fID;
-      createStream();
+      if (config.DEBUG) {
+        debugWebSocket();
+      } else {
+        createStream();
+      }
       // test an item
       //var item_test = items.lookupItem(7214);
       //console.log(item_test._id + ' - ' + item_test.name);
@@ -131,5 +132,18 @@ function startUp(tOne, tTwo, fID) {
   });
 }
 
+function debugWebSocket() {
+  var round = config.debug.round;
+  var counter = 0;
+  var i = setInterval(function(){
+    if (round.hasOwnProperty('' + counter)) {
+      console.log(config.debug.round['' + counter])
+    }
+    counter++;
+    if(counter === 600000) {
+      clearInterval(i);
+    }
+  }, 1);
+}
+
 exports.startUp = startUp;
-exports.config = config;
