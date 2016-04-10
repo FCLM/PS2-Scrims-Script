@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var Q = require('q');
 
 var ps2ws = require('./ps2ws.js');
 var teams = require('./teams.js');
@@ -67,14 +68,17 @@ function start(one, two, f) {
 
   var response = Q.defer();
   var teamOneObject, teamTwoObject;
-  var promises = []
+  var promises = [];
   promises.push(teams.fetchTeamData(teamOneTag));
   promises.push(teams.fetchTeamData(teamTwoTag));
 
   Q.allSettled(promises).then(function (results) {
+    console.log('T1 - ' + JSON.stringify(results[0].value));
+    console.log('T2 - ' + JSON.stringify(results[1].value));
     teamOneObject = results[0].value;
     teamTwoObject = results[1].value;
-    console.log(teamOneObject.name + '\t\t' + teamOneObject.outfit_id + '\n' + teamTwoObject.name + '\t\t' + teamTwoObject.outfit_id);
+    //console.log(teamOneObject.outfit_id + ' ' + teamOneObject.name);
+    //console.log(teamTwoObject.outfit_id + ' ' + teamTwoObject.name);
     ps2ws.startUp(teamOneObject, teamTwoObject, facility);
     return response.promise;
   });
@@ -82,4 +86,5 @@ function start(one, two, f) {
 
 module.exports = app;
 
-start('Fclm', 'Rsnc', '202');
+//start('7ROI', 'HBSS', '202');
+start(ps2ws.config.team1, ps2ws.config.team2, ps2ws.config.base);

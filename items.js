@@ -91,7 +91,7 @@ function initialise() {
       // check if item response from dbg has each json key before updating our template
       if (item.hasOwnProperty('item_id'))
         obj._id = item.item_id;
-      if (item.hasOwnPoperty('item_category_id'))
+      if (item.hasOwnProperty('item_category_id'))
         obj.category_id = item.item_category_id;
       if (item.hasOwnProperty('name'))
         obj.name = item.name.en;
@@ -105,7 +105,8 @@ function initialise() {
       }
     });
     response.resolve(true);
-  }).catch(function () {
+  }).catch(function (err) {
+    console.error(err);
     response.resolve(false);
   });
   return response.promise;
