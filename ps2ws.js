@@ -181,6 +181,7 @@ function itsFacilityData(data) {
   //deals with adding points to the correct team
 
   if (data.outfit_id == teamOneObject.outfit_id) {
+    var points;
     if (captures == 0) {
       points += 10;
     } else {
