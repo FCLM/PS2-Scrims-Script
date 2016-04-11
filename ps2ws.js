@@ -83,8 +83,7 @@ function itsPlayerData(data) {
     if ((data.character_laodout_id == 7) || (data.character_laodout_id == 14) || (data.character_laodout_id == 21)) {
       //Attacker used a max to kill a max
       points = 3;
-    } else
-    {
+    } else {
       //max v infantry
       points = 1;
     }
@@ -143,7 +142,6 @@ function itsPlayerData(data) {
     console.log(teamTwoObject.members[data.attacker_character_id].name + ' Killed himself lol');
     console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   }
-
 }
 
 function itsFacilityData(data) {
