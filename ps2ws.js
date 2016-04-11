@@ -50,14 +50,14 @@ function dealWithTheData(raw) {
   var data = JSON.parse(raw).payload;
   if (data.event_name == "Death") {
     itsPlayerData(data);
-//  } else {
-//    itsFacilityData(data);
+  } else {
+    itsFacilityData(data);
   }
 }
 
-function findPoints(data) {
-  var attackerLoadout = data.payload.attacker_laodout_id;
-  var defenderLoadout = data.payload.character_laodout_id;
+/*function findPoints(data) {
+  var attackerLoadout = data.attacker_laodout_id;
+  var defenderLoadout = data.character_laodout_id;
   // Is attacker a Max?
   if ((attackerLoadout == 7) || (attackerLoadout == 14) || (attackerLoadout == 21)) {
     return 1;
@@ -71,12 +71,26 @@ function findPoints(data) {
     var weaponID = items.lookupItem(data.payload.attacker_weapon_id);
     return items.lookupPointsfromCategory(weaponID);
   }
-}
+}*/
 
 function itsPlayerData(data) {
   //deals with adding points to the correct player & team
   var item = items.lookupItem(data.attacker_weapon_id);
   var points = items.lookupPointsfromCategory(item.category_id);
+  if ((data.attacker_laodout_id == 7) || (data.attacker_laodout_id == 14) || (data.attacker_laodout_id == 21)) {
+    //Attacker using a max
+    if ((data.character_laodout_id == 7) || (data.character_laodout_id == 14) || (data.character_laodout_id == 21)) {
+      //Attacker used a max to kill a max
+      points = 3;
+    } else
+    {
+      //max v infantry
+      points = 1;
+    }
+  } else if ((data.character_laodout_id == 7) || (data.character_laodout_id == 14) || (data.character_laodout_id == 21)) {
+    //defender used a max
+    points = 5;
+  }
   if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
     // Standard IvI
     //add points/lower net score for correct teams
@@ -117,7 +131,7 @@ function itsPlayerData(data) {
     teamOneObject.members[data.attacker_character_id].points += points;
     teamOneObject.members[data.attacker_character_id].deaths++;
   }else if ((data.attacker_character_id) && (data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
-    // Suicides team One lol
+    // Suicides team Two lol
     points = -2;
     teamTwoObject.points += points;
     teamTwoObject.deaths++;
