@@ -195,7 +195,7 @@ function itsFacilityData(data) {
     } else {
       points += 25;
     }
-    teamTwoObject.points += points
+    teamTwoObject.points += points;
     console.log(TeamTwoObject.name + ' captured the base +' + points);
     console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   }
