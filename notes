@@ -13,4 +13,5 @@ RECEIVED: {"payload":{"duration_held":"1211","event_name":"FacilityControl","fac
     "service":"event","type":"serviceMessage"}
 Base capture on Miller
 
+Points system should be functioning, now need to focus on a display. :(
 
