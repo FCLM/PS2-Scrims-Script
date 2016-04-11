@@ -8,10 +8,8 @@ var api_key = require('./api_key.js'),
 
 var config = require('./config');
 
-
 var teamOne, teamOneObject, teamTwoObject, teamTwo, facilityID;
 var captures = 0;
-
 var time = Date.now();
 
 var memberTemplate = JSON.stringify({
@@ -57,25 +55,6 @@ function dealWithTheData(raw) {
     itsFacilityData(data);
   }
 }
-
-//probably remove once canabilised
-/*function findPoints(data) {
-  var attackerLoadout = data.attacker_laodout_id;
-  var defenderLoadout = data.character_laodout_id;
-  // Is attacker a Max?
-  if ((attackerLoadout == 7) || (attackerLoadout == 14) || (attackerLoadout == 21)) {
-    return 1;
-  }
-  // Is defender a Max?
-  else if ((defenderLoadout == 7) || (defenderLoadout == 14) || (defenderLoadout == 21)) {
-    return 5;
-  }
-  // Must be IvI
-  else {
-    var weaponID = items.lookupItem(data.payload.attacker_weapon_id);
-    return items.lookupPointsfromCategory(weaponID);
-  }
-}*/
 
 function itsPlayerData(data) {
   //deals with adding points to the correct player & team
@@ -179,30 +158,34 @@ function itsPlayerData(data) {
 
 function itsFacilityData(data) {
   //deals with adding points to the correct team
-
   if (data.outfit_id == teamOneObject.outfit_id) {
     var points;
     if (captures == 0) {
-      points += 10;
+      points = 10;
+      teamOneObject.points += points;
+      console.log(teamOneObject.name + ' captured the base +' + points);
+      console.log(teamOneObject.points + ' ' + teamTwoObject.points);
     } else {
-      points += 25;
+      points = 25;
+      teamOneObject.points += points;
+      console.log(teamOneObject.name + ' captured the base +' + points);
+      console.log(teamOneObject.points + ' ' + teamTwoObject.points);
     }
-    teamOneObject.points += points;
-    console.log(TeamOneObject.name + ' captured the base +' + points);
-    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   } else if (data.outfit_id == teamTwoObject.outfit_id) {
     if (captures == 0) {
-      points += 10;
+      points = 10;
+      teamTwoObject.points += points;
+      console.log(teamTwoObject.name + ' captured the base +' + points);
+      console.log(teamOneObject.points + ' ' + teamTwoObject.points);
     } else {
-      points += 25;
+      points = 25;
+      teamTwoObject.points += points;
+      console.log(teamTwoObject.name + ' captured the base +' + points);
+      console.log(teamOneObject.points + ' ' + teamTwoObject.points);
     }
-    teamTwoObject.points += points;
-    console.log(TeamTwoObject.name + ' captured the base +' + points);
-    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   }
   captures++;
   //else it was captured by neither outfit and they deserve no points
-  //currently doesn't deal with recaps :/
 }
 
 function createStream() {
@@ -223,10 +206,7 @@ function createStream() {
     ws.send('{"service":"event","action":"subscribe","worlds":["19","25"],"eventNames":["FacilityControl"]}');
     //not correct currently - subscribes to all, i guess it could just be that and then if the facility is the right one then add points to corresponding team
   });
-
-  ws.on('message', function (data, flags) {
-    // flags.binary will be set if a binary data is received.
-    // flags.masked will be set if the data was masked.
+  ws.on('message', function (data) {
     if (data.indexOf("payload") == 2) {
       if (data.indexOf('"event_name":"FacilityControl"') == -1 || data.indexOf('"facility_id":"' + config.config.base + '"') > -1) {
         dealWithTheData(data);
@@ -234,11 +214,6 @@ function createStream() {
     }
     //store the data somewhere - possibly a txt file in case something gets disputed
   });
-
-}
-
-function actUponData(data) {
-  //console.log((Date.now() - time) + ' ' + data);
 }
 
 function startUp(tOne, tTwo, fID) {
