@@ -50,6 +50,9 @@ function dealWithTheData(raw) {
   var data = JSON.parse(raw).payload;
   if (data.event_name == "Death") {
     itsPlayerData(data);
+  } else if (data.name == "Death") {
+    //debugging match only
+    itsPlayerData(data);
   } else {
     itsFacilityData(data);
   }
@@ -136,7 +139,7 @@ function itsPlayerData(data) {
     teamOneObject.deaths++;
     teamOneObject.members[data.attacker_character_id].points -= points;
     teamOneObject.members[data.attacker_character_id].deaths++;
-    console.log(teamOneObject.members[data.attacker_character_id].name + ' Killed himself lol');
+    console.log(teamOneObject.members[data.attacker_character_id].name + ' Killed himself -' + points);
     console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   } else if ((data.attacker_character_id == data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
     // Suicides team Two lol
@@ -151,7 +154,7 @@ function itsPlayerData(data) {
     teamTwoObject.deaths++;
     teamTwoObject.members[data.attacker_character_id].points -= points;
     teamTwoObject.members[data.attacker_character_id].deaths++;
-    console.log(teamTwoObject.members[data.attacker_character_id].name + ' Killed himself lol');
+    console.log(teamTwoObject.members[data.attacker_character_id].name + ' Killed himself -' + points);
     console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   } else if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
       // Hahahaha he killed his mate
@@ -160,6 +163,8 @@ function itsPlayerData(data) {
     teamOneObject.deaths++;
     teamOneObject.members[data.attacker_character_id].points -= points;
     teamOneObject.members[data.character_id].deaths++;
+    console.log(teamOneObject.members[data.attacker_character_id].name + ' teamkilled ' + teamOneObject.members[data._character_id].name + ' -' + points);
+    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   }else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
     // Hahahaha he killed his mate
     points = 5;
@@ -167,6 +172,8 @@ function itsPlayerData(data) {
     teamTwoObject.deaths++;
     teamTwoObject.members[data.attacker_character_id].points -= points;
     teamTwoObject.members[data.character_id].deaths++;
+    console.log(teamTwoObject.members[data.attacker_character_id].name + ' teamkilled ' + teamTwoObject.members[data._character_id].name + ' -' + points);
+    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   }
 }
 
@@ -175,16 +182,22 @@ function itsFacilityData(data) {
 
   if (data.outfit_id == teamOneObject.outfit_id) {
     if (captures == 0) {
-      teamOneObject.points += 10;
+      points += 10;
     } else {
-      teamOneObject.points += 25;
+      points += 25;
     }
+    teamOneObject.points += points;
+    console.log(TeamOneObject.name + ' captured the base +' + points);
+    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   } else if (data.outfit_id == teamTwoObject.outfit_id) {
     if (captures == 0) {
-      teamTwoObject.points += 10;
+      points += 10;
     } else {
-      teamTwoObject.points += 25;
+      points += 25;
     }
+    teamTwoObject.points += points
+    console.log(TeamTwoObject.name + ' captured the base +' + points);
+    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   }
   captures++;
   //else it was captured by neither outfit and they deserve no points
@@ -233,7 +246,7 @@ function startUp(tOne, tTwo, fID) {
       //console.log('Items are initialised');
       time = Date.now();
       console.log(time + ' start match');
-      console.log('=======================================================');
+      console.log('=====================================================================================================================================');
       // start websocket now ?
       teamOne = tOne;
       teamOneObject = teamObject(teamOne);
