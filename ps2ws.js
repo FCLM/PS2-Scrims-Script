@@ -131,13 +131,17 @@ function itsPlayerData(data) {
     teamOneObject.deaths++;
     teamOneObject.members[data.attacker_character_id].points -= points;
     teamOneObject.members[data.attacker_character_id].deaths++;
-  }else if ((data.attacker_character_id) && (data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
+    console.log(teamOneObject.members[data.attacker_character_id].name + ' Killed himself lol');
+    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+  } else if ((data.attacker_character_id) && (data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
     // Suicides team Two lol
     points = 2;
     teamTwoObject.points -= points;
     teamTwoObject.deaths++;
     teamTwoObject.members[data.attacker_character_id].points -= points;
     teamTwoObject.members[data.attacker_character_id].deaths++;
+    console.log(teamTwoObject.members[data.attacker_character_id].name + ' Killed himself lol');
+    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   }
 
 }
