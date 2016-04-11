@@ -123,24 +123,50 @@ function itsPlayerData(data) {
     teamOneObject.members[data.character_id].deaths++;
     console.log(teamTwoObject.members[data.attacker_character_id].name + ' --> ' + teamOneObject.members[data.character_id].name + ' for ' + points + ' points (' + item.name + ')');
     console.log(teamOneObject.points + ' ' + teamTwoObject.points);
-  } else if ((data.attacker_character_id) && (data.character_id) && (teamOneObject.members.hasOwnProperty(data.character_id))){
+  } else if ((data.attacker_character_id == data.character_id) && (teamOneObject.members.hasOwnProperty(data.character_id))){
     // Suicides team One lol
-    points = 2;
+    if ((data.character_laodout_id == 7) || (data.character_laodout_id == 14) || (data.character_laodout_id == 21)) {
+      //suicided as a max lol
+      points = 5;
+    } else {
+      //just infantry suicide
+      points = 2;
+    }
     teamOneObject.points -= points;
     teamOneObject.deaths++;
     teamOneObject.members[data.attacker_character_id].points -= points;
     teamOneObject.members[data.attacker_character_id].deaths++;
     console.log(teamOneObject.members[data.attacker_character_id].name + ' Killed himself lol');
     console.log(teamOneObject.points + ' ' + teamTwoObject.points);
-  } else if ((data.attacker_character_id) && (data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
+  } else if ((data.attacker_character_id == data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
     // Suicides team Two lol
-    points = 2;
+    if ((data.character_laodout_id == 7) || (data.character_laodout_id == 14) || (data.character_laodout_id == 21)) {
+      //suicided as a max lol
+      points = 5;
+    } else {
+      //just infantry suicide
+      points = 2;
+    }
     teamTwoObject.points -= points;
     teamTwoObject.deaths++;
     teamTwoObject.members[data.attacker_character_id].points -= points;
     teamTwoObject.members[data.attacker_character_id].deaths++;
     console.log(teamTwoObject.members[data.attacker_character_id].name + ' Killed himself lol');
     console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+  } else if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
+      // Hahahaha he killed his mate
+    points = 5;
+    teamOneObject.points -= points;
+    teamOneObject.deaths++;
+    teamOneObject.members[data.attacker_character_id].points -= points;
+    teamOneObject.members[data.character_id].deaths++;
+  }else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
+    // Hahahaha he killed his mate
+    points = 5;
+    teamTwoObject.points -= points;
+    teamTwoObject.deaths++;
+    teamTwoObject.members[data.attacker_character_id].points -= points;
+    teamTwoObject.members[data.character_id].deaths++;
   }
 }
 
