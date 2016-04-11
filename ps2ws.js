@@ -28,7 +28,7 @@ function teamObject(team) {
     alias : team.alias,
     outfit_id : team.outfit_id,
     name : team.name,
-    faction : 0,
+    faction : team.faction,
     points : 0,
     netScore : 0,
     kills : 0,

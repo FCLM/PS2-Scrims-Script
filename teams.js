@@ -6,11 +6,12 @@ var prequest = require('prequest');
 var Q = require('q');
 
 //https://census.daybreakgames.com/get/ps2/outfit/?alias=FCLM&c:resolve=member_character(name)&c:hide=time_created
+//https://census.daybreakgames.com/get/ps2:v2/outfit/?alias_lower=fcln&c:resolve=leader(faction_id),member_character(name)&c:hide=time_created
 
 function fetchTeamData(teamTag) {
   var response = Q.defer();
   teamTag = teamTag.toLowerCase();
-  prequest('https://census.daybreakgames.com/s:' + api_key.KEY + '/get/ps2/outfit/?alias_lower='+ teamTag + '&c:resolve=member_character(name)').then(function (body) {
+  prequest('https://census.daybreakgames.com/s:' + api_key.KEY + '/get/ps2/outfit/?alias_lower='+ teamTag + '&c:resolve=leader(faction_id),member_character(name)&c:hide=time_created,time_created_date').then(function (body) {
     var teamPlayers = [];
     body.outfit_list[0].members.forEach(function(result) {
       teamPlayers.push({
@@ -22,6 +23,7 @@ function fetchTeamData(teamTag) {
       alias : body.outfit_list[0].alias,
       outfit_id : body.outfit_list[0].outfit_id,
       name : body.outfit_list[0].name,
+      faction : body.outfit_list[0].leader.faction_id,
       members : teamPlayers
     };
     response.resolve(obj);
