@@ -55,6 +55,7 @@ function dealWithTheData(raw) {
   }
 }
 
+//probably remove once canabilised
 /*function findPoints(data) {
   var attackerLoadout = data.attacker_laodout_id;
   var defenderLoadout = data.character_laodout_id;
@@ -125,17 +126,17 @@ function itsPlayerData(data) {
     console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   } else if ((data.attacker_character_id) && (data.character_id) && (teamOneObject.members.hasOwnProperty(data.character_id))){
     // Suicides team One lol
-    points = -2;
-    teamOneObject.points += points;
+    points = 2;
+    teamOneObject.points -= points;
     teamOneObject.deaths++;
-    teamOneObject.members[data.attacker_character_id].points += points;
+    teamOneObject.members[data.attacker_character_id].points -= points;
     teamOneObject.members[data.attacker_character_id].deaths++;
   }else if ((data.attacker_character_id) && (data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
     // Suicides team Two lol
-    points = -2;
-    teamTwoObject.points += points;
+    points = 2;
+    teamTwoObject.points -= points;
     teamTwoObject.deaths++;
-    teamTwoObject.members[data.attacker_character_id].points += points;
+    teamTwoObject.members[data.attacker_character_id].points -= points;
     teamTwoObject.members[data.attacker_character_id].deaths++;
   }
 
