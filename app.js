@@ -86,7 +86,7 @@ io.on('connection', function(sock) {
     console.log(data);
   });
 });
-
+/*
 var count = 0;
 setInterval(function () {
   count++;
@@ -102,10 +102,14 @@ setInterval(function () {
   };
   io.emit('killfeed', {obj: obj});
 }, 2000);
-
+*/
 console.log('Listening on port %d', server.address().port);
 
 //end killfeed.js code
+
+function killfeedEmit(killfeed) {
+  io.emit('killfeed', {obj: killfeed});
+}
 
 function start(one, two, f) {
   //match variables
@@ -137,6 +141,7 @@ function start(one, two, f) {
 }
 
 module.exports = app;
+exports.killfeedEmit = killfeedEmit;
 
 //start('7ROI', 'HBSS', '202');
 start(config.config.team1, config.config.team2, config.config.base);
