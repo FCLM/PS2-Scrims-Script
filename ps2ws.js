@@ -340,8 +340,10 @@ function startUp(tOne, tTwo, fID) {
       facilityID = fID;
       if (config.DEBUG) {
         debugWebSocket();
+        app.refreshPage();
       } else {
         createStream();
+        app.refreshPage();
       }
       // test an item
       //var item_test = items.lookupItem(7214);

@@ -123,9 +123,14 @@ console.log('Listening on port %d', server.address().port);
 
 //end killfeed.js code
 
+function refreshPage() {
+  io.emit('refresh');
+}
+
 function killfeedEmit(killfeed) {
   io.emit('killfeed', {obj: killfeed});
 }
+
 function sendScores(teamOneObject, teamTwoObject) {
   var scoreboard = {
     teamOne: {
@@ -183,6 +188,7 @@ function start(one, two, f) {
 module.exports        = app;
 exports.killfeedEmit  = killfeedEmit;
 exports.sendScores    = sendScores;
+exports.refreshPage   = refreshPage;
 
 //start('7ROI', 'HBSS', '202');
 start(config.config.team1, config.config.team2, config.config.base);

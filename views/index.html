@@ -74,6 +74,9 @@
             $('#outfitT2').html('[' + event.teamTwo.alias + '] ' + event.teamTwo.name);
             console.log(event.teamOne.alias);
         });
+        socket.on('refresh', function() {
+                window.location.reload();
+        });
         socket.on('killfeed', function(data) {
             var event = data.obj;
             console.log(event);
