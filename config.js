@@ -1,7 +1,7 @@
 
 var debug_match = require('./test_matches/fclm_match_10042016');
 
-var DEBUG = true;
+var DEBUG = false;
 
 var config = {
   base:  244610, // rime 244610, heyoka 206002
@@ -19,4 +19,3 @@ var debug = {
 module.exports.DEBUG = DEBUG;
 module.exports.config = config;
 module.exports.debug = debug;
-

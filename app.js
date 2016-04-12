@@ -14,6 +14,8 @@ var ps2ws   = require('./ps2ws.js'),
     users   = require('./routes/users'),
     config  = require('./config'),
     api_key = require('./api_key');
+//global variable for use in different functions
+var teamOneObject, teamTwoObject;
 
 var app = express();
 
@@ -83,6 +85,19 @@ var server = http.createServer(app).listen(app.get('port'));
 var io = require('socket.io').listen(server);
 io.on('connection', function(sock) {
   sock.on('backchat', function (data) {
+    var teams = {
+      teamOne: {
+        alias : teamOneObject.alias,
+        name : teamOneObject.name,
+        faction : teamOneObject.faction
+      },
+      teamTwo: {
+        alias : teamTwoObject.alias,
+        name : teamTwoObject.name,
+        faction : teamTwoObject.faction
+      }
+    };
+    io.emit('teams', {obj: teams});
     console.log(data);
   });
 });
@@ -119,7 +134,6 @@ function start(one, two, f) {
       facility = f;
 
   var response = Q.defer();
-  var teamOneObject, teamTwoObject;
   var promises = [];
   promises.push(teams.fetchTeamData(teamOneTag));
   promises.push(teams.fetchTeamData(teamTwoTag));
@@ -141,8 +155,8 @@ function start(one, two, f) {
   });
 }
 
-module.exports = app;
-exports.killfeedEmit = killfeedEmit;
+module.exports        = app;
+exports.killfeedEmit  = killfeedEmit;
 
 //start('7ROI', 'HBSS', '202');
 start(config.config.team1, config.config.team2, config.config.base);

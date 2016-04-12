@@ -31,6 +31,10 @@
 
 <div class="main_area container" role="main">
     <section>
+        <h1>{{ title }}</h1>
+        <h3 id="outfiTitle"></h3>
+    </section>
+    <section>
         <p>Killfeed</p>
         <table class="table index-table">
             <thead><tr><th>Winner</th><th>Loser</th><th>Weapon</th><th>Image</th><th>Points</th></tr></thead>
@@ -49,6 +53,12 @@
 
     var socket = io();
     socket.on('connect', function() {
+        socket.on('teams', function(data) {
+            var event = data.obj;
+            console.log(event);
+            $('[' + event.teamOne.alias + '] ' + event.teamOne.name + '  V  [' + event.teamTwo.alias + '] ' + event.teamTwo.name + '').appendTo($('outfitTitle'));
+            console.log(event.teamOne.alias);
+        });
         socket.on('killfeed', function(data) {
             var event = data.obj;
             console.log(event);
@@ -61,7 +71,7 @@
         });
     });
 
-    socket.emit('backchat', { obj: 'hello from html' });
+    socket.emit('backchat', { obj: 'Web Connection' });
 
 </script>
 </body>

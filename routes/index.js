@@ -32,34 +32,6 @@ var scoreboard = {
   }
 };
 
-function teamToScoreboard(teamOne, teamTwo) {
-  scoreboard = {
-    teamOne: {
-      alias : teamOne.alias,
-      outfit_id : teamOne.outfit_id,
-      name : teamOne.name,
-      faction : teamOne.faction,
-      points : teamOne.points,
-      netScore : teamOne.netScore,
-      kills : teamOne.kills,
-      deaths : teamOne.deaths,
-      members : teamOne.members
-    },
-    teamTwo: {
-      alias : teamTwo.alias,
-      outfit_id : teamTwo.outfit_id,
-      name : teamTwo.name,
-      faction : teamTwo.faction,
-      points : teamTwo.points,
-      netScore : teamTwo.netScore,
-      kills : teamTwo.kills,
-      deaths : teamTwo.deaths,
-      members : teamTwo.members
-    }
-  };
-  return scoreboard;
-}
-
 var killfeed = {
   killer : '',
   dead : '',
@@ -69,4 +41,3 @@ var killfeed = {
 };
 
 module.exports = router;
-exports.teamToScoreboard = teamToScoreboard;

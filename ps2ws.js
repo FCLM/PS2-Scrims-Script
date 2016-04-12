@@ -20,17 +20,6 @@ var memberTemplate = JSON.stringify({
   deaths : 0
 });
 
-var killfeedTemplate = {
-  winner: '',
-  winner_faction: 0,
-  loser: '',
-  loser_faction: 0,
-  weapon: '',
-  image: '',
-  points: 0,
-  time: 0
-};
-
 function teamObject(team) {
   // Create a new indexable team object
   var outfit_obj = {
@@ -297,7 +286,7 @@ function createStream() {
     //team1 subscribing
     //{"service":"event","action":"subscribe","characters":["5428010618035589553"],"eventNames":["Death"]}
     teamOne.members.forEach(function (member) {
-      ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}');
+      ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
       //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}')
     });
     //team2 subscribing
@@ -308,7 +297,7 @@ function createStream() {
     //facility Subscribing
     ws.send('{"service":"event","action":"subscribe","worlds":["19","25"],"eventNames":["FacilityControl"]}');
     //not correct currently - subscribes to all, i guess it could just be that and then if the facility is the right one then add points to corresponding team
-  });
+    });
   ws.on('message', function (data) {
     if (data.indexOf("payload") == 2) {
       if (data.indexOf('"event_name":"FacilityControl"') == -1 || data.indexOf('"facility_id":"' + config.config.base + '"') > -1) {
@@ -317,7 +306,7 @@ function createStream() {
     }
     //store the data somewhere - possibly a txt file in case something gets disputed
   });
-}
+} 
 
 function startUp(tOne, tTwo, fID) {
   items.initialise().then(function(result) {
