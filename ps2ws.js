@@ -264,11 +264,13 @@ function itsFacilityData(data) {
     if (captures == 0) {
       points = 10;
       teamOneObject.points += points;
+      teamOneObject.netScore += points;
       console.log(teamOneObject.name + ' captured the base +' + points);
       console.log(teamOneObject.points + ' ' + teamTwoObject.points);
     } else {
       points = 25;
       teamOneObject.points += points;
+      teamOneObject.netScore += points;
       console.log(teamOneObject.name + ' captured the base +' + points);
       console.log(teamOneObject.points + ' ' + teamTwoObject.points);
     }
@@ -276,11 +278,13 @@ function itsFacilityData(data) {
     if (captures == 0) {
       points = 10;
       teamTwoObject.points += points;
+      teamTwoObject.netScore += points;
       console.log(teamTwoObject.name + ' captured the base +' + points);
       console.log(teamOneObject.points + ' ' + teamTwoObject.points);
     } else {
       points = 25;
       teamTwoObject.points += points;
+      teamTwoObject.netScore += points;
       console.log(teamTwoObject.name + ' captured the base +' + points);
       console.log(teamOneObject.points + ' ' + teamTwoObject.points);
     }

@@ -17,3 +17,7 @@
 .pad {
   padding: 20px;
 }
+.inlinePad {
+  padding: 20px;
+  display: inline;
+}
