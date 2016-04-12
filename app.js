@@ -1,17 +1,17 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var Q = require('q');
+var express       = require('express'),
+    path          = require('path'),
+    favicon       = require('serve-favicon'),
+    logger        = require('morgan'),
+    cookieParser  = require('cookie-parser'),
+    bodyParser    = require('body-parser'),
+    Q             = require('q');
 
-var ps2ws = require('./ps2ws.js');
-var teams = require('./teams.js');
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
-var config = require('./config');
+var ps2ws   = require('./ps2ws.js'),
+    teams   = require('./teams.js'),
+    routes  = require('./routes/index'),
+    users   = require('./routes/users'),
+    config  = require('./config'),
+    api_key = require('./api_key');
 
 var app = express();
 
