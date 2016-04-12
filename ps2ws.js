@@ -109,10 +109,12 @@ function itsPlayerData(data) {
 
 function oneIvITwo(data, points, item) {
   teamOneObject.points += points;
+  teamOneObject.netScore += points;
   teamTwoObject.netScore -= points;
   teamOneObject.kills++;
   teamTwoObject.deaths++;
   teamOneObject.members[data.attacker_character_id].points += points;
+  teamOneObject.members[data.attacker_character_id].netScore += points;
   teamTwoObject.members[data.character_id].netScore -= points;
   teamOneObject.members[data.attacker_character_id].kills++;
   teamTwoObject.members[data.character_id].deaths++;
@@ -135,10 +137,12 @@ function oneIvITwo(data, points, item) {
 
 function twoIvIOne(data, points, item) {
   teamTwoObject.points += points;
+  teamTwoObject.netScore += points;
   teamOneObject.netScore -= points;
   teamTwoObject.kills++;
   teamOneObject.deaths++;
   teamTwoObject.members[data.attacker_character_id].points += points;
+  teamTwoObject.members[data.attacker_character_id].netScore += points;
   teamOneObject.members[data.character_id].netScore -= points;
   teamTwoObject.members[data.attacker_character_id].kills++;
   teamOneObject.members[data.character_id].deaths++;
@@ -161,6 +165,7 @@ function twoIvIOne(data, points, item) {
 
 function teamOneSuicide(data, points, item) {
   teamOneObject.points -= points;
+  teamOneObject.netScore -= points;
   teamOneObject.deaths++;
   teamOneObject.members[data.attacker_character_id].points -= points;
   teamOneObject.members[data.attacker_character_id].deaths++;
@@ -183,6 +188,7 @@ function teamOneSuicide(data, points, item) {
 
 function teamTwoSuicide(data, points, item) {
   teamTwoObject.points -= points;
+  teamTwoObject.netScore -= points;
   teamTwoObject.deaths++;
   teamTwoObject.members[data.attacker_character_id].points -= points;
   teamTwoObject.members[data.attacker_character_id].deaths++;
@@ -206,6 +212,7 @@ function teamTwoSuicide(data, points, item) {
 function teamOneTeamkill (data, item) {
   points = 5;
   teamOneObject.points -= points;
+  teamOneObject.netScore -= points;
   teamOneObject.deaths++;
   teamOneObject.members[data.attacker_character_id].points -= points;
   teamOneObject.members[data.character_id].deaths++;
@@ -229,6 +236,7 @@ function teamOneTeamkill (data, item) {
 function teamTwoTeamkill (data, item) {
   points = 5;
   teamTwoObject.points -= points;
+  teamTwoObject.netScore -= points;
   teamTwoObject.deaths++;
   teamTwoObject.members[data.attacker_character_id].points -= points;
   teamTwoObject.members[data.character_id].deaths++;

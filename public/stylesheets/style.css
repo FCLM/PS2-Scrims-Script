@@ -9,3 +9,11 @@
 .faction3 {
   color: red;
 }
+
+.inline {
+  display: inline;
+}
+
+.pad {
+  padding: 20px;
+}
