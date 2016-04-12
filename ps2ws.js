@@ -104,6 +104,7 @@ function itsPlayerData(data) {
     // Hahahaha he killed his mate
     teamTwoTeamkill(data, item);
   }
+  app.sendScores(teamOneObject, teamTwoObject);
 }
 
 function oneIvITwo(data, points, item) {
@@ -300,9 +301,9 @@ function createStream() {
     });
   ws.on('message', function (data) {
     if (data.indexOf("payload") == 2) {
-      if (data.indexOf('"event_name":"FacilityControl"') == -1 || data.indexOf('"facility_id":"' + config.config.base + '"') > -1) {
+      //if (data.indexOf('"event_name":"FacilityControl"') == -1 || data.indexOf('"facility_id":"' + config.config.base + '"') > -1) {
         dealWithTheData(data);
-      }
+      //}
     }
     //store the data somewhere - possibly a txt file in case something gets disputed
   });

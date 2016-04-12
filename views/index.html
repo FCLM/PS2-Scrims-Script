@@ -32,10 +32,18 @@
 <div class="main_area container" role="main">
     <section>
         <h1>{{ title }}</h1>
-        <h3 id="outfiTitle"></h3>
+        <h3 id="outfitTitle"></h3>
+        <table>
+            <thead><tr><th>Team One: </th><th>Score: </th><th>Net Score: </th><th>Kills: </th><th>Deaths: </th></tr></thead>
+            <tbody id="T1"></tbody>
+        </table>
+        <table>
+            <thead><tr><th>Team Two: </th><th>Score: </th><th>Net Score: </th><th>Kills: </th><th>Deaths: </th></tr></thead>
+            <tbody id="T2"></tbody>
+        </table>
     </section>
     <section>
-        <p>Killfeed</p>
+        <p>Killfeed: </p>
         <table class="table index-table">
             <thead><tr><th>Winner</th><th>Loser</th><th>Weapon</th><th>Image</th><th>Points</th></tr></thead>
             <tbody id="killfeed"></tbody>
@@ -56,7 +64,7 @@
         socket.on('teams', function(data) {
             var event = data.obj;
             console.log(event);
-            $('[' + event.teamOne.alias + '] ' + event.teamOne.name + '  V  [' + event.teamTwo.alias + '] ' + event.teamTwo.name + '').appendTo($('outfitTitle'));
+            $('#outfitTitle').html('[' + event.teamOne.alias + '] ' + event.teamOne.name + '  V  [' + event.teamTwo.alias + '] ' + event.teamTwo.name + '');
             console.log(event.teamOne.alias);
         });
         socket.on('killfeed', function(data) {
@@ -69,8 +77,25 @@
                     '<td>' + event.points + '</td></tr>')
                     .appendTo($(killfeed));
         });
+        socket.on('score', function(data) {
+            var event = data.obj;
+            console.log(event);
+            event.teamOne.members.forEach(function (member) {
+                $('<tr><td>' + member.name + '</td>' +
+                        '<td>' + member.points + '</td>' +
+                        '<td>' + member.netScore + '</td>'+
+                        '<td>' + member.kills + '</td>' +
+                        '<td>' + member.deaths + '</td></tr>').appendTo($(T1));
+            });
+            event.teamTwo.members.forEach(function (member) {
+                $('<tr><td>' + member.name + '</td>' +
+                        '<td>' + member.points + '</td>' +
+                        '<td>' + member.netScore + '</td>'+
+                        '<td>' + member.kills + '</td>' +
+                        '<td>' + member.deaths + '</td></tr>').appendTo($(T2));
+            });
+        })
     });
-
     socket.emit('backchat', { obj: 'Web Connection' });
 
 </script>

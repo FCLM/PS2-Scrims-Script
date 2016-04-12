@@ -126,6 +126,31 @@ console.log('Listening on port %d', server.address().port);
 function killfeedEmit(killfeed) {
   io.emit('killfeed', {obj: killfeed});
 }
+function sendScores(teamOneObject, teamTwoObject) {
+  var scoreboard = {
+    teamOne: {
+      alias : teamOneObject.alias,
+      name : teamOneObject.name,
+      faction : teamOneObject.faction,
+      points : teamOneObject.points,
+      netScore : teamOneObject.netScore,
+      kills : teamOneObject.kills,
+      deaths : teamOneObject.deaths,
+      members : teamOneObject.members
+    },
+    teamTwo: {
+      alias : teamTwoObject.alias,
+      name : teamTwoObject.name,
+      faction : teamTwoObject.faction,
+      points : teamTwoObject.points,
+      netScore : teamTwoObject.netScore,
+      kills : teamTwoObject.kills,
+      deaths : teamTwoObject.deaths,
+      members : teamTwoObject.members
+    }
+  };
+  io.emit('score', {obj: scoreboard});
+}
 
 function start(one, two, f) {
   //match variables
@@ -157,6 +182,7 @@ function start(one, two, f) {
 
 module.exports        = app;
 exports.killfeedEmit  = killfeedEmit;
+exports.sendScores    = sendScores;
 
 //start('7ROI', 'HBSS', '202');
 start(config.config.team1, config.config.team2, config.config.base);
