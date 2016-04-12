@@ -8,6 +8,8 @@
     <meta name="author" content="">
     <title>{{ title }}</title>
 
+    <link href="../stylesheets/style.css" rel="stylesheet">
+
     <!-- Bootstrap core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap theme -->
@@ -50,12 +52,12 @@
         socket.on('killfeed', function(data) {
             var event = data.obj;
             console.log(event);
-            $('<tr><td>' + event.winner + '</td>' +
-                    '<td>' + event.loser + '</td>' +
+            $('<tr><td class="faction' + event.winner_faction + '">' + event.winner + '</td>' +
+                    '<td class="faction' + event.loser_faction + '">' + event.loser + '</td>' +
                     '<td>' + event.weapon + '</td>' +
                     '<td>' + event.image + '</td>' +
                     '<td>' + event.points + '</td></tr>')
-                    .appendTo($(killfeed)).css('color', 'black');
+                    .appendTo($(killfeed));
         });
     });
 

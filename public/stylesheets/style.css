@@ -1,8 +1,11 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.faction1 {
+  color: purple;
 }
 
-a {
-  color: #00B7FF;
+.faction2 {
+  color: blue;
+}
+
+.faction3 {
+  color: red;
 }

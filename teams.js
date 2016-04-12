@@ -7,6 +7,7 @@ var Q = require('q');
 
 //https://census.daybreakgames.com/get/ps2/outfit/?alias=FCLM&c:resolve=member_character(name)&c:hide=time_created
 //https://census.daybreakgames.com/get/ps2:v2/outfit/?alias_lower=fcln&c:resolve=leader(faction_id),member_character(name)&c:hide=time_created
+//factions: 0 - NS, 1 - VS, 2 - NC, 3 - TR
 
 function fetchTeamData(teamTag) {
   var response = Q.defer();

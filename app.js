@@ -58,10 +58,10 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  //res.render('error', {
-  //  message: err.message,
-  //  error: {}
-  //});
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
 });
 
 // Killfeed.js code start
@@ -86,6 +86,7 @@ io.on('connection', function(sock) {
     console.log(data);
   });
 });
+//the following code generates fake kill feed JSON to test socket.io
 /*
 var count = 0;
 setInterval(function () {
