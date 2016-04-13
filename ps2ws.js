@@ -257,12 +257,6 @@ function teamTwoTeamkill (data, item) {
   app.killfeedEmit(obj);
 }
 
-function teamOneKill (data, points) {
-  var obj = {
-    attacker: 0
-  }
-}
-
 function itsFacilityData(data) {
   //deals with adding points to the correct team
   if (data.outfit_id == teamOneObject.outfit_id) {

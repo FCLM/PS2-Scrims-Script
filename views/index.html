@@ -47,8 +47,6 @@
             <tbody id="Team2">
             <tr id="T2">
             </tr>
-            <tr id="1"></tr>
-            <tr id="2"></tr>
             </tbody>
         </table>
     </section>
@@ -93,37 +91,40 @@
         socket.on('score', function(data) {
             var event = data.obj;
             console.log(event);
-            $('#T1').empty(); $('#T2').empty();
-             $('<td class="pad">' + event.teamOne.alias + '</td>' +
+            $('#Team1').empty(); $('#Team2').empty();
+             $('<tr id="T2"><tr id="T1"><td class="pad">' + event.teamOne.alias + '</td>' +
                      '<td class="pad">' + event.teamOne.points + '</td>' +
                      '<td class="pad">' + event.teamOne.netScore + '</td>'+
                      '<td class="pad">' + event.teamOne.kills + '</td>' +
-                     '<td class="pad">' + event.teamOne.deaths + '</td>').appendTo($(T1));
+                     '<td class="pad">' + event.teamOne.deaths + '</td></tr>').appendTo($(Team1));
             $('<td class="pad">' + event.teamTwo.alias + '</td>' +
                     '<td class="pad">' + event.teamTwo.points + '</td>' +
                     '<td class="pad">' + event.teamTwo.netScore + '</td>'+
                     '<td class="pad">' + event.teamTwo.kills + '</td>' +
                     '<td class="pad">' + event.teamTwo.deaths + '</td>').appendTo($(T2));
-            $.each(event.teamOne.members, function(members, i) {
-                $('<tr id="' + event.teamOne.members.name +
-                        '"><td id="name">' + event.teamOne.members.name +
-                        '</td><td id="score">' + members.score +
-                        '</td><td id="netScore">' + members.netScore +
-                        '</td><td id="kills">' + members.kills +
-                        '<td id="deaths">' + members.deaths +
-                        '</td></tr>').appendTo($(Team1));
+            event.teamOne.members.forEach(function(member) {
+                if (member.kills > 0 || member.deaths > 0) {
+                    $('<tr id="' + event.teamOne.members.name +
+                            '"><td class="pad" id="name">' + member.name +
+                            '</td><td class="pad" id="score">' + member.points +
+                            '</td><td class="pad" id="netScore">' + member.netScore +
+                            '</td><td class="pad" id="kills">' + member.kills +
+                            '<td class="pad" id="deaths">' + member.deaths +
+                            '</td></tr>').appendTo($(Team1));
+                }
             });
+            event.teamTwo.members.forEach(function(member) {
+                if (member.kills > 0 || member.deaths > 0) {
+                    $('<tr id="' + event.teamOne.members.name +
+                            '"><td class="pad" class="pad" id="name">' + member.name +
+                            '</td><td class="pad" id="score">' + member.points +
+                            '</td><td class="pad" id="netScore">' + member.netScore +
+                            '</td><td class="pad" id="kills">' + member.kills +
+                            '<td class="pad" id="deaths">' + member.deaths +
+                            '</td></tr>').appendTo($(Team2));
+                }
             });
-        socket.on('playerDataT1', function(data) {
-            var event = data.obj;
-            console.log(event);
-            $('<td class="pad">' + event.teamOne.alias + '</td>' +
-                    '<td class="pad">' + event.teamOne.points + '</td>' +
-                    '<td class="pad">' + event.teamOne.netScore + '</td>'+
-                    '<td class="pad">' + event.teamOne.kills + '</td>' +
-                    '<td class="pad">' + event.teamOne.deaths + '</td>').appendTo($(Team1));
-        })
-    });
+        });
     socket.emit('backchat', { obj: 'Web Connection' });
 
 </script>

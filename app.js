@@ -98,7 +98,6 @@ io.on('connection', function(sock) {
       }
     };
     io.emit('teams', {obj: teams});
-    console.log(data);
   });
 });
 //the following code generates fake kill feed JSON to test socket.io
@@ -161,6 +160,7 @@ function sendScores(teamOneObject, teamTwoObject) {
     scoreboard.teamTwo.members.push(teamTwoObject.members[keys])
   }
   io.emit('score', {obj: scoreboard});
+  console.log(scoreboard.teamOne.members[0].name);
 }
 
 function playerDataT1 (obj) {
