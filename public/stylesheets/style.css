@@ -15,7 +15,9 @@
 }
 
 .pad {
-  padding: 20px;
+  padding-right: 20px;
+  padding-bottom: 5px;
+  padding-top: 5px;
 }
 .inlinePad {
   padding: 20px;

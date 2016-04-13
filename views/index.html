@@ -69,16 +69,16 @@
 
     var socket = io();
     socket.on('connect', function() {
-        socket.on('teams', function(data) {
+        socket.on('teams', function (data) {
             var event = data.obj;
             console.log(event);
             $('#outfitT1').html('[' + event.teamOne.alias + '] ' + event.teamOne.name);
             $('#outfitT2').html('[' + event.teamTwo.alias + '] ' + event.teamTwo.name);
         });
-        socket.on('refresh', function() {
-                window.location.reload();
+        socket.on('refresh', function () {
+            window.location.reload();
         });
-        socket.on('killfeed', function(data) {
+        socket.on('killfeed', function (data) {
             var event = data.obj;
             console.log(event);
             $('<tr><td class="faction' + event.winner_faction + '">' + event.winner + '</td>' +
@@ -88,23 +88,24 @@
                     '<td>' + event.points + '</td></tr>')
                     .appendTo($(killfeed));
         });
-        socket.on('score', function(data) {
+        socket.on('score', function (data) {
             var event = data.obj;
             console.log(event);
-            $('#Team1').empty(); $('#Team2').empty();
-             $('<tr id="T2"><tr id="T1"><td class="pad">' + event.teamOne.alias + '</td>' +
-                     '<td class="pad">' + event.teamOne.points + '</td>' +
-                     '<td class="pad">' + event.teamOne.netScore + '</td>'+
-                     '<td class="pad">' + event.teamOne.kills + '</td>' +
-                     '<td class="pad">' + event.teamOne.deaths + '</td></tr>').appendTo($(Team1));
-            $('<td class="pad">' + event.teamTwo.alias + '</td>' +
+            $('#Team1').empty();
+            $('#Team2').empty();
+            $('<tr id="T1"><td class="pad">' + event.teamOne.alias + '</td>' +
+                    '<td class="pad">' + event.teamOne.points + '</td>' +
+                    '<td class="pad">' + event.teamOne.netScore + '</td>' +
+                    '<td class="pad">' + event.teamOne.kills + '</td>' +
+                    '<td class="pad">' + event.teamOne.deaths + '</td></tr>').appendTo($(Team1));
+            $('<tr id="T2"><td class="pad">' + event.teamTwo.alias + '</trtd>' +
                     '<td class="pad">' + event.teamTwo.points + '</td>' +
-                    '<td class="pad">' + event.teamTwo.netScore + '</td>'+
+                    '<td class="pad">' + event.teamTwo.netScore + '</td>' +
                     '<td class="pad">' + event.teamTwo.kills + '</td>' +
-                    '<td class="pad">' + event.teamTwo.deaths + '</td>').appendTo($(T2));
-            event.teamOne.members.forEach(function(member) {
+                    '<td class="pad">' + event.teamTwo.deaths + '</td></tr>').appendTo($(Team2));
+            event.teamOne.members.forEach(function (member) {
                 if (member.kills > 0 || member.deaths > 0) {
-                    $('<tr id="' + event.teamOne.members.name +
+                    $('<tr id="' + member.name +
                             '"><td class="pad" id="name">' + member.name +
                             '</td><td class="pad" id="score">' + member.points +
                             '</td><td class="pad" id="netScore">' + member.netScore +
@@ -113,9 +114,9 @@
                             '</td></tr>').appendTo($(Team1));
                 }
             });
-            event.teamTwo.members.forEach(function(member) {
+            event.teamTwo.members.forEach(function (member) {
                 if (member.kills > 0 || member.deaths > 0) {
-                    $('<tr id="' + event.teamOne.members.name +
+                    $('<tr id="' + member.name +
                             '"><td class="pad" class="pad" id="name">' + member.name +
                             '</td><td class="pad" id="score">' + member.points +
                             '</td><td class="pad" id="netScore">' + member.netScore +
@@ -125,6 +126,7 @@
                 }
             });
         });
+    });
     socket.emit('backchat', { obj: 'Web Connection' });
 
 </script>

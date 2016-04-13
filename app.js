@@ -24,8 +24,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', '.html'); // changed from hbs to .html
 app.use(express.static(__dirname + '/public')); // code from killfeed.js
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -100,27 +99,8 @@ io.on('connection', function(sock) {
     io.emit('teams', {obj: teams});
   });
 });
-//the following code generates fake kill feed JSON to test socket.io
-/*
-var count = 0;
-setInterval(function () {
-  count++;
-  var obj = {
-    winner: 'mono',
-    winner_faction: 2,
-    loser: 'spoodles',
-    loser_faction: 1,
-    weapon: 'Serpent',
-    image: '7214.png',
-    points: Math.floor(Math.random() * 5) ,
-    time: (count * 1000)
-  };
-  io.emit('killfeed', {obj: obj});
-}, 2000);
-*/
-console.log('Listening on port %d', server.address().port);
 
-//end killfeed.js code
+console.log('Listening on port %d', server.address().port);
 
 function refreshPage() {
   io.emit('refresh');
@@ -160,7 +140,6 @@ function sendScores(teamOneObject, teamTwoObject) {
     scoreboard.teamTwo.members.push(teamTwoObject.members[keys])
   }
   io.emit('score', {obj: scoreboard});
-  console.log(scoreboard.teamOne.members[0].name);
 }
 
 function playerDataT1 (obj) {
