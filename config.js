@@ -5,8 +5,8 @@ var DEBUG = false;
 
 var config = {
   base:  244610, // rime 244610, heyoka 206002
-  team1: 'FLCM', 
-  team2: 'D3CK'  
+  team1: 'MLCF',
+  team2: 'FLCM'
 };
 
 var debug = {
