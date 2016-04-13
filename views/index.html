@@ -95,7 +95,7 @@
                     '<td>' + event.weapon + '</td>' +
                     '<td>' + event.image + '</td>' +
                     '<td>' + event.points + '</td></tr>')
-                    .appendTo($(killfeed));
+                    .prependTo($(killfeed));
         });
         socket.on('score', function (data) {
             var event = data.obj;
