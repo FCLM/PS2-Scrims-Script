@@ -132,29 +132,43 @@ function killfeedEmit(killfeed) {
 }
 
 function sendScores(teamOneObject, teamTwoObject) {
+  var teamOneMembers = []
   var scoreboard = {
     teamOne: {
       alias : teamOneObject.alias,
       name : teamOneObject.name,
-      faction : teamOneObject.faction,
       points : teamOneObject.points,
       netScore : teamOneObject.netScore,
       kills : teamOneObject.kills,
       deaths : teamOneObject.deaths,
-      members : teamOneObject.members
+      members : []
     },
     teamTwo: {
       alias : teamTwoObject.alias,
       name : teamTwoObject.name,
-      faction : teamTwoObject.faction,
       points : teamTwoObject.points,
       netScore : teamTwoObject.netScore,
       kills : teamTwoObject.kills,
       deaths : teamTwoObject.deaths,
-      members : teamTwoObject.members
+      members : []
     }
   };
+
+  for (keys in teamOneObject.members) {
+    scoreboard.teamOne.members.push(teamOneObject.members[keys])
+  }
+  for (keys in teamTwoObject.members) {
+    scoreboard.teamTwo.members.push(teamTwoObject.members[keys])
+  }
   io.emit('score', {obj: scoreboard});
+}
+
+function playerDataT1 (obj) {
+  io.emit('playerDataT1', {obj: obj});
+}
+
+function playerDataT2 (obj) {
+  io.emit('playerDataT2', {obj: obj});
 }
 
 function start(one, two, f) {
@@ -189,6 +203,8 @@ module.exports        = app;
 exports.killfeedEmit  = killfeedEmit;
 exports.sendScores    = sendScores;
 exports.refreshPage   = refreshPage;
+exports.playerDataT1  = playerDataT1;
+exports.playerDataT2  = playerDataT2;
 
 //start('7ROI', 'HBSS', '202');
 start(config.config.team1, config.config.team2, config.config.base);

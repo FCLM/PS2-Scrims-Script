@@ -107,7 +107,7 @@ function itsPlayerData(data) {
   app.sendScores(teamOneObject, teamTwoObject);
 }
 
-function oneIvITwo(data, points, item) {
+function oneIvITwo (data, points, item) {
   teamOneObject.points += points;
   teamOneObject.netScore += points;
   teamTwoObject.netScore -= points;
@@ -135,7 +135,7 @@ function oneIvITwo(data, points, item) {
   app.killfeedEmit(obj);
 }
 
-function twoIvIOne(data, points, item) {
+function twoIvIOne (data, points, item) {
   teamTwoObject.points += points;
   teamTwoObject.netScore += points;
   teamOneObject.netScore -= points;
@@ -163,7 +163,7 @@ function twoIvIOne(data, points, item) {
   app.killfeedEmit(obj);
 }
 
-function teamOneSuicide(data, points, item) {
+function teamOneSuicide (data, points, item) {
   teamOneObject.points -= points;
   teamOneObject.netScore -= points;
   teamOneObject.deaths++;
@@ -186,7 +186,7 @@ function teamOneSuicide(data, points, item) {
   app.killfeedEmit(obj);
 }
 
-function teamTwoSuicide(data, points, item) {
+function teamTwoSuicide (data, points, item) {
   teamTwoObject.points -= points;
   teamTwoObject.netScore -= points;
   teamTwoObject.deaths++;
@@ -251,10 +251,16 @@ function teamTwoTeamkill (data, item) {
     loser_faction: teamTwoObject.faction,
     weapon: item.name,
     image: item.image,
-    points: points,
+    points: 0 - points,
     time: 0
   };
   app.killfeedEmit(obj);
+}
+
+function teamOneKill (data, points) {
+  var obj = {
+    attacker: 0
+  }
 }
 
 function itsFacilityData(data) {

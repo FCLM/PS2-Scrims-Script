@@ -37,14 +37,18 @@
         <p id="T2Score"></p>
         <table class="inline">
             <thead><tr><th class="pad">Team One: </th><th class="pad">Score: </th><th class="pad">Net Score: </th><th class="pad">Kills: </th><th class="pad">Deaths: </th></tr></thead>
-            <tbody id="T1">
-
+            <tbody id="Team1">
+            <tr id="T1">
+            </tr>
             </tbody>
         </table>
         <table class="inline">
             <thead><tr><th class="pad">Team Two: </th><th class="pad">Score: </th><th class="pad">Net Score: </th><th class="pad">Kills: </th><th class="pad">Deaths: </th></tr></thead>
-            <tbody id="T2">
-
+            <tbody id="Team2">
+            <tr id="T2">
+            </tr>
+            <tr id="1"></tr>
+            <tr id="2"></tr>
             </tbody>
         </table>
     </section>
@@ -72,7 +76,6 @@
             console.log(event);
             $('#outfitT1').html('[' + event.teamOne.alias + '] ' + event.teamOne.name);
             $('#outfitT2').html('[' + event.teamTwo.alias + '] ' + event.teamTwo.name);
-            console.log(event.teamOne.alias);
         });
         socket.on('refresh', function() {
                 window.location.reload();
@@ -91,17 +94,35 @@
             var event = data.obj;
             console.log(event);
             $('#T1').empty(); $('#T2').empty();
-             $('<tr><td class="pad">' + event.teamOne.alias + '</td>' +
+             $('<td class="pad">' + event.teamOne.alias + '</td>' +
                      '<td class="pad">' + event.teamOne.points + '</td>' +
                      '<td class="pad">' + event.teamOne.netScore + '</td>'+
                      '<td class="pad">' + event.teamOne.kills + '</td>' +
-                     '<td class="pad">' + event.teamOne.deaths + '</td></tr>').appendTo($(T1));
-            $('<tr><td class="pad">' + event.teamTwo.alias + '</td>' +
+                     '<td class="pad">' + event.teamOne.deaths + '</td>').appendTo($(T1));
+            $('<td class="pad">' + event.teamTwo.alias + '</td>' +
                     '<td class="pad">' + event.teamTwo.points + '</td>' +
                     '<td class="pad">' + event.teamTwo.netScore + '</td>'+
                     '<td class="pad">' + event.teamTwo.kills + '</td>' +
-                    '<td class="pad">' + event.teamTwo.deaths + '</td></tr>').appendTo($(T2));
+                    '<td class="pad">' + event.teamTwo.deaths + '</td>').appendTo($(T2));
+            $.each(event.teamOne.members, function(members, i) {
+                $('<tr id="' + event.teamOne.members.name +
+                        '"><td id="name">' + event.teamOne.members.name +
+                        '</td><td id="score">' + members.score +
+                        '</td><td id="netScore">' + members.netScore +
+                        '</td><td id="kills">' + members.kills +
+                        '<td id="deaths">' + members.deaths +
+                        '</td></tr>').appendTo($(Team1));
             });
+            });
+        socket.on('playerDataT1', function(data) {
+            var event = data.obj;
+            console.log(event);
+            $('<td class="pad">' + event.teamOne.alias + '</td>' +
+                    '<td class="pad">' + event.teamOne.points + '</td>' +
+                    '<td class="pad">' + event.teamOne.netScore + '</td>'+
+                    '<td class="pad">' + event.teamOne.kills + '</td>' +
+                    '<td class="pad">' + event.teamOne.deaths + '</td>').appendTo($(Team1));
+        })
     });
     socket.emit('backchat', { obj: 'Web Connection' });
 
