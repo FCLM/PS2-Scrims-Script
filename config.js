@@ -1,12 +1,12 @@
 
 var debug_match = require('./test_matches/fclm_match_10042016');
 
-var DEBUG = true;
+var DEBUG = false;
 
 var config = {
   base:  244610, // rime 244610, heyoka 206002
-  team1: 'FCLM', //FLCM for debug
-  team2: 'RSNC'  //J0K2 for debug
+  team1: 'FLCM', 
+  team2: 'D3CK'  
 };
 
 var debug = {

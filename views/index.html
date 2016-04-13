@@ -49,6 +49,10 @@
         </tr>
         </tbody>
     </table>
+    <table id="smallKillboard">
+
+    </table>
+    <br><br>
 </div>
 <div class="main_area container" role="main">
     <section>
@@ -98,16 +102,16 @@
             console.log(event);
             $('#Team1').empty(); $('#Team2').empty();
             $('#T1Score').empty().html(event.teamOne.points); $('#T2Score').empty().html(event.teamTwo.points);
-            $('<tr id="T1"><td class="pad">' + event.teamOne.alias + '</td>' +
-                    '<td class="pad">' + event.teamOne.points + '</td>' +
-                    '<td class="pad">' + event.teamOne.netScore + '</td>' +
-                    '<td class="pad">' + event.teamOne.kills + '</td>' +
-                    '<td class="pad">' + event.teamOne.deaths + '</td></tr>').appendTo($(Team1));
-            $('<tr id="T2"><td class="pad">' + event.teamTwo.alias + '</trtd>' +
-                    '<td class="pad">' + event.teamTwo.points + '</td>' +
-                    '<td class="pad">' + event.teamTwo.netScore + '</td>' +
-                    '<td class="pad">' + event.teamTwo.kills + '</td>' +
-                    '<td class="pad">' + event.teamTwo.deaths + '</td></tr>').appendTo($(Team2));
+            $('<tr id="T1"><td class="pad" id="outfitScore">' + event.teamOne.alias + '</td>' +
+                    '<td class="pad" id="outfitScore">' + event.teamOne.points + '</td>' +
+                    '<td class="pad" id="outfitScore">' + event.teamOne.netScore + '</td>' +
+                    '<td class="pad" id="outfitScore">' + event.teamOne.kills + '</td>' +
+                    '<td class="pad" id="outfitScore">' + event.teamOne.deaths + '</td></tr>').appendTo($(Team1));
+            $('<tr id="T2"><td class="pad" id="outfitScore">' + event.teamTwo.alias + '</trtd>' +
+                    '<td class="pad" id="outfitScore">' + event.teamTwo.points + '</td>' +
+                    '<td class="pad" id="outfitScore">' + event.teamTwo.netScore + '</td>' +
+                    '<td class="pad" id="outfitScore">' + event.teamTwo.kills + '</td>' +
+                    '<td class="pad" id="outfitScore">' + event.teamTwo.deaths + '</td></tr>').appendTo($(Team2));
             event.teamOne.members.forEach(function (member) {
                 if (member.kills > 0 || member.deaths > 0) {
                     $('<tr id="' + member.name +
