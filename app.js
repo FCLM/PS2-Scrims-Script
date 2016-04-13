@@ -120,6 +120,7 @@ function sendScores(teamOneObject, teamTwoObject) {
       netScore : teamOneObject.netScore,
       kills : teamOneObject.kills,
       deaths : teamOneObject.deaths,
+      faction : teamOneObject.faction,
       members : []
     },
     teamTwo: {
@@ -129,6 +130,7 @@ function sendScores(teamOneObject, teamTwoObject) {
       netScore : teamTwoObject.netScore,
       kills : teamTwoObject.kills,
       deaths : teamTwoObject.deaths,
+      faction : teamTwoObject.faction,
       members : []
     }
   };

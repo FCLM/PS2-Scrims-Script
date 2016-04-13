@@ -29,26 +29,30 @@
 
 <body role="document">
 
+<div id="stats">
+    <h1>{{ title }}</h1>
+    <h3 class="inlinePad" id="outfitT1"></h3><h1 class="score" id="T1Score"></h1>
+    <h1 class="v">v</h1>
+    <h1 class="score" id="T2Score"></h1><h3 class="inlinePad" id="outfitT2"></h3>
+    <h1 id="timer">15:00</h1>
+    <table class="inline">
+        <thead><tr><th class="pad">Team One: </th><th class="pad">Score: </th><th class="pad">Net Score: </th><th class="pad">Kills: </th><th class="pad">Deaths: </th></tr></thead>
+        <tbody id="Team1">
+        <tr id="T1">
+        </tr>
+        </tbody>
+    </table>
+    <table class="inline">
+        <thead><tr><th class="pad">Team Two: </th><th class="pad">Score: </th><th class="pad">Net Score: </th><th class="pad">Kills: </th><th class="pad">Deaths: </th></tr></thead>
+        <tbody id="Team2">
+        <tr id="T2">
+        </tr>
+        </tbody>
+    </table>
+</div>
 <div class="main_area container" role="main">
     <section>
-        <h1>{{ title }}</h1>
-        <h3 class="inlinePad" id="outfitT1"></h3><h3 id="V" class="inlinePad"> V </h3><h3 class="inlinePad" id="outfitT2"></h3>
-        <p id="T1Score"></p>
-        <p id="T2Score"></p>
-        <table class="inline">
-            <thead><tr><th class="pad">Team One: </th><th class="pad">Score: </th><th class="pad">Net Score: </th><th class="pad">Kills: </th><th class="pad">Deaths: </th></tr></thead>
-            <tbody id="Team1">
-            <tr id="T1">
-            </tr>
-            </tbody>
-        </table>
-        <table class="inline">
-            <thead><tr><th class="pad">Team Two: </th><th class="pad">Score: </th><th class="pad">Net Score: </th><th class="pad">Kills: </th><th class="pad">Deaths: </th></tr></thead>
-            <tbody id="Team2">
-            <tr id="T2">
-            </tr>
-            </tbody>
-        </table>
+
     </section>
     <section>
         <p>Killfeed: </p>
@@ -66,14 +70,15 @@
 <script src="../js/bootstrap.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-
     var socket = io();
     socket.on('connect', function() {
         socket.on('teams', function (data) {
             var event = data.obj;
             console.log(event);
-            $('#outfitT1').html('[' + event.teamOne.alias + '] ' + event.teamOne.name);
-            $('#outfitT2').html('[' + event.teamTwo.alias + '] ' + event.teamTwo.name);
+            $('#outfitT1').html('[' + event.teamOne.alias + '] ' + event.teamOne.name).addClass('faction' + event.teamOne.faction);;
+            $('#outfitT2').html('[' + event.teamTwo.alias + '] ' + event.teamTwo.name).addClass('faction' + event.teamTwo.faction);
+            $('#Team1').addClass('faction' + event.teamOne.faction);
+            $('#Team2').addClass('faction' + event.teamTwo.faction);
         });
         socket.on('refresh', function () {
             window.location.reload();
@@ -91,8 +96,8 @@
         socket.on('score', function (data) {
             var event = data.obj;
             console.log(event);
-            $('#Team1').empty();
-            $('#Team2').empty();
+            $('#Team1').empty(); $('#Team2').empty();
+            $('#T1Score').empty().html(event.teamOne.points); $('#T2Score').empty().html(event.teamTwo.points);
             $('<tr id="T1"><td class="pad">' + event.teamOne.alias + '</td>' +
                     '<td class="pad">' + event.teamOne.points + '</td>' +
                     '<td class="pad">' + event.teamOne.netScore + '</td>' +
@@ -128,7 +133,6 @@
         });
     });
     socket.emit('backchat', { obj: 'Web Connection' });
-
 </script>
 </body>
 </html>

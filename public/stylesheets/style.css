@@ -10,6 +10,9 @@
   color: red;
 }
 
+#stats {
+  text-align: center;
+}
 .inline {
   display: inline;
 }
@@ -19,7 +22,29 @@
   padding-bottom: 5px;
   padding-top: 5px;
 }
+
 .inlinePad {
   padding: 20px;
   display: inline;
+  text-align: center;
+}
+
+.score {
+  display: inline;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+}
+
+.v {
+  display: inline;
+  text-align: center;
+}
+
+#timer {
+  text-align: center;
+}
+
+#name {
+  text-align: left;
 }
