@@ -6,7 +6,8 @@ var api_key   = require('./api_key.js'),
     items     = require('./items.js'),
     WebSocket = require('ws'),
     app       = require('./app'),
-    config    = require('./config');
+    config    = require('./config'),
+    fs        = require('fs');
 
 var teamOne, teamOneObject, teamTwoObject, teamTwo, facilityID;
 var captures = 0;
@@ -19,6 +20,102 @@ var memberTemplate = JSON.stringify({
   kills : 0,
   deaths : 0
 });
+
+function initialiseOverlay() {
+  fs.writeFile('scoreT1.txt', '0', function(err) {
+    if (err) {
+      return console.log('scoreT1.txt Error: ' + err);
+    }
+    console.log('scoreT1.txt updated: ' + '0')
+  });
+  fs.writeFile('scoreT2.txt', '0', function(err) {
+    if (err) {
+      return console.log('scoreT1.txt Error: ' + err);
+    }
+    console.log('scoreT2.txt updated: ' + '0')
+  });
+  fs.writeFile('playersT1.txt', '', function(err) {
+    if (err) {
+      return console.log('playersT1.txt Error: ' + err);
+    }
+    console.log('playersT1.txt updated: ' + '')
+  });
+  fs.writeFile('playersT2.txt', '', function(err) {
+    if (err) {
+      return console.log('playersT2.txt Error: ' + err);
+    }
+    console.log('playersT2.txt updated: ' + '')
+  });
+}
+
+function scoreUpdate() {
+  //for use in OBS for the overlay
+  //writes to 2 text files the current team score
+  fs.writeFile('scoreT1.txt', teamOneObject.points, function (err) {
+    if (err) {
+      return console.log('scoreT1.txt Error: ' + err);
+    }
+    console.log('scoreT1.txt updated: ' + teamOneObject.points)
+  });
+
+  fs.writeFile('scoreT2.txt', teamTwoObject.points, function (err) {
+    if (err) {
+      return console.log('scoreT2.txt Error: ' + err);
+    }
+    console.log('scoreT2.txt updated: ' + teamTwoObject.points)
+  });
+  //Writes player data to a text file
+  var teamOneActivePlayers = [];
+  for (keys in teamOneObject.members) {
+    teamOneActivePlayers.push(teamOneObject.members[keys])
+  }
+  var teamOneActive = '';
+  var i = 0;
+  teamOneActivePlayers.forEach(function (member) {
+    if ((member.points > 0) || (member.netScore != 0)) {
+      teamOneActive += member.name + '\t ' + member.points;
+      if (i % 2 == 0) {
+        teamOneActive += '    |    ';
+        i++
+      } else {
+        teamOneActive += '\n';
+        i++;
+      }
+    }
+  });
+  fs.writeFile('playersT1.txt', teamOneActive, function (err) {
+    if (err) {
+      return console.log('playersT1.txt Error: ' + err);
+    }
+    console.log('playersT1.txt updated: ' + '')
+  });
+
+  var teamTwoActivePlayers = [];
+  for (keys in teamTwoObject.members) {
+    teamTwoActivePlayers.push(teamTwoObject.members[keys])
+  }
+  var teamTwoActive = '';
+  var i = 0;
+  teamTwoActivePlayers.forEach(function (member) {
+    if ((member.points > 0) || (member.netScore != 0)) {
+      teamTwoActive += member.name + '\t ' + member.points;
+      if (i % 2 == 0) {
+        teamTwoActive += '    |    ';
+        i++
+      } else {
+        teamTwoActive += '\n';
+        i++;
+      }
+    }
+  });
+  fs.writeFile('playersT2.txt', teamTwoActive, function (err) {
+    if (err) {
+      return console.log('playersT2.txt Error: ' + err);
+    }
+    console.log('playersT2.txt updated: ' + teamTwoActive);
+  });
+}
+
 
 function teamObject(team) {
   // Create a new indexable team object
@@ -105,6 +202,7 @@ function itsPlayerData(data) {
     teamTwoTeamkill(data, item);
   }
   app.sendScores(teamOneObject, teamTwoObject);
+  scoreUpdate();
 }
 
 function oneIvITwo (data, points, item) {
@@ -315,6 +413,7 @@ function createStream() {
     ws.send('{"service":"event","action":"subscribe","worlds":["19","25"],"eventNames":["FacilityControl"]}');
     //not correct currently - subscribes to all, i guess it could just be that and then if the facility is the right one then add points to corresponding team
     });
+    initialiseOverlay();
   ws.on('message', function (data) {
     if (data.indexOf("payload") == 2) {
       //if (data.indexOf('"event_name":"FacilityControl"') == -1 || data.indexOf('"facility_id":"' + config.config.base + '"') > -1) {
@@ -355,6 +454,7 @@ function startUp(tOne, tTwo, fID) {
 }
 
 function debugWebSocket() {
+  initialiseOverlay();
   var round = config.debug.round;
   var counter = 15000;
   var i = setInterval(function(){
