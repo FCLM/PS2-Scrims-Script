@@ -27,8 +27,6 @@ function fetchTeamData(teamTag) {
   teamTag = teamTag.toLowerCase();
   var url = 'https://census.daybreakgames.com/s:' + api_key.KEY + '/get/ps2/outfit/?alias_lower='+ teamTag + '&c:resolve=leader(faction_id),member_character(name)&c:hide=time_created,time_created_date';
   prequest(url).then(function (body) {
-    console.log(body);
-    console.log(body.outfit_list[0].alias);
     var teamPlayers = [];
     body.outfit_list[0].members.forEach(function(result) {
 
@@ -50,7 +48,6 @@ function fetchTeamData(teamTag) {
       members : teamPlayers
     };
     response.resolve(obj);
-    console.log(obj);
   }).catch(function (err) { // Any HTTP status >= 400 falls here
     response.reject(err);
   });

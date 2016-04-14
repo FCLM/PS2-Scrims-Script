@@ -130,7 +130,6 @@ function scoreUpdate() {
   });
 }
 
-
 function teamObject(team) {
   // Create a new indexable team object
   var outfit_obj = {
