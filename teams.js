@@ -8,6 +8,20 @@ var Q = require('q');
 //https://census.daybreakgames.com/get/ps2:v2/outfit/?alias_lower=fcln&c:resolve=leader(faction_id),member_character(name)&c:hide=time_created
 //factions: 0 - NS, 1 - VS, 2 - NC, 3 - TR
 
+function removeNameParts(name) {
+  // remove faction from end
+  var end = name.length-2;
+  if (name.indexOf('VS') == end || name.indexOf('NC') == end || name.indexOf('TR') == end) {
+    name = name.substring(0, end);
+  }
+  // remove start tag
+  var idx = name.indexOf('x')
+  if (idx > 0 && idx < 5) {
+    name = name.substring(idx + 1, name.length);
+  }
+  return name;
+}
+
 function fetchTeamData(teamTag) {
   var response = Q.defer();
   teamTag = teamTag.toLowerCase();
@@ -17,11 +31,15 @@ function fetchTeamData(teamTag) {
     console.log(body.outfit_list[0].alias);
     var teamPlayers = [];
     body.outfit_list[0].members.forEach(function(result) {
-      if (result.hasOwnProperty('name.first')) {
+
+      if ((result.hasOwnProperty('name')) && (result.name.hasOwnProperty('first')))  {
+        memName = removeNameParts(result.name.first);
         teamPlayers.push({
           character_id: result.character_id,
-          name: result.name.first
+          name: memName
         });
+      } else {
+        console.error('ERROR: there is a character that does not have a name (has been deleted): ' + result.character_id);
       }
     });
     var obj = {
@@ -40,3 +58,4 @@ function fetchTeamData(teamTag) {
 }
 
 exports.fetchTeamData = fetchTeamData;
+exports.removeNameParts = removeNameParts;

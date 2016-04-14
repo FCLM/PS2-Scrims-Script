@@ -7,7 +7,8 @@ var api_key   = require('./api_key.js'),
     WebSocket = require('ws'),
     app       = require('./app'),
     config    = require('./config'),
-    fs        = require('fs');
+    fs        = require('fs'),
+    team      = require('./teams.js');
 
 var teamOne, teamOneObject, teamTwoObject, teamTwo, facilityID;
 var captures = 0;
@@ -26,25 +27,25 @@ function initialiseOverlay() {
     if (err) {
       return console.log('scoreT1.txt Error: ' + err);
     }
-    console.log('scoreT1.txt updated: ' + '0')
+    console.log('scoreT1.txt initialised')
   });
   fs.writeFile('scoreT2.txt', '0', function(err) {
     if (err) {
       return console.log('scoreT1.txt Error: ' + err);
     }
-    console.log('scoreT2.txt updated: ' + '0')
+    console.log('scoreT2.txt initialised')
   });
   fs.writeFile('playersT1.txt', '', function(err) {
     if (err) {
       return console.log('playersT1.txt Error: ' + err);
     }
-    console.log('playersT1.txt updated: ' + '')
+    console.log('playersT1.txt initialised')
   });
   fs.writeFile('playersT2.txt', '', function(err) {
     if (err) {
       return console.log('playersT2.txt Error: ' + err);
     }
-    console.log('playersT2.txt updated: ' + '')
+    console.log('playersT2.txt initialised')
   });
 }
 
@@ -55,27 +56,34 @@ function scoreUpdate() {
     if (err) {
       return console.log('scoreT1.txt Error: ' + err);
     }
-    console.log('scoreT1.txt updated: ' + teamOneObject.points)
   });
 
   fs.writeFile('scoreT2.txt', teamTwoObject.points, function (err) {
     if (err) {
       return console.log('scoreT2.txt Error: ' + err);
     }
-    console.log('scoreT2.txt updated: ' + teamTwoObject.points)
   });
   //Writes player data to a text file
   var teamOneActivePlayers = [];
   for (keys in teamOneObject.members) {
     teamOneActivePlayers.push(teamOneObject.members[keys])
   }
+  //writes to 2 text files to update the members scores
   var teamOneActive = '';
-  var i = 0;
+  var i = 0; var length;
   teamOneActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
-      teamOneActive += member.name + '\t ' + member.points;
+      var memName = member.name;
+      var netScore = member.netScore.toString();
+      while (memName.length < 20) {
+        memName += ' ';
+      }
+      while (netScore.length < 4) {
+        netScore = ' ' + netScore;
+      }
+      teamOneActive += memName + '  ' + netScore;
       if (i % 2 == 0) {
-        teamOneActive += '    |    ';
+        teamOneActive += ' | ';
         i++
       } else {
         teamOneActive += '\n';
@@ -87,7 +95,6 @@ function scoreUpdate() {
     if (err) {
       return console.log('playersT1.txt Error: ' + err);
     }
-    console.log('playersT1.txt updated: ' + '')
   });
 
   var teamTwoActivePlayers = [];
@@ -98,9 +105,17 @@ function scoreUpdate() {
   var i = 0;
   teamTwoActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
-      teamTwoActive += member.name + '\t ' + member.points;
+      var memName = member.name;
+      var netScore = member.netScore.toString();
+      while (memName.length < 16) {
+        memName += ' ';
+      }
+      while (netScore.length < 4) {
+        netScore = ' ' + netScore;
+      }
+      teamTwoActive += memName + '  ' + netScore;
       if (i % 2 == 0) {
-        teamTwoActive += '    |    ';
+        teamTwoActive += ' | ';
         i++
       } else {
         teamTwoActive += '\n';
@@ -112,7 +127,6 @@ function scoreUpdate() {
     if (err) {
       return console.log('playersT2.txt Error: ' + err);
     }
-    console.log('playersT2.txt updated: ' + teamTwoActive);
   });
 }
 
@@ -131,10 +145,18 @@ function teamObject(team) {
     members : {}
   };
   team.members.forEach(function(member) {
-    var obj = JSON.parse(memberTemplate);
-    obj.name = member.name;
-    if (!outfit_obj.hasOwnProperty(member.character_id)) {
-      outfit_obj.members[member.character_id] = obj;
+    if (config.DEBUG) {
+      var obj = JSON.parse(memberTemplate);
+      obj.name = teams.removeNameParts(member.name);
+      if (!outfit_obj.hasOwnProperty(member.character_id)) {
+        outfit_obj.members[member.character_id] = obj;
+      }
+    } else {
+      var obj = JSON.parse(memberTemplate);
+      obj.name = member.name;
+      if (!outfit_obj.hasOwnProperty(member.character_id)) {
+        outfit_obj.members[member.character_id] = obj;
+      }
     }
   });
   return outfit_obj;

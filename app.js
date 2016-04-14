@@ -157,7 +157,6 @@ function start(one, two, f) {
   var teamOneTag = one,
       teamTwoTag = two,
       facility = f;
-  console.log(two.toLowerCase());
   var response = Q.defer();
   var promises = [];
   promises.push(teams.fetchTeamData(teamOneTag));
