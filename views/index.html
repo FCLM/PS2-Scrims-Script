@@ -34,7 +34,7 @@
     <h3 class="inlinePad" id="outfitT1"></h3><h1 class="score" id="T1Score"></h1>
     <h1 class="v">v</h1>
     <h1 class="score" id="T2Score"></h1><h3 class="inlinePad" id="outfitT2"></h3>
-    <h1 id="timer">15:00</h1>
+    <h1 id="timer">00 : 00</h1>
     <table class="inline">
         <thead><tr><th class="pad">Team One: </th><th class="pad">Score: </th><th class="pad">Net Score: </th><th class="pad">Kills: </th><th class="pad">Deaths: </th></tr></thead>
         <tbody id="Team1">
@@ -79,10 +79,15 @@
         socket.on('teams', function (data) {
             var event = data.obj;
             console.log(event);
-            $('#outfitT1').html('[' + event.teamOne.alias + '] ' + event.teamOne.name).addClass('faction' + event.teamOne.faction);;
+            $('#outfitT1').html('[' + event.teamOne.alias + '] ' + event.teamOne.name).addClass('faction' + event.teamOne.faction);
             $('#outfitT2').html('[' + event.teamTwo.alias + '] ' + event.teamTwo.name).addClass('faction' + event.teamTwo.faction);
             $('#Team1').addClass('faction' + event.teamOne.faction);
             $('#Team2').addClass('faction' + event.teamTwo.faction);
+        });
+        socket.on ('time', function(data) {
+            var event = data.obj;
+            console.log(event);
+            $('#timer').html(event.minutes + ' : ' + event.seconds);
         });
         socket.on('refresh', function () {
             window.location.reload();

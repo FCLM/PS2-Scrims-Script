@@ -8,10 +8,11 @@ var api_key   = require('./api_key.js'),
     app       = require('./app'),
     config    = require('./config'),
     fs        = require('fs'),
-    team      = require('./teams.js');
+    team      = require('./teams.js'),
+    io        = require('socket.io');
 
 var teamOne, teamOneObject, teamTwoObject, teamTwo, facilityID;
-var captures = 0;
+var captures = 0, roundTracker = 0;
 var time = Date.now();
 
 var memberTemplate = JSON.stringify({
@@ -388,6 +389,7 @@ function itsFacilityData(data) {
       teamTwoObject.netScore -= points;
       console.log(teamOneObject.name + ' captured the base +' + points);
       console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+      app.sendScores(teamOneObject, teamTwoObject);
     } else {
       points = 25;
       teamOneObject.points += points;
@@ -395,6 +397,7 @@ function itsFacilityData(data) {
       teamTwoObject.netScore -= points;
       console.log(teamOneObject.name + ' captured the base +' + points);
       console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+      app.sendScores(teamOneObject, teamTwoObject);
     }
   } else if (data.outfit_id == teamTwoObject.outfit_id) {
     if (captures == 0) {
@@ -404,6 +407,7 @@ function itsFacilityData(data) {
       teamOneObject.netScore -= points;
       console.log(teamTwoObject.name + ' captured the base +' + points);
       console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+      app.sendScores(teamOneObject, teamTwoObject);
     } else {
       points = 25;
       teamTwoObject.points += points;
@@ -411,40 +415,110 @@ function itsFacilityData(data) {
       teamOneObject.netScore -= points;
       console.log(teamTwoObject.name + ' captured the base +' + points);
       console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+      app.sendScores(teamOneObject, teamTwoObject);
     }
   }
   captures++;
   //else it was captured by neither outfit and they deserve no points
 }
 
+var triggerCharacter = '';//enter a character ID for someone who can /suicide to start the match
+
 function createStream() {
   var ws = new WebSocket('wss://push.planetside2.com/streaming?environment=ps2&service-id=s:' + api_key.KEY);
   ws.on('open', function open() {
-    //team1 subscribing
-    //{"service":"event","action":"subscribe","characters":["5428010618035589553"],"eventNames":["Death"]}
-    teamOne.members.forEach(function (member) {
-      ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
-      //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}')
-    });
-    //team2 subscribing
-    teamTwo.members.forEach(function (member) {
-      ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
-      //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
-    });
-    //facility Subscribing
-    ws.send('{"service":"event","action":"subscribe","worlds":["19","25"],"eventNames":["FacilityControl"]}');
-    //not correct currently - subscribes to all, i guess it could just be that and then if the facility is the right one then add points to corresponding team
-    });
+    console.log('stream opened');
+    ws.send('{"service":"event","action":"subscribe","characters":["' + triggerCharacter + '"],"eventNames":["Death"]}');
     initialiseOverlay();
+    subscribe(ws);
+  });
+  var EoM = false; //variable keeping track of whether it is end of match/round
   ws.on('message', function (data) {
     if (data.indexOf("payload") == 2) {
       //if (data.indexOf('"event_name":"FacilityControl"') == -1 || data.indexOf('"facility_id":"' + config.config.base + '"') > -1) {
         dealWithTheData(data);
       //}
+      /*if (data.character_id == triggerCharacter) {
+        console.error('*** TRIGGERED ***'); // not an error, just needs to stand out
+        if (EoM) {
+          unsubscribe();
+          EoM = false;
+          console.log('End of round');
+        } else {
+          subscribe();
+          startTimer();
+          EoM = true;
+        }
+      }*/
     }
+
     //store the data somewhere - possibly a txt file in case something gets disputed
   });
-} 
+}
+
+function subscribe(ws) {
+  //team1 subscribing
+  //{"service":"event","action":"subscribe","characters":["5428010618035589553"],"eventNames":["Death"]}
+  teamOne.members.forEach(function (member) {
+    ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
+    //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}')
+  });
+  //team2 subscribing
+  teamTwo.members.forEach(function (member) {
+    ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
+    //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
+  });
+  //facility Subscribing
+  ws.send('{"service":"event","action":"subscribe","worlds":["19","25"],"eventNames":["FacilityControl"]}');
+  //not correct currently - subscribes to all, i guess it could just be that and then if the facility is the right one then add points to corresponding team
+  //start timer
+  startTimer(ws);
+  console.log('subscribed');
+}
+
+function unsubscribe(ws) {
+  //unsubscribes from all events
+  ws.send('{"service":"event","action":"clearSubscribe","all":"true"}');
+  //resubscribe to trigger characters event
+  ws.send('{"service":"event","action":"subscribe","characters":["' + triggerCharacter + '"],"eventNames":["Death"]}');
+  console.log('unsubscribed');
+}
+
+function startTimer(ws) {
+  console.log('timer started');
+  roundTracker++;
+  var i = 0;
+  setInterval(function() {
+    if (i == 900) {
+      unsubscribe(ws);
+      i++;
+      return 0;
+    }
+    var sec = i,
+        min;
+    if (i < 60) {
+      min = 0;
+    } else if (i == 60) {
+      min = 1; sec = 0;
+    } else {
+      min = i % 60;
+    }
+    min = min.toString();
+    if (min.length < 2) {
+      min = '0' + min;
+    }
+    sec = sec.toString();
+    if (sec.length < 2) {
+      sec = '0' + sec;
+    }
+    timerObj = {
+      minutes : min,
+      seconds : sec
+    };
+    app.timerEmit(timerObj);
+    i++;
+  }, 1000);
+}
 
 function startUp(tOne, tTwo, fID) {
   items.initialise().then(function(result) {

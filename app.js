@@ -152,6 +152,11 @@ function playerDataT2 (obj) {
   io.emit('playerDataT2', {obj: obj});
 }
 
+function timerEmit (obj) {
+  io.emit('time', {obj: obj});
+}
+
+
 function start(one, two, f) {
   //match variables
   var teamOneTag = one,
@@ -185,6 +190,7 @@ exports.sendScores    = sendScores;
 exports.refreshPage   = refreshPage;
 exports.playerDataT1  = playerDataT1;
 exports.playerDataT2  = playerDataT2;
+exports.timerEmit     = timerEmit;
 
 //start('7ROI', 'HBSS', '202');
 start(config.config.team1, config.config.team2, config.config.base);
