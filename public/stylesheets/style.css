@@ -1,8 +1,55 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.faction1 {
+  color: purple;
 }
 
-a {
-  color: #00B7FF;
+.faction2 {
+  color: blue;
+}
+
+.faction3 {
+  color: red;
+}
+
+#stats {
+  text-align: center;
+}
+.inline {
+  display: inline;
+}
+
+.pad {
+  padding-right: 20px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+.inlinePad {
+  padding: 20px;
+  display: inline;
+  text-align: center;
+}
+
+.score {
+  display: inline;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+}
+
+.v {
+  display: inline;
+  text-align: center;
+}
+
+#timer {
+  text-align: center;
+}
+
+#name {
+  text-align: left;
+}
+
+#outfitScore {
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
 }

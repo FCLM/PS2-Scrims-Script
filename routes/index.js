@@ -11,7 +11,7 @@ var scoreboard = {
   teamOne: {
     alias : '',
     outfit_id : '',
-    name : '',
+    nvame : '',
     faction : 0,
     points : 0,
     netScore : 0,

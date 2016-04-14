@@ -5,8 +5,8 @@ var DEBUG = true;
 
 var config = {
   base:  244610, // rime 244610, heyoka 206002
-  team1: 'FCLM', //FLCM for debug
-  team2: 'RSNC'  //J0K2 for debug
+  team1: 'FLCM',
+  team2: 'RSNC'
 };
 
 var debug = {
@@ -19,4 +19,3 @@ var debug = {
 module.exports.DEBUG = DEBUG;
 module.exports.config = config;
 module.exports.debug = debug;
-
