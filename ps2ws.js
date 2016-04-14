@@ -384,45 +384,47 @@ function teamTwoTeamkill (data, item) {
 
 function itsFacilityData(data) {
   //deals with adding points to the correct team
-  if (data.outfit_id == teamOneObject.outfit_id) {
-    var points;
-    if (captures == 0) {
-      points = 10;
-      teamOneObject.points += points;
-      teamOneObject.netScore += points;
-      teamTwoObject.netScore -= points;
-      console.log(teamOneObject.name + ' captured the base +' + points);
-      console.log(teamOneObject.points + ' ' + teamTwoObject.points);
-      app.sendScores(teamOneObject, teamTwoObject);
-    } else {
-      points = 25;
-      teamOneObject.points += points;
-      teamOneObject.netScore += points;
-      teamTwoObject.netScore -= points;
-      console.log(teamOneObject.name + ' captured the base +' + points);
-      console.log(teamOneObject.points + ' ' + teamTwoObject.points);
-      app.sendScores(teamOneObject, teamTwoObject);
+  if (data.new_faction_id != data.old_faction_id) {
+    if (data.outfit_id == teamOneObject.outfit_id) {
+      var points;
+      if (captures == 0) {
+        points = 10;
+        teamOneObject.points += points;
+        teamOneObject.netScore += points;
+        teamTwoObject.netScore -= points;
+        console.log(teamOneObject.name + ' captured the base +' + points);
+        console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+        app.sendScores(teamOneObject, teamTwoObject);
+      } else {
+        points = 25;
+        teamOneObject.points += points;
+        teamOneObject.netScore += points;
+        teamTwoObject.netScore -= points;
+        console.log(teamOneObject.name + ' captured the base +' + points);
+        console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+        app.sendScores(teamOneObject, teamTwoObject);
+      }
+      captures++;
+    } else if (data.outfit_id == teamTwoObject.outfit_id) {
+      if (captures == 0) {
+        points = 10;
+        teamTwoObject.points += points;
+        teamTwoObject.netScore += points;
+        teamOneObject.netScore -= points;
+        console.log(teamTwoObject.name + ' captured the base +' + points);
+        console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+        app.sendScores(teamOneObject, teamTwoObject);
+      } else {
+        points = 25;
+        teamTwoObject.points += points;
+        teamTwoObject.netScore += points;
+        teamOneObject.netScore -= points;
+        console.log(teamTwoObject.name + ' captured the base +' + points);
+        console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+        app.sendScores(teamOneObject, teamTwoObject);
+      }
+      captures++;
     }
-    captures++;
-  } else if (data.outfit_id == teamTwoObject.outfit_id) {
-    if (captures == 0) {
-      points = 10;
-      teamTwoObject.points += points;
-      teamTwoObject.netScore += points;
-      teamOneObject.netScore -= points;
-      console.log(teamTwoObject.name + ' captured the base +' + points);
-      console.log(teamOneObject.points + ' ' + teamTwoObject.points);
-      app.sendScores(teamOneObject, teamTwoObject);
-    } else {
-      points = 25;
-      teamTwoObject.points += points;
-      teamTwoObject.netScore += points;
-      teamOneObject.netScore -= points;
-      console.log(teamTwoObject.name + ' captured the base +' + points);
-      console.log(teamOneObject.points + ' ' + teamTwoObject.points);
-      app.sendScores(teamOneObject, teamTwoObject);
-    }
-    captures++;
   }
   //else it was captured by neither outfit and they deserve no points
 }
@@ -440,9 +442,7 @@ function createStream() {
   var EoM = false; //variable keeping track of whether it is end of match/round
   ws.on('message', function (data) {
     if (data.indexOf("payload") == 2) {
-      //if (data.indexOf('"event_name":"FacilityControl"') == -1 || data.indexOf('"facility_id":"' + config.config.base + '"') > -1) {
         dealWithTheData(data);
-      //}
       /*if (data.character_id == triggerCharacter) {
         console.error('*** TRIGGERED ***'); // not an error, just needs to stand out
         if (EoM) {

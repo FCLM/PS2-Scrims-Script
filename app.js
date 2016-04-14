@@ -84,19 +84,11 @@ var server = http.createServer(app).listen(app.get('port'));
 var io = require('socket.io').listen(server);
 io.on('connection', function(sock) {
   sock.on('backchat', function (data) {
-    var teams = {
-      teamOne: {
-        alias : teamOneObject.alias,
-        name : teamOneObject.name,
-        faction : teamOneObject.faction
-      },
-      teamTwo: {
-        alias : teamTwoObject.alias,
-        name : teamTwoObject.name,
-        faction : teamTwoObject.faction
-      }
-    };
-    io.emit('teams', {obj: teams});
+
+  });
+  sock.on('start', function (data) {
+    start(data.teamOne, data.teamTwo);
+    console.log(data.teamOne + ' ' + data.teamTwo);
   });
 });
 
@@ -177,6 +169,7 @@ function start(one, two, f) {
       teamTwoObject = results[1].value;
     }
     ps2ws.startUp(teamOneObject, teamTwoObject, facility);
+    
     return response.promise;
   });
 }
@@ -188,6 +181,3 @@ exports.refreshPage   = refreshPage;
 exports.playerDataT1  = playerDataT1;
 exports.playerDataT2  = playerDataT2;
 exports.timerEmit     = timerEmit;
-
-//start('7ROI', 'HBSS', '202');
-start(config.config.team1, config.config.team2);
