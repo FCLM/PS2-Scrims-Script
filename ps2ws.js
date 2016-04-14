@@ -8,7 +8,6 @@ var api_key   = require('./api_key.js'),
     app       = require('./app'),
     config    = require('./config'),
     fs        = require('fs'),
-    team      = require('./teams.js'),
     io        = require('socket.io');
 
 var teamOne, teamOneObject, teamTwoObject, teamTwo, facilityID;
@@ -47,6 +46,12 @@ function initialiseOverlay() {
       return console.log('playersT2.txt Error: ' + err);
     }
     console.log('playersT2.txt initialised')
+  });
+  fs.writeFile('time.txt', '', function(err) {
+    if (err) {
+      return console.log('time.txt Error: ' + err);
+    }
+    console.log('time.txt initialised')
   });
 }
 
@@ -130,7 +135,6 @@ function scoreUpdate() {
     }
   });
 }
-
 
 function teamObject(team) {
   // Create a new indexable team object
@@ -399,6 +403,7 @@ function itsFacilityData(data) {
       console.log(teamOneObject.points + ' ' + teamTwoObject.points);
       app.sendScores(teamOneObject, teamTwoObject);
     }
+    captures++;
   } else if (data.outfit_id == teamTwoObject.outfit_id) {
     if (captures == 0) {
       points = 10;
@@ -417,8 +422,8 @@ function itsFacilityData(data) {
       console.log(teamOneObject.points + ' ' + teamTwoObject.points);
       app.sendScores(teamOneObject, teamTwoObject);
     }
+    captures++;
   }
-  captures++;
   //else it was captured by neither outfit and they deserve no points
 }
 
@@ -451,7 +456,6 @@ function createStream() {
         }
       }*/
     }
-
     //store the data somewhere - possibly a txt file in case something gets disputed
   });
 }
@@ -487,22 +491,14 @@ function unsubscribe(ws) {
 function startTimer(ws) {
   console.log('timer started');
   roundTracker++;
-  var i = 0;
-  setInterval(function() {
-    if (i == 900) {
+  var i = 900;
+  var time = setInterval(function () {
+    if (i < 0) {
+      clearInterval(time);
       unsubscribe(ws);
-      i++;
-      return 0;
     }
-    var sec = i,
-        min;
-    if (i < 60) {
-      min = 0;
-    } else if (i == 60) {
-      min = 1; sec = 0;
-    } else {
-      min = i % 60;
-    }
+    var sec = parseInt(i % 60),
+        min = parseInt(i / 60);
     min = min.toString();
     if (min.length < 2) {
       min = '0' + min;
@@ -512,15 +508,21 @@ function startTimer(ws) {
       sec = '0' + sec;
     }
     timerObj = {
-      minutes : min,
-      seconds : sec
+      minutes: min,
+      seconds: sec
     };
+    timeString = min + ' : ' + sec;
+    fs.writeFile('time.txt', timeString, function (err) {
+      if (err) {
+        return console.log('time.txt Error: ' + err);
+      }
+    });
     app.timerEmit(timerObj);
-    i++;
+    i--;
   }, 1000);
 }
 
-function startUp(tOne, tTwo, fID) {
+function startUp(tOne, tTwo) {
   items.initialise().then(function(result) {
     if (result) {
       //console.log('Items are initialised');
@@ -532,7 +534,6 @@ function startUp(tOne, tTwo, fID) {
       teamOneObject = teamObject(teamOne);
       teamTwo = tTwo;
       teamTwoObject= teamObject(teamTwo);
-      facilityID = fID;
       if (config.DEBUG) {
         debugWebSocket();
         app.refreshPage();
@@ -540,9 +541,6 @@ function startUp(tOne, tTwo, fID) {
         createStream();
         app.refreshPage();
       }
-      // test an item
-      //var item_test = items.lookupItem(7214);
-      //console.log(item_test._id + ' - ' + item_test.name);
     } else {
       console.error('Items did not initialise!!');
     }
