@@ -111,7 +111,6 @@ function killfeedEmit(killfeed) {
 }
 
 function sendScores(teamOneObject, teamTwoObject) {
-  var teamOneMembers = []
   var scoreboard = {
     teamOne: {
       alias : teamOneObject.alias,
@@ -134,7 +133,6 @@ function sendScores(teamOneObject, teamTwoObject) {
       members : []
     }
   };
-
   for (keys in teamOneObject.members) {
     scoreboard.teamOne.members.push(teamOneObject.members[keys])
   }
@@ -166,7 +164,6 @@ function start(one, two, f) {
   var promises = [];
   promises.push(teams.fetchTeamData(teamOneTag));
   promises.push(teams.fetchTeamData(teamTwoTag));
-
   Q.allSettled(promises).then(function (results) {
     if (config.DEBUG) {
       console.log('T1 - ' + config.debug.team1);
@@ -193,4 +190,4 @@ exports.playerDataT2  = playerDataT2;
 exports.timerEmit     = timerEmit;
 
 //start('7ROI', 'HBSS', '202');
-start(config.config.team1, config.config.team2, config.config.base);
+start(config.config.team1, config.config.team2);

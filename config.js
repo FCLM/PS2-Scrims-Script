@@ -5,12 +5,11 @@ var DEBUG = false;
 
 var config = {
   base:  244610, // rime 244610, heyoka 206002
-  team1: 'FLCM',
-  team2: '1NSC'
+  team1: 'FCLM',
+  team2: 'RSNC'
 };
 
 var debug = {
-  base: debug_match.base,
   team1: debug_match.team1,
   team2: debug_match.team2,
   round: debug_match.round0
