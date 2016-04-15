@@ -15,7 +15,7 @@ function removeNameParts(name) {
     name = name.substring(0, end);
   }
   // remove start tag
-  var idx = name.indexOf('x')
+  var idx = name.indexOf('x');
   if (idx > 0 && idx < 5) {
     name = name.substring(idx + 1, name.length);
   }
@@ -27,11 +27,8 @@ function fetchTeamData(teamTag) {
   teamTag = teamTag.toLowerCase();
   var url = 'https://census.daybreakgames.com/s:' + api_key.KEY + '/get/ps2/outfit/?alias_lower='+ teamTag + '&c:resolve=leader(faction_id),member_character(name)&c:hide=time_created,time_created_date';
   prequest(url).then(function (body) {
-    console.log(body);
-    console.log(body.outfit_list[0].alias);
     var teamPlayers = [];
     body.outfit_list[0].members.forEach(function(result) {
-
       if ((result.hasOwnProperty('name')) && (result.name.hasOwnProperty('first')))  {
         memName = removeNameParts(result.name.first);
         teamPlayers.push({
@@ -50,7 +47,7 @@ function fetchTeamData(teamTag) {
       members : teamPlayers
     };
     response.resolve(obj);
-    console.log(obj);
+
   }).catch(function (err) { // Any HTTP status >= 400 falls here
     response.reject(err);
   });

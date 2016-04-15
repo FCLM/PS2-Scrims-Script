@@ -46,7 +46,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use(function(err, req, res) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -57,7 +57,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
@@ -84,19 +84,16 @@ var server = http.createServer(app).listen(app.get('port'));
 var io = require('socket.io').listen(server);
 io.on('connection', function(sock) {
   sock.on('backchat', function (data) {
-    var teams = {
-      teamOne: {
-        alias : teamOneObject.alias,
-        name : teamOneObject.name,
-        faction : teamOneObject.faction
-      },
-      teamTwo: {
-        alias : teamTwoObject.alias,
-        name : teamTwoObject.name,
-        faction : teamTwoObject.faction
-      }
-    };
-    io.emit('teams', {obj: teams});
+
+  });
+  sock.on('start', function (data) {
+    var event = data.obj;
+    if ((event.hasOwnProperty('teamOne')) && (event.hasOwnProperty('teamTwo'))) {
+      start(event.teamOne, event.teamTwo);
+      console.log(event.teamOne + ' ' + event.teamTwo);
+    } else {
+      console.error('No data sent: ' + event.teamOne + ' ' + event.teamTwo);
+    }
   });
 });
 
@@ -111,7 +108,6 @@ function killfeedEmit(killfeed) {
 }
 
 function sendScores(teamOneObject, teamTwoObject) {
-  var teamOneMembers = []
   var scoreboard = {
     teamOne: {
       alias : teamOneObject.alias,
@@ -134,7 +130,6 @@ function sendScores(teamOneObject, teamTwoObject) {
       members : []
     }
   };
-
   for (keys in teamOneObject.members) {
     scoreboard.teamOne.members.push(teamOneObject.members[keys])
   }
@@ -152,16 +147,18 @@ function playerDataT2 (obj) {
   io.emit('playerDataT2', {obj: obj});
 }
 
-function start(one, two, f) {
-  //match variables
+function timerEmit (obj) {
+  io.emit('time', {obj: obj});
+}
+
+
+function start(one, two) {
   var teamOneTag = one,
-      teamTwoTag = two,
-      facility = f;
+      teamTwoTag = two;
   var response = Q.defer();
   var promises = [];
   promises.push(teams.fetchTeamData(teamOneTag));
   promises.push(teams.fetchTeamData(teamTwoTag));
-
   Q.allSettled(promises).then(function (results) {
     if (config.DEBUG) {
       console.log('T1 - ' + config.debug.team1);
@@ -174,7 +171,7 @@ function start(one, two, f) {
       teamOneObject = results[0].value;
       teamTwoObject = results[1].value;
     }
-    ps2ws.startUp(teamOneObject, teamTwoObject, facility);
+    ps2ws.startUp(teamOneObject, teamTwoObject);
     return response.promise;
   });
 }
@@ -185,6 +182,4 @@ exports.sendScores    = sendScores;
 exports.refreshPage   = refreshPage;
 exports.playerDataT1  = playerDataT1;
 exports.playerDataT2  = playerDataT2;
-
-//start('7ROI', 'HBSS', '202');
-start(config.config.team1, config.config.team2, config.config.base);
+exports.timerEmit     = timerEmit;
