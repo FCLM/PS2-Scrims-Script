@@ -15,7 +15,7 @@ function removeNameParts(name) {
     name = name.substring(0, end);
   }
   // remove start tag
-  var idx = name.indexOf('x')
+  var idx = name.indexOf('x');
   if (idx > 0 && idx < 5) {
     name = name.substring(idx + 1, name.length);
   }
