@@ -7,7 +7,10 @@ var Q = require('q');
 
 var items = {};
 
+//N.B: category 0 doesn't exist in the API but i assume it is for being killed by wreckage or terrain and it was annoying me with error messages so its now in the map
+// You can edit this bit to have it return whatever points you want, so this can be used for most rulesets
 var category_map = {
+  '0':   { 'category' : 'Error - Killed by Unkown',   points : 0 },
   '2':   { 'category' : 'Knife',                      points : 2 },
   '3':   { 'category' : 'Pistol',                     points : 2 },
   '4':   { 'category' : 'Shotgun',                    points : 0 },
@@ -34,7 +37,7 @@ var category_map = {
   '99':  { 'category' : 'Camo',                       points : null },
   '100': { 'category' : 'Infantry',                   points : 1 },
   '101': { 'category' : 'Vehicles',                   points : null },
-  '102': { 'category' : 'Infantry Weapons',           points : null },
+  '102': { 'category' : 'Infantry Weapons',           points : 1 },
   '103': { 'category' : 'Infantry Gear',              points : null },
   '104': { 'category' : 'Vehicle Weapons',            points : null },
   '105': { 'category' : 'Vehicle Gear',               points : null },
