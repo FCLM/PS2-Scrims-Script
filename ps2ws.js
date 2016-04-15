@@ -21,7 +21,10 @@ var memberTemplate = JSON.stringify({
   kills : 0,
   deaths : 0
 });
-
+ /*
+  Overlay Code
+  Writes to 5 files to allow a streamer to use them in OBS to display the match stats
+  */
 function initialiseOverlay() {
   fs.writeFile('scoreT1.txt', '0', function(err) {
     if (err) {
@@ -463,7 +466,7 @@ function subscribe(ws) {
   //not correct currently - subscribes to all, i guess it could just be that and then if the facility is the right one then add points to corresponding team
   //start timer
   startTimer(ws);
-  console.log('subscribed');
+  console.log('Subscribed to facility and kill/death events between ' + teamOneObject.alias + ' and '  +teamTwoObject.alias);
 }
 
 function unsubscribe(ws) {
@@ -471,7 +474,7 @@ function unsubscribe(ws) {
   ws.send('{"service":"event","action":"clearSubscribe","all":"true"}');
   //resubscribe to trigger characters event
   ws.send('{"service":"event","action":"subscribe","characters":["' + triggerCharacter + '"],"eventNames":["Death"]}');
-  console.log('unsubscribed');
+  console.log('Unsubscribed from facility and kill/death events between ' + teamOneObject.alias + ' and '  +teamTwoObject.alias);
 }
 
 function startTimer(ws) {
@@ -479,7 +482,7 @@ function startTimer(ws) {
   roundTracker++;
   var i = 900;
   var time = setInterval(function () {
-    if (i < 0) {
+    if (i < 1) {
       clearInterval(time);
       unsubscribe(ws);
     }
