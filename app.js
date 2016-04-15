@@ -84,7 +84,21 @@ var server = http.createServer(app).listen(app.get('port'));
 var io = require('socket.io').listen(server);
 io.on('connection', function(sock) {
   sock.on('backchat', function (data) {
-
+    if (teamOneObject.hasOwnProperty('alias')) {
+      var teams = {
+        teamOne: {
+          alias: teamOneObject.alias,
+          name: teamOneObject.name,
+          faction: teamOneObject.faction
+        },
+        teamTwo: {
+          alias: teamTwoObject.alias,
+          name: teamTwoObject.name,
+          faction: teamTwoObject.faction
+        }
+      };
+      io.emit('teams', {obj: teams});
+    }
   });
   sock.on('start', function (data) {
     var event = data.obj;
