@@ -65,8 +65,6 @@ app.use(function(err, req, res) {
   });
 });
 
-// Killfeed.js code start
-
 app.set('port', 3001);
 
 nunjucks.configure('views', {
@@ -84,7 +82,22 @@ var server = http.createServer(app).listen(app.get('port'));
 var io = require('socket.io').listen(server);
 io.on('connection', function(sock) {
   sock.on('backchat', function (data) {
-
+    console.log('New Web Connection');
+    if (teamOneObject.hasOwnProperty('alias')) {
+      var teams = {
+        teamOne: {
+          alias: teamOneObject.alias,
+          name: teamOneObject.name,
+          faction: teamOneObject.faction
+        },
+        teamTwo: {
+          alias: teamTwoObject.alias,
+          name: teamTwoObject.name,
+          faction: teamTwoObject.faction
+        }
+      };
+      io.emit('teams', {obj: teams});
+    }
   });
   sock.on('start', function (data) {
     var event = data.obj;
