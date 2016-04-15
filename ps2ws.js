@@ -77,7 +77,6 @@ function scoreUpdate() {
   for (keys in teamOneObject.members) {
     teamOneActivePlayers.push(teamOneObject.members[keys])
   }
-  //writes to 2 text files to update the members scores
   var teamOneActive = '';
   var i = 0;
   teamOneActivePlayers.forEach(function (member) {
@@ -489,6 +488,7 @@ function startTimer(ws) {
     if (i < 1) {
       clearInterval(time);
       unsubscribe(ws);
+      final();
     }
     var sec = parseInt(i % 60),
         min = parseInt(i / 60);
@@ -553,4 +553,77 @@ function debugWebSocket() {
   }, 1);
 }
 
+function final() {
+  var path = 'match' + roundTracker + '.txt';
+  console.log(path);
+  var teamOneActivePlayers = [];
+  for (keys in teamOneObject.members) {
+    teamOneActivePlayers.push(teamOneObject.members[keys])
+  }
+  var teamOneActive = teamOneObject.name + '  ' + teamOneObject.points + '  '  + teamOneObject.netScore + '  ' + teamOneObject.kills  + '  ' + teamOneObject.kills  + '\n\n';
+  teamOneActivePlayers.forEach(function (member) {
+    if ((member.points > 0) || (member.netScore != 0)) {
+      var memName = member.name;
+      var points = member.points.toString();
+      var netScore = member.netScore.toString();
+      var kills = member.kills.toString();
+      var deaths = member.deaths.toString();
+      while (memName.length < 16) {
+        memName += ' ';
+      }
+      while (points.length < 4) {
+        points = ' ' + points;
+      }
+      while (netScore.length < 4) {
+        netScore = ' ' + netScore;
+      }
+      while (kills.length < 4) {
+        kills = ' ' + kills;
+      }
+      while (deaths.length < 4) {
+        deaths = ' ' + deaths;
+      }
+      teamOneActive += memName + '  ' + points + '  ' + netScore + '  ' + kills + '  ' + deaths + '  ' + '\n';
+    }
+  });
+  var teamTwoPlayers = [];
+  for (keys in teamTwoObject.members) {
+    teamTwoPlayers.push(teamTwoObject.members[keys])
+  }
+  var teamTwoActive = teamTwoObject.name + '  ' + teamTwoObject.points + '  '  + teamTwoObject.netScore + '  ' + teamTwoObject.kills  + '  ' + teamTwoObject.kills  + '\n\n';
+  teamTwoPlayers.forEach(function (member) {
+    if ((member.points > 0) || (member.netScore != 0)) {
+      var memName = member.name;
+      var points = member.points.toString();
+      var netScore = member.netScore.toString();
+      var kills = member.kills.toString();
+      var deaths = member.deaths.toString();
+      while (memName.length < 16) {
+        memName += ' ';
+      }
+      while (points.length < 4) {
+        points = ' ' + points;
+      }
+      while (netScore.length < 4) {
+        netScore = ' ' + netScore;
+      }
+      while (kills.length < 4) {
+        kills = ' ' + kills;
+      }
+      while (deaths.length < 4) {
+        deaths = ' ' + deaths;
+      }
+      teamTwoActive += memName + '  ' + points + '  ' + netScore+ '  ' + kills + + '  ' + deaths + '  ' + '\n';
+    }
+  });
+  var stats = 'Final Scores for this match:\n' + teamOneActive + '\n\n\n' + teamTwoActive;
+  fs.writeFile(path, stats, function(err) {
+    if (err) {
+      return console.log(path +' Error: ' + err);
+    }
+    console.log('Match stats wrote to ' + path);
+
+  });
+
+}
 exports.startUp = startUp;
