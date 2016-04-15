@@ -113,6 +113,7 @@ io.on('connection', function(sock) {
         console.error('No data sent: ' + event.teamOne + ' ' + event.teamTwo);
       }
     }
+    io.emit('redirect');
   });
 });
 
