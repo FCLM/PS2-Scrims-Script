@@ -15,7 +15,7 @@ function removeNameParts(name) {
     name = name.substring(0, end);
   }
   // remove start tag
-  var idx = name.indexOf('x')
+  var idx = name.indexOf('x');
   if (idx > 0 && idx < 5) {
     name = name.substring(idx + 1, name.length);
   }
@@ -29,7 +29,6 @@ function fetchTeamData(teamTag) {
   prequest(url).then(function (body) {
     var teamPlayers = [];
     body.outfit_list[0].members.forEach(function(result) {
-
       if ((result.hasOwnProperty('name')) && (result.name.hasOwnProperty('first')))  {
         memName = removeNameParts(result.name.first);
         teamPlayers.push({
@@ -48,6 +47,7 @@ function fetchTeamData(teamTag) {
       members : teamPlayers
     };
     response.resolve(obj);
+
   }).catch(function (err) { // Any HTTP status >= 400 falls here
     response.reject(err);
   });

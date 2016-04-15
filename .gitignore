@@ -10,3 +10,10 @@ node_modules
 
 #config
 /api_key.js
+
+#overlays
+playersT1.txt
+playersT2.txt
+scoreT1.txt
+scoreT2.txt
+time.txt

@@ -31,10 +31,16 @@
 
 <div id="stats">
     <h1>{{ title }}</h1>
+    <form id="outfits">
+        <input type="text" size="4" maxlength="4" id="T1Tag" placeholder="FCLM">
+        <h3 id="verse" class="inline"> v </h3>
+        <input type="text" size="4" maxlength="4" id="T2Tag" placeholder="FCLN">
+        <input id="start" type="submit" value="Track">
+    </form>
     <h3 class="inlinePad" id="outfitT1"></h3><h1 class="score" id="T1Score"></h1>
     <h1 class="v">v</h1>
     <h1 class="score" id="T2Score"></h1><h3 class="inlinePad" id="outfitT2"></h3>
-    <h1 id="timer">15:00</h1>
+    <h1 id="timer">15 : 00</h1>
     <table class="inline">
         <thead><tr><th class="pad">Team One: </th><th class="pad">Score: </th><th class="pad">Net Score: </th><th class="pad">Kills: </th><th class="pad">Deaths: </th></tr></thead>
         <tbody id="Team1">
@@ -49,10 +55,8 @@
         </tr>
         </tbody>
     </table>
-    <table id="smallKillboard">
-
-    </table>
-    <br><br>
+    <br>
+    <br>
 </div>
 <div class="main_area container" role="main">
     <section>
@@ -73,70 +77,6 @@
 
 <script src="../js/bootstrap.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
-<script>
-    var socket = io();
-    socket.on('connect', function() {
-        socket.on('teams', function (data) {
-            var event = data.obj;
-            console.log(event);
-            $('#outfitT1').html('[' + event.teamOne.alias + '] ' + event.teamOne.name).addClass('faction' + event.teamOne.faction);;
-            $('#outfitT2').html('[' + event.teamTwo.alias + '] ' + event.teamTwo.name).addClass('faction' + event.teamTwo.faction);
-            $('#Team1').addClass('faction' + event.teamOne.faction);
-            $('#Team2').addClass('faction' + event.teamTwo.faction);
-        });
-        socket.on('refresh', function () {
-            window.location.reload();
-        });
-        socket.on('killfeed', function (data) {
-            var event = data.obj;
-            console.log(event);
-            $('<tr><td class="faction' + event.winner_faction + '">' + event.winner + '</td>' +
-                    '<td class="faction' + event.loser_faction + '">' + event.loser + '</td>' +
-                    '<td>' + event.weapon + '</td>' +
-                    '<td>' + event.image + '</td>' +
-                    '<td>' + event.points + '</td></tr>')
-                    .prependTo($(killfeed));
-        });
-        socket.on('score', function (data) {
-            var event = data.obj;
-            console.log(event);
-            $('#Team1').empty(); $('#Team2').empty();
-            $('#T1Score').empty().html(event.teamOne.points); $('#T2Score').empty().html(event.teamTwo.points);
-            $('<tr id="T1"><td class="pad" id="outfitScore">' + event.teamOne.alias + '</td>' +
-                    '<td class="pad" id="outfitScore">' + event.teamOne.points + '</td>' +
-                    '<td class="pad" id="outfitScore">' + event.teamOne.netScore + '</td>' +
-                    '<td class="pad" id="outfitScore">' + event.teamOne.kills + '</td>' +
-                    '<td class="pad" id="outfitScore">' + event.teamOne.deaths + '</td></tr>').appendTo($(Team1));
-            $('<tr id="T2"><td class="pad" id="outfitScore">' + event.teamTwo.alias + '</trtd>' +
-                    '<td class="pad" id="outfitScore">' + event.teamTwo.points + '</td>' +
-                    '<td class="pad" id="outfitScore">' + event.teamTwo.netScore + '</td>' +
-                    '<td class="pad" id="outfitScore">' + event.teamTwo.kills + '</td>' +
-                    '<td class="pad" id="outfitScore">' + event.teamTwo.deaths + '</td></tr>').appendTo($(Team2));
-            event.teamOne.members.forEach(function (member) {
-                if (member.kills > 0 || member.deaths > 0) {
-                    $('<tr id="' + member.name +
-                            '"><td class="pad" id="name">' + member.name +
-                            '</td><td class="pad" id="score">' + member.points +
-                            '</td><td class="pad" id="netScore">' + member.netScore +
-                            '</td><td class="pad" id="kills">' + member.kills +
-                            '<td class="pad" id="deaths">' + member.deaths +
-                            '</td></tr>').appendTo($(Team1));
-                }
-            });
-            event.teamTwo.members.forEach(function (member) {
-                if (member.kills > 0 || member.deaths > 0) {
-                    $('<tr id="' + member.name +
-                            '"><td class="pad" class="pad" id="name">' + member.name +
-                            '</td><td class="pad" id="score">' + member.points +
-                            '</td><td class="pad" id="netScore">' + member.netScore +
-                            '</td><td class="pad" id="kills">' + member.kills +
-                            '<td class="pad" id="deaths">' + member.deaths +
-                            '</td></tr>').appendTo($(Team2));
-                }
-            });
-        });
-    });
-    socket.emit('backchat', { obj: 'Web Connection' });
-</script>
+<script src="../js/main.js"></script>
 </body>
 </html>

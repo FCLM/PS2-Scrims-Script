@@ -8,10 +8,10 @@ var api_key   = require('./api_key.js'),
     app       = require('./app'),
     config    = require('./config'),
     fs        = require('fs'),
-    team      = require('./teams.js');
+    io        = require('socket.io');
 
-var teamOne, teamOneObject, teamTwoObject, teamTwo, facilityID;
-var captures = 0;
+var teamOne, teamOneObject, teamTwoObject, teamTwo;
+var captures = 0, roundTracker = 0;
 var time = Date.now();
 
 var memberTemplate = JSON.stringify({
@@ -21,7 +21,10 @@ var memberTemplate = JSON.stringify({
   kills : 0,
   deaths : 0
 });
-
+ /*
+  Overlay Code
+  Writes to 5 files to allow a streamer to use them in OBS to display the match stats
+  */
 function initialiseOverlay() {
   fs.writeFile('scoreT1.txt', '0', function(err) {
     if (err) {
@@ -47,6 +50,12 @@ function initialiseOverlay() {
     }
     console.log('playersT2.txt initialised')
   });
+  fs.writeFile('time.txt', '', function(err) {
+    if (err) {
+      return console.log('time.txt Error: ' + err);
+    }
+    console.log('time.txt initialised')
+  });
 }
 
 function scoreUpdate() {
@@ -70,7 +79,7 @@ function scoreUpdate() {
   }
   //writes to 2 text files to update the members scores
   var teamOneActive = '';
-  var i = 0; var length;
+  var i = 0;
   teamOneActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
       var memName = member.name;
@@ -96,13 +105,12 @@ function scoreUpdate() {
       return console.log('playersT1.txt Error: ' + err);
     }
   });
-
   var teamTwoActivePlayers = [];
   for (keys in teamTwoObject.members) {
     teamTwoActivePlayers.push(teamTwoObject.members[keys])
   }
   var teamTwoActive = '';
-  var i = 0;
+  i = 0;
   teamTwoActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
       var memName = member.name;
@@ -151,7 +159,7 @@ function teamObject(team) {
         outfit_obj.members[member.character_id] = obj;
       }
     } else {
-      var obj = JSON.parse(memberTemplate);
+      obj = JSON.parse(memberTemplate);
       obj.name = member.name;
       if (!outfit_obj.hasOwnProperty(member.character_id)) {
         outfit_obj.members[member.character_id] = obj;
@@ -378,86 +386,141 @@ function teamTwoTeamkill (data, item) {
 
 function itsFacilityData(data) {
   //deals with adding points to the correct team
-  if (data.outfit_id == teamOneObject.outfit_id) {
-    var points;
-    if (captures == 0) {
-      points = 10;
-      teamOneObject.points += points;
-      teamOneObject.netScore += points;
-      teamTwoObject.netScore -= points;
-      console.log(teamOneObject.name + ' captured the base +' + points);
-      console.log(teamOneObject.points + ' ' + teamTwoObject.points);
-    } else {
-      points = 25;
-      teamOneObject.points += points;
-      teamOneObject.netScore += points;
-      teamTwoObject.netScore -= points;
-      console.log(teamOneObject.name + ' captured the base +' + points);
-      console.log(teamOneObject.points + ' ' + teamTwoObject.points);
-    }
-  } else if (data.outfit_id == teamTwoObject.outfit_id) {
-    if (captures == 0) {
-      points = 10;
-      teamTwoObject.points += points;
-      teamTwoObject.netScore += points;
-      teamOneObject.netScore -= points;
-      console.log(teamTwoObject.name + ' captured the base +' + points);
-      console.log(teamOneObject.points + ' ' + teamTwoObject.points);
-    } else {
-      points = 25;
-      teamTwoObject.points += points;
-      teamTwoObject.netScore += points;
-      teamOneObject.netScore -= points;
-      console.log(teamTwoObject.name + ' captured the base +' + points);
-      console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+  if (data.new_faction_id != data.old_faction_id) {
+    if (data.outfit_id == teamOneObject.outfit_id) {
+      var points;
+      if (captures == 0) {
+        points = 10;
+        teamOneObject.points += points;
+        teamOneObject.netScore += points;
+        teamTwoObject.netScore -= points;
+        console.log(teamOneObject.name + ' captured the base +' + points);
+        console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+        app.sendScores(teamOneObject, teamTwoObject);
+      } else {
+        points = 25;
+        teamOneObject.points += points;
+        teamOneObject.netScore += points;
+        teamTwoObject.netScore -= points;
+        console.log(teamOneObject.name + ' captured the base +' + points);
+        console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+        app.sendScores(teamOneObject, teamTwoObject);
+      }
+      captures++;
+    } else if (data.outfit_id == teamTwoObject.outfit_id) {
+      if (captures == 0) {
+        points = 10;
+        teamTwoObject.points += points;
+        teamTwoObject.netScore += points;
+        teamOneObject.netScore -= points;
+        console.log(teamTwoObject.name + ' captured the base +' + points);
+        console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+        app.sendScores(teamOneObject, teamTwoObject);
+      } else {
+        points = 25;
+        teamTwoObject.points += points;
+        teamTwoObject.netScore += points;
+        teamOneObject.netScore -= points;
+        console.log(teamTwoObject.name + ' captured the base +' + points);
+        console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+        app.sendScores(teamOneObject, teamTwoObject);
+      }
+      captures++;
     }
   }
-  captures++;
   //else it was captured by neither outfit and they deserve no points
 }
+
+var triggerCharacter = '';//enter a character ID for someone who can /suicide to start the match
 
 function createStream() {
   var ws = new WebSocket('wss://push.planetside2.com/streaming?environment=ps2&service-id=s:' + api_key.KEY);
   ws.on('open', function open() {
-    //team1 subscribing
-    //{"service":"event","action":"subscribe","characters":["5428010618035589553"],"eventNames":["Death"]}
-    teamOne.members.forEach(function (member) {
-      ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
-      //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}')
-    });
-    //team2 subscribing
-    teamTwo.members.forEach(function (member) {
-      ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
-      //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
-    });
-    //facility Subscribing
-    ws.send('{"service":"event","action":"subscribe","worlds":["19","25"],"eventNames":["FacilityControl"]}');
-    //not correct currently - subscribes to all, i guess it could just be that and then if the facility is the right one then add points to corresponding team
-    });
+    console.log('stream opened');
+    ws.send('{"service":"event","action":"subscribe","characters":["' + triggerCharacter + '"],"eventNames":["Death"]}');
     initialiseOverlay();
+    subscribe(ws);
+  });
   ws.on('message', function (data) {
     if (data.indexOf("payload") == 2) {
-      //if (data.indexOf('"event_name":"FacilityControl"') == -1 || data.indexOf('"facility_id":"' + config.config.base + '"') > -1) {
         dealWithTheData(data);
-      //}
     }
     //store the data somewhere - possibly a txt file in case something gets disputed
   });
-} 
+}
 
-function startUp(tOne, tTwo, fID) {
+function subscribe(ws) {
+  //team1 subscribing
+  //{"service":"event","action":"subscribe","characters":["5428010618035589553"],"eventNames":["Death"]}
+  teamOne.members.forEach(function (member) {
+    ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
+    //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}')
+  });
+  //team2 subscribing
+  teamTwo.members.forEach(function (member) {
+    ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
+    //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
+  });
+  //facility Subscribing
+  ws.send('{"service":"event","action":"subscribe","worlds":["19","25"],"eventNames":["FacilityControl"]}');
+  //not correct currently - subscribes to all, i guess it could just be that and then if the facility is the right one then add points to corresponding team
+  //start timer
+  startTimer(ws);
+  console.log('Subscribed to facility and kill/death events between ' + teamOneObject.alias + ' and '  +teamTwoObject.alias);
+}
+
+function unsubscribe(ws) {
+  //unsubscribes from all events
+  ws.send('{"service":"event","action":"clearSubscribe","all":"true"}');
+  //resubscribe to trigger characters event
+  ws.send('{"service":"event","action":"subscribe","characters":["' + triggerCharacter + '"],"eventNames":["Death"]}');
+  console.log('Unsubscribed from facility and kill/death events between ' + teamOneObject.alias + ' and '  +teamTwoObject.alias);
+}
+
+function startTimer(ws) {
+  console.log('timer started');
+  roundTracker++;
+  var i = 900;
+  var time = setInterval(function () {
+    if (i < 1) {
+      clearInterval(time);
+      unsubscribe(ws);
+    }
+    var sec = parseInt(i % 60),
+        min = parseInt(i / 60);
+    min = min.toString();
+    if (min.length < 2) {
+      min = '0' + min;
+    }
+    sec = sec.toString();
+    if (sec.length < 2) {
+      sec = '0' + sec;
+    }
+    var timerObj = {
+      minutes: min,
+      seconds: sec
+    };
+    var timeString = min + ' : ' + sec;
+    fs.writeFile('time.txt', timeString, function (err) {
+      if (err) {
+        return console.log('time.txt Error: ' + err);
+      }
+    });
+    app.timerEmit(timerObj);
+    i--;
+  }, 1000);
+}
+
+function startUp(tOne, tTwo) {
   items.initialise().then(function(result) {
     if (result) {
-      //console.log('Items are initialised');
       time = Date.now();
       console.log(time + ' start match');
       console.log('=====================================================================================================================================');
-      // start websocket now ?
       teamOne = tOne;
       teamOneObject = teamObject(teamOne);
       teamTwo = tTwo;
       teamTwoObject= teamObject(teamTwo);
-      facilityID = fID;
       if (config.DEBUG) {
         debugWebSocket();
         app.refreshPage();
@@ -465,9 +528,6 @@ function startUp(tOne, tTwo, fID) {
         createStream();
         app.refreshPage();
       }
-      // test an item
-      //var item_test = items.lookupItem(7214);
-      //console.log(item_test._id + ' - ' + item_test.name);
     } else {
       console.error('Items did not initialise!!');
     }
