@@ -205,17 +205,19 @@ function itsPlayerData(data) {
     twoIvIOne(data, points, item);
   } else if ((data.attacker_character_id == data.character_id) && (teamOneObject.members.hasOwnProperty(data.character_id))){
     // Suicides team One lol
-    if ((data.character_laodout_id == 7) || (data.character_laodout_id == 14) || (data.character_laodout_id == 21)) {
+    if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
       //suicided as a max lol
+      console.log('MAX: \n' + data);
       points = 5;
     } else {
       //just infantry suicide
+      console.log(data);
       points = 2;
     }
     teamOneSuicide(data, points, item);
   } else if ((data.attacker_character_id == data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
     // Suicides team Two lol
-    if ((data.character_laodout_id == 7) || (data.character_laodout_id == 14) || (data.character_laodout_id == 21)) {
+    if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
       //suicided as a max lol
       points = 5;
     } else {
@@ -295,6 +297,7 @@ function teamOneSuicide (data, points, item) {
   teamOneObject.netScore -= points;
   teamOneObject.deaths++;
   teamOneObject.members[data.attacker_character_id].points -= points;
+  teamOneObject.members[data.attacker_character_id].netScore -= points;
   teamOneObject.members[data.attacker_character_id].deaths++;
   //logging
   console.log(teamOneObject.members[data.attacker_character_id].name + ' Killed himself -' + points);
@@ -318,6 +321,7 @@ function teamTwoSuicide (data, points, item) {
   teamTwoObject.netScore -= points;
   teamTwoObject.deaths++;
   teamTwoObject.members[data.attacker_character_id].points -= points;
+  teamTwoObject.members[data.attacker_character_id].netScore -= points;
   teamTwoObject.members[data.attacker_character_id].deaths++;
   //logging
   console.log(teamTwoObject.members[data.attacker_character_id].name + ' Killed himself -' + points);
