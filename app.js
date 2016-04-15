@@ -8,12 +8,13 @@ var express       = require('express'),
     nunjucks      = require('nunjucks'),
     http          = require('http');
 
-var ps2ws   = require('./ps2ws.js'),
-    teams   = require('./teams.js'),
-    routes  = require('./routes/index'),
-    users   = require('./routes/users'),
-    config  = require('./config'),
-    api_key = require('./api_key');
+var ps2ws         = require('./ps2ws.js'),
+    teams         = require('./teams.js'),
+    routes        = require('./routes/index'),
+    adminControls = require('./routes/admin'),
+    config        = require('./config'),
+    api_key       = require('./api_key');
+
 //global variable for use in different functions
 var teamOneObject, teamTwoObject;
 
@@ -21,8 +22,8 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', '.html'); // changed from hbs to .html
-app.use(express.static(__dirname + '/public')); // code from killfeed.js
+app.set('view engine', '.html');
+app.use(express.static(__dirname + '/public'));
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -32,7 +33,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/admin', adminControls);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
