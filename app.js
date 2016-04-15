@@ -105,11 +105,13 @@ io.on('connection', function(sock) {
   });
   sock.on('start', function (data) {
     var event = data.obj;
-    if ((event.hasOwnProperty('teamOne')) && (event.hasOwnProperty('teamTwo'))) {
-      start(event.teamOne, event.teamTwo);
-      console.log(event.teamOne + ' ' + event.teamTwo);
-    } else {
-      console.error('No data sent: ' + event.teamOne + ' ' + event.teamTwo);
+    if (event.auth == 'Password1') {
+      if ((event.hasOwnProperty('teamOne')) && (event.hasOwnProperty('teamTwo'))) {
+        start(event.teamOne, event.teamTwo);
+        console.log(event.teamOne + ' ' + event.teamTwo);
+      } else {
+        console.error('No data sent: ' + event.teamOne + ' ' + event.teamTwo);
+      }
     }
   });
 });
