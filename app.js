@@ -173,8 +173,7 @@ function start(one, two, f) {
       teamOneObject = results[0].value;
       teamTwoObject = results[1].value;
     }
-    ps2ws.startUp(teamOneObject, teamTwoObject, facility);
-    
+    ps2ws.startUp(teamOneObject, teamTwoObject);
     return response.promise;
   });
 }

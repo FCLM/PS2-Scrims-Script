@@ -10,7 +10,7 @@ var api_key   = require('./api_key.js'),
     fs        = require('fs'),
     io        = require('socket.io');
 
-var teamOne, teamOneObject, teamTwoObject, teamTwo, facilityID;
+var teamOne, teamOneObject, teamTwoObject, teamTwo;
 var captures = 0, roundTracker = 0;
 var time = Date.now();
 
@@ -76,7 +76,7 @@ function scoreUpdate() {
   }
   //writes to 2 text files to update the members scores
   var teamOneActive = '';
-  var i = 0; var length;
+  var i = 0;
   teamOneActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
       var memName = member.name;
@@ -102,13 +102,12 @@ function scoreUpdate() {
       return console.log('playersT1.txt Error: ' + err);
     }
   });
-
   var teamTwoActivePlayers = [];
   for (keys in teamTwoObject.members) {
     teamTwoActivePlayers.push(teamTwoObject.members[keys])
   }
   var teamTwoActive = '';
-  var i = 0;
+  i = 0;
   teamTwoActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
       var memName = member.name;
@@ -157,7 +156,7 @@ function teamObject(team) {
         outfit_obj.members[member.character_id] = obj;
       }
     } else {
-      var obj = JSON.parse(memberTemplate);
+      obj = JSON.parse(memberTemplate);
       obj.name = member.name;
       if (!outfit_obj.hasOwnProperty(member.character_id)) {
         outfit_obj.members[member.character_id] = obj;
@@ -439,22 +438,9 @@ function createStream() {
     initialiseOverlay();
     subscribe(ws);
   });
-  var EoM = false; //variable keeping track of whether it is end of match/round
   ws.on('message', function (data) {
     if (data.indexOf("payload") == 2) {
         dealWithTheData(data);
-      /*if (data.character_id == triggerCharacter) {
-        console.error('*** TRIGGERED ***'); // not an error, just needs to stand out
-        if (EoM) {
-          unsubscribe();
-          EoM = false;
-          console.log('End of round');
-        } else {
-          subscribe();
-          startTimer();
-          EoM = true;
-        }
-      }*/
     }
     //store the data somewhere - possibly a txt file in case something gets disputed
   });
@@ -507,11 +493,11 @@ function startTimer(ws) {
     if (sec.length < 2) {
       sec = '0' + sec;
     }
-    timerObj = {
+    var timerObj = {
       minutes: min,
       seconds: sec
     };
-    timeString = min + ' : ' + sec;
+    var timeString = min + ' : ' + sec;
     fs.writeFile('time.txt', timeString, function (err) {
       if (err) {
         return console.log('time.txt Error: ' + err);
@@ -525,11 +511,9 @@ function startTimer(ws) {
 function startUp(tOne, tTwo) {
   items.initialise().then(function(result) {
     if (result) {
-      //console.log('Items are initialised');
       time = Date.now();
       console.log(time + ' start match');
       console.log('=====================================================================================================================================');
-      // start websocket now ?
       teamOne = tOne;
       teamOneObject = teamObject(teamOne);
       teamTwo = tTwo;
