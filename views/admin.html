@@ -38,7 +38,19 @@
         <br> <br>
         <h3 id="passw" class="inline">Password: </h3>
         <input type="text" size="8" id="pw">
-        <input id="start" type="submit" value="Track">
+        <input id="start" type="submit" value="Track" onclick="return submitForm(this)">
+    </form>
+    <br>
+    <br>
+    <form id="stopRestart">
+        <h3>Stop and restart:</h3>
+        <input id="sRestart" type="submit" value="Stop and Restart" onclick="return submitForm(this)">
+    </form>
+    <br>
+    <br>
+    <form id="">
+        <h3>Second Round: (only works after round one is finished) </h3>
+        <input id="Round2" type="submit" value="Start Second Round" onclick="return submitForm(this)">
     </form>
 </div>
 <script src="../js/jquery-1.11.1.min.js"></script>

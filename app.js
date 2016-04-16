@@ -115,6 +115,9 @@ io.on('connection', function(sock) {
     }
     io.emit('redirect');
   });
+  sock.on('newRound', function() {
+    ps2ws.createStream();
+  })
 });
 
 console.log('Listening on port %d', server.address().port);

@@ -626,4 +626,6 @@ function final() {
   });
 
 }
+
 exports.startUp = startUp;
+exports.createStream = createStream;
