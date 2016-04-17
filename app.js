@@ -117,6 +117,7 @@ io.on('connection', function(sock) {
   });
   sock.on('newRound', function() {
     ps2ws.createStream();
+    io.emit('redirect');
   })
 });
 
