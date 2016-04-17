@@ -185,16 +185,16 @@ function itsPlayerData(data) {
   //deals with adding points to the correct player & team
   var item = items.lookupItem(data.attacker_weapon_id);
   var points = items.lookupPointsfromCategory(item.category_id);
-  if ((data.attacker_laodout_id == 7) || (data.attacker_laodout_id == 14) || (data.attacker_laodout_id == 21)) {
+  if ((data.attacker_loadout_id == 7) || (data.attacker_loadout_id == 14) || (data.attacker_loadout_id == 21)) {
     //Attacker using a max
-    if ((data.character_laodout_id == 7) || (data.character_laodout_id == 14) || (data.character_laodout_id == 21)) {
+    if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
       //Attacker used a max to kill a max
       points = 3;
     } else {
       //max v infantry
       points = 1;
     }
-  } else if ((data.character_laodout_id == 7) || (data.character_laodout_id == 14) || (data.character_laodout_id == 21)) {
+  } else if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
     //defender used a max
     points = 5;
   }
@@ -347,20 +347,20 @@ function teamOneTeamkill (data, item) {
   teamOneObject.members[data.attacker_character_id].points -= points;
   teamOneObject.members[data.character_id].deaths++;
   //logging
-  console.log(teamOneObject.members[data.attacker_character_id].name + ' teamkilled ' + teamOneObject.members[data._character_id].name + ' -' + points);
+  console.log(teamOneObject.members[data.attacker_character_id].name + ' teamkilled ' + teamOneObject.members[data.character_id].name + ' -' + points);
   console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   //create a JSON and send it to the web
-  var obj = {
-    winner: teamTwoObject.members[data.attacker_character_id].name,
-    winner_faction: teamTwoObject.faction,
-    loser: teamTwoObject.members[data.character_id].name,
-    loser_faction: teamTwoObject.faction,
-    weapon: item.name,
-    image: item.image,
-    points: 0 - points,
-    time: 0
-  };
-  app.killfeedEmit(obj);
+  /*var obj = {
+   winner: teamTwoObject.members[data.attacker_character_id].name,
+   winner_faction: teamTwoObject.faction,
+   loser: teamTwoObject.members[data.character_id].name,
+   loser_faction: teamTwoObject.faction,
+   weapon: item.name,
+   image: item.image,
+   points: 0 - points,
+   time: 0
+   }*/
+  //app.killfeedEmit(obj);
 }
 
 function teamTwoTeamkill (data, item) {
@@ -371,10 +371,10 @@ function teamTwoTeamkill (data, item) {
   teamTwoObject.members[data.attacker_character_id].points -= points;
   teamTwoObject.members[data.character_id].deaths++;
   //logging
-  console.log(teamTwoObject.members[data.attacker_character_id].name + ' teamkilled ' + teamTwoObject.members[data._character_id].name + ' -' + points);
+  console.log(teamTwoObject.members[data.attacker_character_id].name + ' teamkilled ' + teamTwoObject.members[data.character_id].name + ' -' + points);
   console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   //create a JSON and send it to the web
-  var obj = {
+  /*var obj = {
     winner: teamTwoObject.members[data.attacker_character_id].name,
     winner_faction: teamTwoObject.faction,
     loser: teamTwoObject.members[data.character_id].name,
@@ -383,8 +383,8 @@ function teamTwoTeamkill (data, item) {
     image: item.image,
     points: 0 - points,
     time: 0
-  };
-  app.killfeedEmit(obj);
+  }*/
+  //app.killfeedEmit(obj);
 }
 
 function itsFacilityData(data) {
@@ -616,7 +616,7 @@ function final() {
       teamTwoActive += memName + '  ' + points + '  ' + netScore+ '  ' + kills + + '  ' + deaths + '  ' + '\n';
     }
   });
-  var stats = 'Final Scores for this match:\n' + teamOneActive + '\n\n\n' + teamTwoActive;
+  var stats = 'Final Scores for this match:\n' + teamOneActive + '\n' + teamTwoActive;
   fs.writeFile(path, stats, function(err) {
     if (err) {
       return console.log(path +' Error: ' + err);
