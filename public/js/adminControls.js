@@ -3,15 +3,12 @@
  */
 var socket = io();
 
-
-var form = document.getElementById('start');
-
 function submitForm (button)
 {
     if (button.value == "Track") {
         var tagOne = $("#T1Tag").val();
         var tagTwo = $("#T2Tag").val();
-        var pw = $('#pw').val();
+        var pw = $('#pwStart').val();
         var obj = {
             teamOne : tagOne,
             teamTwo : tagTwo,
@@ -20,15 +17,23 @@ function submitForm (button)
         console.log(obj);
         socket.emit('start', { obj: obj});
     } else if (button.value == "Stop and Restart") {
-       socket.emit('stopRestart');
+       pw = $('#pwsRestart').val();
+       obj = {
+            auth: pw
+        };
+       socket.emit('stopRestart', { obj: obj});
+        console.log(pw);
     } else if (button.value == "Start Second Round") {
-        socket.emit('newRound');
+        pw = $('#pwRound2').val();
+        obj = {
+            auth: pw
+        };
+        socket.emit('newRound', { obj: obj});
+        console.log(pw);
     }
     return false;
 }
-document.addEventListener('submit', function(e) {
-   
-});
+
 socket.on('connect', function() {
     socket.on ('redirect', function() {
     //redirect to index.html
@@ -36,4 +41,5 @@ socket.on('connect', function() {
         window.location.replace("http://localhost:3001");
     });
 });
+
 socket.emit('backchat', { obj: 'Admin - Web Connection' });

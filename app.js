@@ -108,17 +108,35 @@ io.on('connection', function(sock) {
     if (event.auth == 'Password1') {
       if ((event.hasOwnProperty('teamOne')) && (event.hasOwnProperty('teamTwo'))) {
         start(event.teamOne, event.teamTwo);
-        console.log(event.teamOne + ' ' + event.teamTwo);
+        console.log('Admin entered a start match command involving: ' + event.teamOne + ' ' + event.teamTwo);
       } else {
         console.error('No data sent: ' + event.teamOne + ' ' + event.teamTwo);
       }
     }
     io.emit('redirect');
   });
-  sock.on('newRound', function() {
-    ps2ws.createStream();
-    io.emit('redirect');
-  })
+  sock.on('newRound', function(data) {
+    var event = data.obj;
+    if (event.auth == 'Password1') {
+      console.log('Admin entered New Round command, new round starting: ');
+      console.log(data);
+      ps2ws.createStream();
+      io.emit('redirect');
+    } else {
+      io.emit('redirect');
+      console.log(data);
+    }
+  });
+  sock.on('sRestart', function(data) {
+    var event = data.obj;
+    if (event.auth == 'Password1') {
+      console.log('Admin entered sRestart command, match restarting: ');
+      console.log(data);
+      io.emit('redirect');
+    } else {
+      io.emit('redirect');
+    }
+  });
 });
 
 console.log('Listening on port %d', server.address().port);

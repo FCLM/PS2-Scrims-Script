@@ -37,19 +37,21 @@
         <input type="text" size="4" maxlength="4" id="T2Tag" placeholder="FCLN">
         <br> <br>
         <h3 id="passw" class="inline">Password: </h3>
-        <input type="text" size="8" id="pw">
+        <input type="text" size="8" id="pwStart">
         <input id="start" type="submit" value="Track" onclick="return submitForm(this)">
     </form>
     <br>
     <br>
     <form id="stopRestart">
         <h3>Stop and restart:</h3>
+        <input id="pwsRestart" size="8" type="text">
         <input id="sRestart" type="submit" value="Stop and Restart" onclick="return submitForm(this)">
     </form>
     <br>
     <br>
     <form id="">
-        <h3>Second Round: (only works after round one is finished) </h3>
+        <h3>Second Round: (only use AFTER round one is finished) </h3>
+        <input id="pwRound2" type="text" size="8">
         <input id="Round2" type="submit" value="Start Second Round" onclick="return submitForm(this)">
     </form>
 </div>

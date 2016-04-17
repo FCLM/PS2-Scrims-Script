@@ -225,7 +225,7 @@ function itsPlayerData(data) {
     }
     teamTwoSuicide(data, points, item);
   } else if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
-      // Hahahaha he killed his mate
+    // Hahahaha he killed his mate
    teamOneTeamkill(data, item);
   } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
     // Hahahaha he killed his mate
@@ -350,7 +350,7 @@ function teamOneTeamkill (data, item) {
   console.log(teamOneObject.members[data.attacker_character_id].name + ' teamkilled ' + teamOneObject.members[data.character_id].name + ' -' + points);
   console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   //create a JSON and send it to the web
-  /*var obj = {
+  var obj = {
    winner: teamTwoObject.members[data.attacker_character_id].name,
    winner_faction: teamTwoObject.faction,
    loser: teamTwoObject.members[data.character_id].name,
@@ -359,8 +359,8 @@ function teamOneTeamkill (data, item) {
    image: item.image,
    points: 0 - points,
    time: 0
-   }*/
-  //app.killfeedEmit(obj);
+   };
+  app.killfeedEmit(obj);
 }
 
 function teamTwoTeamkill (data, item) {
@@ -374,7 +374,7 @@ function teamTwoTeamkill (data, item) {
   console.log(teamTwoObject.members[data.attacker_character_id].name + ' teamkilled ' + teamTwoObject.members[data.character_id].name + ' -' + points);
   console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   //create a JSON and send it to the web
-  /*var obj = {
+  var obj = {
     winner: teamTwoObject.members[data.attacker_character_id].name,
     winner_faction: teamTwoObject.faction,
     loser: teamTwoObject.members[data.character_id].name,
@@ -383,8 +383,8 @@ function teamTwoTeamkill (data, item) {
     image: item.image,
     points: 0 - points,
     time: 0
-  }*/
-  //app.killfeedEmit(obj);
+  };
+  app.killfeedEmit(obj);
 }
 
 function itsFacilityData(data) {
