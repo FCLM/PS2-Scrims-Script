@@ -8,12 +8,13 @@ var express       = require('express'),
     nunjucks      = require('nunjucks'),
     http          = require('http');
 
-var ps2ws   = require('./ps2ws.js'),
-    teams   = require('./teams.js'),
-    routes  = require('./routes/index'),
-    users   = require('./routes/users'),
-    config  = require('./config'),
-    api_key = require('./api_key');
+var ps2ws         = require('./ps2ws.js'),
+    teams         = require('./teams.js'),
+    routes        = require('./routes/index'),
+    adminControls = require('./routes/admin'),
+    config        = require('./config'),
+    api_key       = require('./api_key');
+
 //global variable for use in different functions
 var teamOneObject, teamTwoObject;
 
@@ -21,8 +22,8 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', '.html'); // changed from hbs to .html
-app.use(express.static(__dirname + '/public')); // code from killfeed.js
+app.set('view engine', '.html');
+app.use(express.static(__dirname + '/public'));
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -32,7 +33,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/admin', adminControls);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -65,6 +66,8 @@ app.use(function(err, req, res) {
   });
 });
 
+// Killfeed.js code start
+
 app.set('port', 3001);
 
 nunjucks.configure('views', {
@@ -82,8 +85,7 @@ var server = http.createServer(app).listen(app.get('port'));
 var io = require('socket.io').listen(server);
 io.on('connection', function(sock) {
   sock.on('backchat', function (data) {
-    console.log('New Web Connection');
-    if (teamOneObject.hasOwnProperty('alias')) {
+    if (teamOneObject != undefined) {
       var teams = {
         teamOne: {
           alias: teamOneObject.alias,
@@ -97,15 +99,42 @@ io.on('connection', function(sock) {
         }
       };
       io.emit('teams', {obj: teams});
+    } else {
+      console.log(teamOneObject + '\n' + teamTwoObject);
     }
   });
   sock.on('start', function (data) {
     var event = data.obj;
-    if ((event.hasOwnProperty('teamOne')) && (event.hasOwnProperty('teamTwo'))) {
-      start(event.teamOne, event.teamTwo);
-      console.log(event.teamOne + ' ' + event.teamTwo);
+    if (event.auth == 'Password1') {
+      if ((event.hasOwnProperty('teamOne')) && (event.hasOwnProperty('teamTwo'))) {
+        start(event.teamOne, event.teamTwo);
+        console.log('Admin entered a start match command involving: ' + event.teamOne + ' ' + event.teamTwo);
+      } else {
+        console.error('No data sent: ' + event.teamOne + ' ' + event.teamTwo);
+      }
+    }
+    io.emit('redirect');
+  });
+  sock.on('newRound', function(data) {
+    var event = data.obj;
+    if (event.auth == 'Password1') {
+      console.log('Admin entered New Round command, new round starting: ');
+      console.log(data);
+      ps2ws.createStream();
+      io.emit('redirect');
     } else {
-      console.error('No data sent: ' + event.teamOne + ' ' + event.teamTwo);
+      io.emit('redirect');
+      console.log(data);
+    }
+  });
+  sock.on('sRestart', function(data) {
+    var event = data.obj;
+    if (event.auth == 'Password1') {
+      console.log('Admin entered sRestart command, match restarting: ');
+      console.log(data);
+      io.emit('redirect');
+    } else {
+      io.emit('redirect');
     }
   });
 });

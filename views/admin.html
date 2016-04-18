@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>{{ title }}</title>
+    <title>{{ title }} : admin</title>
 
     <link href="../stylesheets/style.css" rel="stylesheet">
 
@@ -31,46 +31,35 @@
 
 <div id="stats">
     <h1>{{ title }}</h1>
-    <h3 class="inlinePad" id="outfitT1"></h3><h1 class="score" id="T1Score"></h1>
-    <h1 class="v">v</h1>
-    <h1 class="score" id="T2Score"></h1><h3 class="inlinePad" id="outfitT2"></h3>
-    <h1 id="timer">15 : 00</h1>
-    <table class="inline">
-        <thead><tr><th class="pad">Team One: </th><th class="pad">Score: </th><th class="pad">Net Score: </th><th class="pad">Kills: </th><th class="pad">Deaths: </th></tr></thead>
-        <tbody id="Team1">
-        <tr id="T1">
-        </tr>
-        </tbody>
-    </table>
-    <table class="inline">
-        <thead><tr><th class="pad">Team Two: </th><th class="pad">Score: </th><th class="pad">Net Score: </th><th class="pad">Kills: </th><th class="pad">Deaths: </th></tr></thead>
-        <tbody id="Team2">
-        <tr id="T2">
-        </tr>
-        </tbody>
-    </table>
+    <form id="outfits">
+        <input type="text" size="4" maxlength="4" id="T1Tag" placeholder="FCLM">
+        <h3 id="verse" class="inline"> v </h3>
+        <input type="text" size="4" maxlength="4" id="T2Tag" placeholder="FCLN">
+        <br> <br>
+        <h3 id="passw" class="inline">Password: </h3>
+        <input type="text" size="8" id="pwStart">
+        <input id="start" type="submit" value="Track" onclick="return submitForm(this)">
+    </form>
     <br>
     <br>
+    <form id="stopRestart">
+        <h3>Stop and restart:</h3>
+        <input id="pwsRestart" size="8" type="text">
+        <input id="sRestart" type="submit" value="Stop and Restart" onclick="return submitForm(this)">
+    </form>
+    <br>
+    <br>
+    <form id="">
+        <h3>Second Round: (only use AFTER round one is finished) </h3>
+        <input id="pwRound2" type="text" size="8">
+        <input id="Round2" type="submit" value="Start Second Round" onclick="return submitForm(this)">
+    </form>
 </div>
-<div class="main_area container" role="main">
-    <section>
-
-    </section>
-    <section>
-        <p>Killfeed: </p>
-        <table class="table index-table">
-            <thead><tr><th>Winner</th><th>Loser</th><th>Weapon</th><th>Image</th><th>Points</th></tr></thead>
-            <tbody id="killfeed"></tbody>
-        </table>
-    </section>
-</div>
-
 <script src="../js/jquery-1.11.1.min.js"></script>
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
 <script src="../js/jquery-ui.min.js"></script>
-
 <script src="../js/bootstrap.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
-<script src="../js/main.js"></script>
+<script src="../js/adminControls.js"></script>
 </body>
 </html>
