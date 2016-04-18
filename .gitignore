@@ -10,6 +10,7 @@ node_modules
 
 #config
 /api_key.js
+/password.js
 
 #overlays
 playersT1.txt
