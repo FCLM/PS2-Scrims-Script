@@ -624,7 +624,6 @@ function final() {
     console.log('Match stats wrote to ' + path);
 
   });
-
 }
 
 exports.startUp = startUp;
