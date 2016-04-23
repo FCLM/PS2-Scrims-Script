@@ -340,7 +340,7 @@ function teamTwoSuicide (data, points, item) {
 }
 
 function teamOneTeamkill (data, item) {
-  points = 5;
+  var points = 5;
   teamOneObject.points -= points;
   teamOneObject.netScore -= points;
   teamOneObject.deaths++;
@@ -351,10 +351,10 @@ function teamOneTeamkill (data, item) {
   console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   //create a JSON and send it to the web
   var obj = {
-   winner: teamTwoObject.members[data.attacker_character_id].name,
-   winner_faction: teamTwoObject.faction,
-   loser: teamTwoObject.members[data.character_id].name,
-   loser_faction: teamTwoObject.faction,
+   winner: teamOneObject.members[data.attacker_character_id].name,
+   winner_faction: teamOneObject.faction,
+   loser: teamOneObject.members[data.character_id].name,
+   loser_faction: teamOneObject.faction,
    weapon: item.name,
    image: item.image,
    points: 0 - points,
@@ -364,7 +364,7 @@ function teamOneTeamkill (data, item) {
 }
 
 function teamTwoTeamkill (data, item) {
-  points = 5;
+  var points = 5;
   teamTwoObject.points -= points;
   teamTwoObject.netScore -= points;
   teamTwoObject.deaths++;
