@@ -5,7 +5,7 @@ Make sure you have the latest [node.js](https://nodejs.org/en/) installed
 You will need to create 2 javascript files, api_key.js and password.js. 
 There are templates of both to show you what they should look like.
 
-To run the script, navigate to the folder where the script is now located.
+To run the script, navigate to the folder where the script is now located using command line.
 
 ```sh
 $ npm install
