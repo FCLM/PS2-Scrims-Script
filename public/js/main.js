@@ -6,8 +6,24 @@ socket.on('connect', function() {
     socket.on('teams', function (data) {
         var event = data.obj;
         console.log(event);
-        $('#outfitT1').html('[' + event.teamOne.alias + '] ' + event.teamOne.name).addClass('faction' + event.teamOne.faction);
-        $('#outfitT2').html('[' + event.teamTwo.alias + '] ' + event.teamTwo.name).addClass('faction' + event.teamTwo.faction);
+        var T1 = '[' + event.teamOne.alias + '] ' + event.teamOne.name;
+        var T2 = '[' + event.teamTwo.alias + '] ' + event.teamTwo.name;
+        if (T1.length < 30) {
+            var space = 30 - T1.length;
+            while (space != 0) {
+                T1 = T1 + "\u00A0";
+                space--;
+            }
+        }
+        if (T2.length < 30) {
+            space = 30 - T2.length;
+            while (space != 0) {
+                T2 = "\u00A0" + T2;
+                space--;
+            }
+        }
+        $('#outfitT1').html(T1).addClass('faction' + event.teamOne.faction);
+        $('#outfitT2').html(T2).addClass('faction' + event.teamTwo.faction);
         $('#Team1').addClass('faction' + event.teamOne.faction);
         $('#Team2').addClass('faction' + event.teamTwo.faction);
     });
