@@ -613,7 +613,7 @@ function final() {
       while (deaths.length < 4) {
         deaths = ' ' + deaths;
       }
-      teamTwoActive += memName + '  ' + points + '  ' + netScore+ '  ' + kills + + '  ' + deaths + '  ' + '\n';
+      teamTwoActive += memName + '  ' + points + '  ' + netScore+ '  ' + kills + '  ' + deaths + '  ' + '\n';
     }
   });
   var stats = 'Final Scores for this match:\n' + teamOneActive + '\n' + teamTwoActive;
