@@ -13,7 +13,8 @@ var ps2ws         = require('./ps2ws.js'),
     routes        = require('./routes/index'),
     adminControls = require('./routes/admin'),
     config        = require('./config'),
-    api_key       = require('./api_key');
+    api_key       = require('./api_key'),
+    password      = require('./password');
 
 //global variable for use in different functions
 var teamOneObject, teamTwoObject;
@@ -105,7 +106,7 @@ io.on('connection', function(sock) {
   });
   sock.on('start', function (data) {
     var event = data.obj;
-    if (event.auth == 'Password1') {
+    if (event.auth == password.KEY) {
       if ((event.hasOwnProperty('teamOne')) && (event.hasOwnProperty('teamTwo'))) {
         start(event.teamOne, event.teamTwo);
         console.log('Admin entered a start match command involving: ' + event.teamOne + ' ' + event.teamTwo);
@@ -117,7 +118,7 @@ io.on('connection', function(sock) {
   });
   sock.on('newRound', function(data) {
     var event = data.obj;
-    if (event.auth == 'Password1') {
+    if (event.auth == password.KEY) {
       console.log('Admin entered New Round command, new round starting: ');
       console.log(data);
       ps2ws.createStream();
@@ -129,7 +130,7 @@ io.on('connection', function(sock) {
   });
   sock.on('sRestart', function(data) {
     var event = data.obj;
-    if (event.auth == 'Password1') {
+    if (event.auth == password.KEY) {
       console.log('Admin entered sRestart command, match restarting: ');
       console.log(data);
       io.emit('redirect');

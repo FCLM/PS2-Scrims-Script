@@ -26,31 +26,31 @@ var memberTemplate = JSON.stringify({
   Writes to 5 files to allow a streamer to use them in OBS to display the match stats
   */
 function initialiseOverlay() {
-  fs.writeFile('scoreT1.txt', '0', function(err) {
+  fs.writeFile('overlay/scoreT1.txt', '0', function(err) {
     if (err) {
       return console.log('scoreT1.txt Error: ' + err);
     }
     console.log('scoreT1.txt initialised')
   });
-  fs.writeFile('scoreT2.txt', '0', function(err) {
+  fs.writeFile('overlay/scoreT2.txt', '0', function(err) {
     if (err) {
       return console.log('scoreT1.txt Error: ' + err);
     }
     console.log('scoreT2.txt initialised')
   });
-  fs.writeFile('playersT1.txt', '', function(err) {
+  fs.writeFile('overlay/playersT1.txt', '', function(err) {
     if (err) {
       return console.log('playersT1.txt Error: ' + err);
     }
     console.log('playersT1.txt initialised')
   });
-  fs.writeFile('playersT2.txt', '', function(err) {
+  fs.writeFile('overlay/playersT2.txt', '', function(err) {
     if (err) {
       return console.log('playersT2.txt Error: ' + err);
     }
     console.log('playersT2.txt initialised')
   });
-  fs.writeFile('time.txt', '', function(err) {
+  fs.writeFile('overlay/time.txt', '', function(err) {
     if (err) {
       return console.log('time.txt Error: ' + err);
     }
@@ -61,13 +61,13 @@ function initialiseOverlay() {
 function scoreUpdate() {
   //for use in OBS for the overlay
   //writes to 2 text files the current team score
-  fs.writeFile('scoreT1.txt', teamOneObject.points, function (err) {
+  fs.writeFile('overlay/scoreT1.txt', teamOneObject.points, function (err) {
     if (err) {
       return console.log('scoreT1.txt Error: ' + err);
     }
   });
 
-  fs.writeFile('scoreT2.txt', teamTwoObject.points, function (err) {
+  fs.writeFile('overlay/scoreT2.txt', teamTwoObject.points, function (err) {
     if (err) {
       return console.log('scoreT2.txt Error: ' + err);
     }
@@ -99,7 +99,7 @@ function scoreUpdate() {
       }
     }
   });
-  fs.writeFile('playersT1.txt', teamOneActive, function (err) {
+  fs.writeFile('overlay/playersT1.txt', teamOneActive, function (err) {
     if (err) {
       return console.log('playersT1.txt Error: ' + err);
     }
@@ -130,7 +130,7 @@ function scoreUpdate() {
       }
     }
   });
-  fs.writeFile('playersT2.txt', teamTwoActive, function (err) {
+  fs.writeFile('overlay/playersT2.txt', teamTwoActive, function (err) {
     if (err) {
       return console.log('playersT2.txt Error: ' + err);
     }
@@ -505,7 +505,7 @@ function startTimer(ws) {
       seconds: sec
     };
     var timeString = min + ' : ' + sec;
-    fs.writeFile('time.txt', timeString, function (err) {
+    fs.writeFile('overlay/time.txt', timeString, function (err) {
       if (err) {
         return console.log('time.txt Error: ' + err);
       }
@@ -624,7 +624,6 @@ function final() {
     console.log('Match stats wrote to ' + path);
 
   });
-
 }
 
 exports.startUp = startUp;

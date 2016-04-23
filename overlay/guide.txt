@@ -1,0 +1,9 @@
+Once a match has been started it will call a function that initialises the overlay .txt files
+once that is done you can use them in OBS.
+
+To use a .txt in OBS:
+
+    In your scene, right click and select add > text in the sources table
+    Name it something helpful (eg Players Team One, Timer, Score Team Two)
+    Select 'Use Text From File' and browse to wear the overlay txt files are located
+    Choose Consolas or any other monospaced font (this will make the names line up)
