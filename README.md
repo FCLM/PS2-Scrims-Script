@@ -17,8 +17,7 @@ Once this finishes downloading the dependencies you can run the script using:
 $ node bin/www
 ```
 
-Once this is done, navigate to localhost:3001/admin
-From there you can control the script as long as you have the password set correctly.
+Then navigate to localhost:3001/admin from there you can control the script as long as you have the password set correctly.
 
 Created by FCLM - DylanNZ, Mononz, Dalordish
 
