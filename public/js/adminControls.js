@@ -38,7 +38,7 @@ socket.on('connect', function() {
     socket.on ('redirect', function() {
     //redirect to index.html
         console.log('Session started, redirecting to index.html');
-        window.location.replace("http://localhost:3001");
+        window.location.replace("/");
     });
 });
 
