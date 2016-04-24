@@ -450,6 +450,7 @@ function createStream() {
     }
     //store the data somewhere - possibly a txt file in case something gets disputed
   });
+  captures = 0;
 }
 
 function subscribe(ws) {
