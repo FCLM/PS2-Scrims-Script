@@ -18,7 +18,7 @@ socket.on('connect', function() {
         if (T2.length < 30) {
             space = 30 - T2.length;
             while (space != 0) {
-                T2 = "\u00A0" + T2;
+                T2 =  T2 + "\u00A0";
                 space--;
             }
         }
