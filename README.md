@@ -2,6 +2,8 @@
 
 Make sure you have the latest [node.js](https://nodejs.org/en/) installed 
 
+**N.B: If you don't know computers then use _install.bat_ followed by _start.bat_ to install and start the script**
+
 You will need to create 2 javascript files, api_key.js and password.js. 
 There are templates of both to show you what they should look like.
 
