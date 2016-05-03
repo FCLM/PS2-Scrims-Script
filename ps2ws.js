@@ -10,9 +10,16 @@ var api_key   = require('./api_key.js'),
     fs        = require('fs'),
     io        = require('socket.io');
 
-var teamOne, teamOneObject, teamTwoObject, teamTwo;
-var captures = 0, roundTracker = 0;
-var time = Date.now();
+var teamOne,
+    teamOneObject,
+    teamTwoObject,
+    teamTwo,
+    captures = 0,
+    roundTracker = 0,
+    time = Date.now(),
+    pOne = '',
+    pTwo = '',
+    pThree = '';
 
 var memberTemplate = JSON.stringify({
   name : '',
@@ -56,6 +63,12 @@ function initialiseOverlay() {
     }
     console.log('time.txt initialised')
   });
+  fs.writeFile('overlay/killfeed.txt', '', function(err) {
+    if (err) {
+      return console.log('killfeed.txt Error: ' + err);
+    }
+    console.log('killfeed.txt intialised')
+  })
 }
 
 function scoreUpdate() {
@@ -135,6 +148,30 @@ function scoreUpdate() {
       return console.log('playersT2.txt Error: ' + err);
     }
   });
+}
+
+function killfeedUpdate(killObj) {
+  pThree = pTwo;
+  pTwo = pOne;
+  var killer = killObj.winner;
+  while (killer.length < 16) {
+    killer += ' ';
+  }
+  var weapon = killObj.weapon;
+  while (killer.length < 10) {
+    killer += ' ';
+  }
+ var  killed = killObj.loser;
+  while (killed.length < 16) {
+    killed = ' ' + killed;
+  }
+  pOne = killer + ' [' + weapon + '] ' + killed + '\n';
+  var feed = pOne + pTwo + pThree;
+  fs.writeFile('overlay/killfeed.txt', feed, function(err) {
+    if (err) {
+      return console.log('killfeed.txt Error: ' + err);
+    }
+  })
 }
 
 function teamObject(team) {
@@ -261,6 +298,7 @@ function oneIvITwo (data, points, item) {
     time: 0
   };
   app.killfeedEmit(obj);
+  killfeedUpdate(obj);
 }
 
 function twoIvIOne (data, points, item) {
@@ -289,6 +327,7 @@ function twoIvIOne (data, points, item) {
     time: 0
   };
   app.killfeedEmit(obj);
+  killfeedUpdate(obj);
 }
 
 function teamOneSuicide (data, points, item) {
@@ -313,6 +352,7 @@ function teamOneSuicide (data, points, item) {
     time: 0
   };
   app.killfeedEmit(obj);
+  killfeedUpdate(obj);
 }
 
 function teamTwoSuicide (data, points, item) {
@@ -337,6 +377,7 @@ function teamTwoSuicide (data, points, item) {
     time: 0
   };
   app.killfeedEmit(obj);
+  killfeedUpdate(obj);
 }
 
 function teamOneTeamkill (data, item) {
@@ -361,6 +402,7 @@ function teamOneTeamkill (data, item) {
    time: 0
    };
   app.killfeedEmit(obj);
+  killfeedUpdate(obj);
 }
 
 function teamTwoTeamkill (data, item) {
@@ -385,6 +427,7 @@ function teamTwoTeamkill (data, item) {
     time: 0
   };
   app.killfeedEmit(obj);
+  killfeedUpdate(obj);
 }
 
 function itsFacilityData(data) {
