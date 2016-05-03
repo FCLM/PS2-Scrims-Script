@@ -22,6 +22,31 @@ function removeNameParts(name) {
   return name;
 }
 
+// add the character ids and the desired name as well as the actual characters name for reference later
+// commas on all curly brackets except for the last set
+var alias = {
+  "1234564321" : {
+    name : "example",
+    actual : "Not a Real Character"
+  },
+  "12345643221321" : {
+    name : "example2",
+    actual : "Not a Real Character"
+  },
+  "5428297991998933537" : {
+    name : "DylanNZ",
+    actual : "FCLMxPedagogueNC"
+  },
+  "5428297991998933569" : {
+    name : "DylanNZ",
+    actual : "FCLMxPedagogueTR"
+  },
+  "5428297991998933601" : {
+    name : "DylanNZ",
+    actual : "FCLMxPedagogueVS"
+  }
+};
+
 function fetchTeamData(teamTag) {
   var response = Q.defer();
   teamTag = teamTag.toLowerCase();
@@ -30,7 +55,11 @@ function fetchTeamData(teamTag) {
     var teamPlayers = [];
     body.outfit_list[0].members.forEach(function(result) {
       if ((result.hasOwnProperty('name')) && (result.name.hasOwnProperty('first')))  {
-        memName = removeNameParts(result.name.first);
+        if (alias.hasOwnProperty(result.character_id)) {
+          memName = alias[result.character_id].name;
+        } else {
+          memName = removeNameParts(result.name.first);
+        }
         teamPlayers.push({
           character_id: result.character_id,
           name: memName
