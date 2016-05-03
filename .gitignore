@@ -8,13 +8,14 @@ node_modules
 # databases
 *.sqlite3
 
-#config
+# config
 /api_key.js
 /password.js
 
-#overlays
+# overlays
 overlay/playersT1.txt
 overlay/playersT2.txt
 overlay/scoreT1.txt
 overlay/scoreT2.txt
 overlay/time.txt
+overlay/killfeed.txt
