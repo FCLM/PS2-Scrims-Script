@@ -55,6 +55,7 @@ function fetchTeamData(teamTag) {
     var teamPlayers = [];
     body.outfit_list[0].members.forEach(function(result) {
       if ((result.hasOwnProperty('name')) && (result.name.hasOwnProperty('first')))  {
+        var memName = '';
         if (alias.hasOwnProperty(result.character_id)) {
           memName = alias[result.character_id].name;
         } else {
