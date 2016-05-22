@@ -158,21 +158,27 @@ function killfeedUpdate(killObj) {
   while (killer.length < 16) {
     killer += ' ';
   }
-  var weapon = killObj.weapon;
-  while (killer.length < 10) {
-    killer += ' ';
+  var weapon = '[' + killObj.weapon + ']';
+  while (weapon.length < 16) {
+      weapon += ' ';
   }
- var  killed = killObj.loser;
-  while (killed.length < 16) {
-    killed = ' ' + killed;
+  var  killed = killObj.loser;
+  while (killed.length < 18) {
+    killed += ' ';
   }
-  pOne = killer + ' [' + weapon + '] ' + killed + '\n';
+  pOne = killer + ' ' + weapon + '  ' + killed + '\n';
   var feed = pOne + pTwo + pThree;
   fs.writeFile('overlay/killfeed.txt', feed, function(err) {
     if (err) {
       return console.log('killfeed.txt Error: ' + err);
     }
   })
+}
+
+function killfeedBaseUpdate(tag, points) {
+  pThree = pTwo;
+  pTwo = pOne;
+  pOne = '       ['+ tag + '] Captured the base (+' + points + ')';
 }
 
 function teamObject(team) {
@@ -444,6 +450,7 @@ function itsFacilityData(data) {
         console.log(teamOneObject.name + ' captured the base +' + points);
         console.log(teamOneObject.points + ' ' + teamTwoObject.points);
         app.sendScores(teamOneObject, teamTwoObject);
+        killfeedBaseUpdate(teamOneObject.alias, points);
       } else {
         points = 25;
         teamOneObject.points += points;
@@ -452,6 +459,7 @@ function itsFacilityData(data) {
         console.log(teamOneObject.name + ' captured the base +' + points);
         console.log(teamOneObject.points + ' ' + teamTwoObject.points);
         app.sendScores(teamOneObject, teamTwoObject);
+        killfeedBaseUpdate(teamOneObject.alias, points);
       }
       captures++;
     } else if (data.outfit_id == teamTwoObject.outfit_id) {
@@ -463,6 +471,7 @@ function itsFacilityData(data) {
         console.log(teamTwoObject.name + ' captured the base +' + points);
         console.log(teamOneObject.points + ' ' + teamTwoObject.points);
         app.sendScores(teamOneObject, teamTwoObject);
+        killfeedBaseUpdate(teamTwoObject.alias, points);
       } else {
         points = 25;
         teamTwoObject.points += points;
@@ -471,11 +480,12 @@ function itsFacilityData(data) {
         console.log(teamTwoObject.name + ' captured the base +' + points);
         console.log(teamOneObject.points + ' ' + teamTwoObject.points);
         app.sendScores(teamOneObject, teamTwoObject);
+        killfeedBaseUpdate(teamTwoObject.alias, points);
       }
       captures++;
     }
   }
-  //else it was captured by neither outfit and they deserve no points
+  //else it was captured by neither outfit
 }
 
 var triggerCharacter = '';//enter a character ID for someone who can /suicide to start the match
@@ -509,9 +519,8 @@ function subscribe(ws) {
     ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
     //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
   });
-  //facility Subscribing
+  //facility Subscribing - subscribes to all capture data
   ws.send('{"service":"event","action":"subscribe","worlds":["19","25"],"eventNames":["FacilityControl"]}');
-  //not correct currently - subscribes to all, i guess it could just be that and then if the facility is the right one then add points to corresponding team
   //start timer
   startTimer(ws);
   console.log('Subscribed to facility and kill/death events between ' + teamOneObject.alias + ' and '  +teamTwoObject.alias);
