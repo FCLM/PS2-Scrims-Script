@@ -16,12 +16,12 @@ function submitForm (button)
         };
         console.log(obj);
         socket.emit('start', { obj: obj});
-    } else if (button.value == "Stop and Restart") {
-       pw = $('#pwsRestart').val();
+    } else if (button.value == "Stop") {
+       pw = $('#pwstop').val();
        obj = {
             auth: pw
         };
-       socket.emit('stopRestart', { obj: obj});
+       socket.emit('stop', { obj: obj});
         console.log(pw);
     } else if (button.value == "Start Second Round") {
         pw = $('#pwRound2').val();

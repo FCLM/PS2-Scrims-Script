@@ -19,7 +19,8 @@ var teamOne,
     time = Date.now(),
     pOne = '',
     pTwo = '',
-    pThree = '';
+    pThree = '',
+    timeCounter = 0;
 
 var memberTemplate = JSON.stringify({
   name : '',
@@ -527,15 +528,15 @@ function unsubscribe(ws) {
 function startTimer(ws) {
   console.log('timer started');
   roundTracker++;
-  var i = 900;
+  timeCounter = 900;
   var time = setInterval(function () {
-    if (i < 1) {
+    if (timeCounter < 1) {
       clearInterval(time);
       unsubscribe(ws);
       final();
     }
-    var sec = parseInt(i % 60),
-        min = parseInt(i / 60);
+    var sec = parseInt(timeCounter % 60),
+        min = parseInt(timeCounter / 60);
     min = min.toString();
     if (min.length < 2) {
       min = '0' + min;
@@ -555,8 +556,12 @@ function startTimer(ws) {
       }
     });
     app.timerEmit(timerObj);
-    i--;
+    timeCounter--;
   }, 1000);
+}
+
+function stopTheMatch() {
+  timeCounter = 0;
 }
 
 function startUp(tOne, tTwo) {
@@ -672,3 +677,4 @@ function final() {
 
 exports.startUp = startUp;
 exports.createStream = createStream;
+exports.stopTheMatch = stopTheMatch;

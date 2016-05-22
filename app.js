@@ -67,8 +67,6 @@ app.use(function(err, req, res) {
   });
 });
 
-// Killfeed.js code start
-
 app.set('port', 3001);
 
 nunjucks.configure('views', {
@@ -128,11 +126,12 @@ io.on('connection', function(sock) {
       console.log(data);
     }
   });
-  sock.on('sRestart', function(data) {
+  sock.on('stop', function(data) {
     var event = data.obj;
     if (event.auth == password.KEY) {
-      console.log('Admin entered sRestart command, match restarting: ');
+      console.log('Admin entered Stop command, match stopping: ');
       console.log(data);
+      ps2ws.stopTheMatch();
       io.emit('redirect');
     } else {
       io.emit('redirect');
