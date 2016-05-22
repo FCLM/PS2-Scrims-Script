@@ -1,25 +1,40 @@
-	ThunderDome Rules:
-                                                                                                                         Done:
-	Infantry versus infantry kills:  2 points.                                                                              x
+This script is designed to follow the Briggs ThunderDome Rules:
+Stats can be changed though
 
-	Infantry versus MAX kills with any weapon/tool/explosive:  5 points.                                                    x
+    Currently:
 
-	Infantry versus infantry kills with explosives*:  0 points. (C4, Prox/Betty/Claymore, Rockets)                          x
+	Infantry versus infantry kills:  2 points.
+        can be edited by editing the category_map with the points for weapon category in items.js
 
-	Infantry versus infantry kills with engineer turrets:  1 point.                                                         x
+	Infantry versus MAX kills with any weapon/tool/explosive:  5 points.
+	    can be edited in the function itsPlayerData()
 
-	Infantry kills with shotguns (as a whole): 0 points                                                                     x
+	Infantry versus infantry kills with explosives*:  0 points. (C4, Prox/Betty/Claymore, Rockets)
+        can be edited by editing the category_map with the points for weapon category in items.js
 
-	MAX versus infantry kills:  1 point.                                                                                    x
+	Infantry versus infantry kills with engineer turrets:  1 point.
+        can be edited by editing the category_map with the points for weapon category in items.js
 
-	MAX versus MAX kills:  3 points.                                                                                        x
+	Infantry kills with shotguns (as a whole): 0 points
+        can be edited by editing the category_map with the points for weapon category in items.js
 
-	Team kills:  -5 points.                                                                                                 x
+	MAX versus infantry kills:  1 point.
+        can be edited in the function itsPlayerData()
 
-	Infantry suicide: -2 points.                                                                                            x
+	MAX versus MAX kills:  3 points.
+	    can be edited in the function itsPlayerData()
 
-	MAX suicide: -5 points.                                                                                                 x
+	Team kills:  -5 points.
+        can be edited in teamOneTeamKill() and teamTwoTeamkill()
 
-	Neutral base capture:  10 points.                                                                                       x
+	Infantry suicide: -2 points.
+        can be edited in teamOneSuicide() and teamTwoSuicied()
 
-	Enemy base capture:  25 points.                                                                                         x
+	MAX suicide: -5 points.
+        can be edited in itsPlayerData()
+
+	Neutral base capture:  10 points.
+        can be edited in the function itsFacilityData()
+
+	Enemy base capture:  25 points.
+	    can be edited in the function itsFacilityData()
