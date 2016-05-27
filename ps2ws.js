@@ -163,7 +163,7 @@ function killfeedUpdate(killObj) {
       weapon += ' ';
   }
   var  killed = killObj.loser;
-  while (killed.length < 18) {
+  while (killed.length < 16) {
     killed += ' ';
   }
   pOne = killer + ' ' + weapon + '  ' + killed + '\n';
