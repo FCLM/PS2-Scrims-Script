@@ -97,7 +97,7 @@ function scoreUpdate() {
     if ((member.points > 0) || (member.netScore != 0)) {
       var memName = member.name;
       var netScore = member.netScore.toString();
-      while (memName.length < 20) {
+      while (memName.length < 16) {
         memName += ' ';
       }
       while (netScore.length < 4) {
