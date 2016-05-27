@@ -19,3 +19,6 @@ overlay/scoreT1.txt
 overlay/scoreT2.txt
 overlay/time.txt
 overlay/killfeed.txt
+
+#match logs
+match*.txt
