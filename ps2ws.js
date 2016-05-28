@@ -33,44 +33,6 @@ var memberTemplate = JSON.stringify({
   Overlay Code
   Writes to 5 files to allow a streamer to use them in OBS to display the match stats
   */
-function initialiseOverlay() {
-  fs.writeFile('overlay/scoreT1.txt', '0', function(err) {
-    if (err) {
-      return console.log('scoreT1.txt Error: ' + err);
-    }
-    console.log('scoreT1.txt initialised')
-  });
-  fs.writeFile('overlay/scoreT2.txt', '0', function(err) {
-    if (err) {
-      return console.log('scoreT1.txt Error: ' + err);
-    }
-    console.log('scoreT2.txt initialised')
-  });
-  fs.writeFile('overlay/playersT1.txt', '', function(err) {
-    if (err) {
-      return console.log('playersT1.txt Error: ' + err);
-    }
-    console.log('playersT1.txt initialised')
-  });
-  fs.writeFile('overlay/playersT2.txt', '', function(err) {
-    if (err) {
-      return console.log('playersT2.txt Error: ' + err);
-    }
-    console.log('playersT2.txt initialised')
-  });
-  fs.writeFile('overlay/time.txt', '', function(err) {
-    if (err) {
-      return console.log('time.txt Error: ' + err);
-    }
-    console.log('time.txt initialised')
-  });
-  fs.writeFile('overlay/killfeed.txt', '', function(err) {
-    if (err) {
-      return console.log('killfeed.txt Error: ' + err);
-    }
-    console.log('killfeed.txt intialised')
-  })
-}
 
 function scoreUpdate() {
   //for use in OBS for the overlay
@@ -495,7 +457,6 @@ function createStream() {
   ws.on('open', function open() {
     console.log('stream opened');
     ws.send('{"service":"event","action":"subscribe","characters":["' + triggerCharacter + '"],"eventNames":["Death"]}');
-    initialiseOverlay();
     subscribe(ws);
   });
   ws.on('message', function (data) {
@@ -618,7 +579,7 @@ function final() {
   for (keys in teamOneObject.members) {
     teamOneActivePlayers.push(teamOneObject.members[keys])
   }
-  var teamOneActive = teamOneObject.name + '  ' + teamOneObject.points + '  '  + teamOneObject.netScore + '  ' + teamOneObject.kills  + '  ' + teamOneObject.kills  + '\n\n';
+  var teamOneActive = teamOneObject.alias + '    ' + teamOneObject.points + '  '  + teamOneObject.netScore + '  ' + teamOneObject.kills  + '  ' + teamOneObject.deaths  + '\n\n';
   teamOneActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
       var memName = member.name;
@@ -648,7 +609,7 @@ function final() {
   for (keys in teamTwoObject.members) {
     teamTwoPlayers.push(teamTwoObject.members[keys])
   }
-  var teamTwoActive = teamTwoObject.name + '  ' + teamTwoObject.points + '  '  + teamTwoObject.netScore + '  ' + teamTwoObject.kills  + '  ' + teamTwoObject.kills  + '\n\n';
+  var teamTwoActive = teamTwoObject.alias + '    ' + teamTwoObject.points + '  '  + teamTwoObject.netScore + '  ' + teamTwoObject.kills  + '  ' + teamTwoObject.deaths  + '\n\n';
   teamTwoPlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
       var memName = member.name;
