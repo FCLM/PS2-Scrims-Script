@@ -9,15 +9,15 @@ var Q = require('q');
 //factions: 0 - NS, 1 - VS, 2 - NC, 3 - TR
 
 function removeNameParts(name) {
-  // remove faction from end
-  var end = name.length-2;
-  if (name.indexOf('VS') == end || name.indexOf('NC') == end || name.indexOf('TR') == end) {
-    name = name.substring(0, end);
-  }
   // remove start tag
   var idx = name.indexOf('x');
   if (idx > 0 && idx < 5) {
     name = name.substring(idx + 1, name.length);
+  }
+  // remove faction from end
+  var end = name.length-2;
+  if (name.indexOf('VS') == end || name.indexOf('NC') == end || name.indexOf('TR') == end) {
+    name = name.substring(0, end);
   }
   return name;
 }
