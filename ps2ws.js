@@ -121,6 +121,9 @@ function killfeedUpdate(killObj) {
     killer += ' ';
   }
   var weapon = '[' + killObj.weapon + ']';
+  if (weapon.length > 16) {
+    weapon = weapon.substring(1, 13) + "...";
+  }
   while (weapon.length < 16) {
       weapon += ' ';
   }
@@ -140,7 +143,7 @@ function killfeedUpdate(killObj) {
 function killfeedBaseUpdate(tag, points) {
   pThree = pTwo;
   pTwo = pOne;
-  pOne = '       ['+ tag + '] Captured the base (+' + points + ')';
+  pOne = '       [' + tag + '] Captured the base (+' + points + ')\n';
 }
 
 function teamObject(team) {
@@ -635,7 +638,7 @@ function final() {
       teamTwoActive += memName + '  ' + points + '  ' + netScore + '  ' + kills + '  ' + deaths + '  ' + '\n';
     }
   });
-  var stats = 'Final Scores for this match:\n' + teamOneActive + '\n' + teamTwoActive;
+  var stats = 'Final Scores for this match:\n\n' + teamOneActive + '\n\n' + teamTwoActive;
   fs.writeFile(path, stats, function(err) {
     if (err) {
       return console.log(path +' Error: ' + err);
