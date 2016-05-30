@@ -36,7 +36,7 @@ var memberTemplate = JSON.stringify({
 
 function scoreUpdate() {
   //for use in OBS for the overlay
-  //writes to 2 text files the current team score
+  //writes to multiple text files the current team score
   fs.writeFile('overlay/scoreT1.txt', teamOneObject.points, function (err) {
     if (err) {
       return console.log('scoreT1.txt Error: ' + err);
