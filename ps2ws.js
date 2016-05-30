@@ -575,6 +575,22 @@ function debugWebSocket() {
   }, 1);
 }
 
+function lengthenName(name) {
+  if (name.length > 16) {
+    name = name.substring(0,13) + "...";
+  }
+  while (name.length < 16) {
+    name += ' ';
+  }
+  return name;
+}
+
+function lengthenStats(stat) {
+  while (stat.length < 4) {
+    stat = ' ' + stat;
+  }
+}
+
 function final() {
   var path = 'match' + roundTracker + '.txt';
   console.log(path);
@@ -585,26 +601,11 @@ function final() {
   var teamOneActive = teamOneObject.alias + '    ' + teamOneObject.points + '  '  + teamOneObject.netScore + '  ' + teamOneObject.kills  + '  ' + teamOneObject.deaths  + '\n\n';
   teamOneActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
-      var memName = member.name;
-      var points = member.points.toString();
-      var netScore = member.netScore.toString();
-      var kills = member.kills.toString();
-      var deaths = member.deaths.toString();
-      while (memName.length < 16) {
-        memName += ' ';
-      }
-      while (points.length < 4) {
-        points = ' ' + points;
-      }
-      while (netScore.length < 4) {
-        netScore = ' ' + netScore;
-      }
-      while (kills.length < 4) {
-        kills = ' ' + kills;
-      }
-      while (deaths.length < 4) {
-        deaths = ' ' + deaths;
-      }
+      var memName = lengthenName(member.name);
+      var points = lengthenStats(member.points.toString());
+      var netScore = lengthenStats(mmember.netScore.toString());
+      var kills = lengthenStats(mmember.kills.toString());
+      var deaths = lengthenStats(mmember.deaths.toString());
       teamOneActive += memName + '  ' + points + '  ' + netScore + '  ' + kills + '  ' + deaths + '  ' + '\n';
     }
   });
@@ -615,26 +616,11 @@ function final() {
   var teamTwoActive = teamTwoObject.alias + '    ' + teamTwoObject.points + '  '  + teamTwoObject.netScore + '  ' + teamTwoObject.kills  + '  ' + teamTwoObject.deaths  + '\n\n';
   teamTwoPlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
-      var memName = member.name;
-      var points = member.points.toString();
-      var netScore = member.netScore.toString();
-      var kills = member.kills.toString();
-      var deaths = member.deaths.toString();
-      while (memName.length < 16) {
-        memName += ' ';
-      }
-      while (points.length < 4) {
-        points = ' ' + points;
-      }
-      while (netScore.length < 4) {
-        netScore = ' ' + netScore;
-      }
-      while (kills.length < 4) {
-        kills = ' ' + kills;
-      }
-      while (deaths.length < 4) {
-        deaths = ' ' + deaths;
-      }
+      var memName = lengthenStats(member.name);
+      var points = lengthenStats(mmember.points.toString());
+      var netScore = lengthenStats(mmember.netScore.toString());
+      var kills = lengthenStats(mmember.kills.toString());
+      var deaths = lengthenStats(mmember.deaths.toString());
       teamTwoActive += memName + '  ' + points + '  ' + netScore + '  ' + kills + '  ' + deaths + '  ' + '\n';
     }
   });
@@ -644,7 +630,20 @@ function final() {
       return console.log(path +' Error: ' + err);
     }
     console.log('Match stats wrote to ' + path);
-
+  });
+  var teamOneStats = teamOneActive; var path1 = "match" + roundTracker + "TeamOne.txt";
+  fs.writeFile(path1, teamOneStats, function(err) {
+   if (err) {
+     return console.log(path + ' Error: ' + err);
+  }
+  console.log("Team One stats wrote to " + path1);
+  });
+  var teamTwoStats = teamTwoActive; var path2 = "match" + roundTracker + "TeamTwo.txt";
+  fs.writeFile(path2, teamTwoStats, function(err) {
+    if (err) {
+      return console.log(path + ' Error: ' + err);
+    }
+    console.log("Team two stats wrote to " + path2);
   });
 }
 
