@@ -565,6 +565,7 @@ function lengthenStats(stat) {
   while (stat.length < 4) {
     stat = ' ' + stat;
   }
+  return stat;
 }
 
 function final() {
