@@ -57,14 +57,8 @@ function scoreUpdate() {
   var i = 0;
   teamOneActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
-      var memName = member.name;
-      var netScore = member.netScore.toString();
-      while (memName.length < 16) {
-        memName += ' ';
-      }
-      while (netScore.length < 4) {
-        netScore = ' ' + netScore;
-      }
+      var memName = lengthenName(member.name);
+      var netScore = lengthenStats(member.netScore.toString());
       teamOneActive += memName + '  ' + netScore;
       if (i % 2 == 0) {
         teamOneActive += ' | ';
@@ -88,14 +82,8 @@ function scoreUpdate() {
   i = 0;
   teamTwoActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
-      var memName = member.name;
-      var netScore = member.netScore.toString();
-      while (memName.length < 16) {
-        memName += ' ';
-      }
-      while (netScore.length < 4) {
-        netScore = ' ' + netScore;
-      }
+      var memName = lengthenName(member.name);
+      var netScore = lengthenStats(member.netScore.toString());
       teamTwoActive += memName + '  ' + netScore;
       if (i % 2 == 0) {
         teamTwoActive += ' | ';
@@ -116,21 +104,9 @@ function scoreUpdate() {
 function killfeedUpdate(killObj) {
   pThree = pTwo;
   pTwo = pOne;
-  var killer = killObj.winner;
-  while (killer.length < 16) {
-    killer += ' ';
-  }
-  var weapon = '[' + killObj.weapon + ']';
-  if (weapon.length > 16) {
-    weapon = weapon.substring(1, 13) + "...";
-  }
-  while (weapon.length < 16) {
-      weapon += ' ';
-  }
-  var  killed = killObj.loser;
-  while (killed.length < 16) {
-    killed += ' ';
-  }
+  var killer = lengthenName(killObj.winner);
+  var weapon = '[' + lengthenName(killObj.weapon) + ']';
+  var  killed = lengthenName(killObj.loser);
   pOne = killer + ' ' + weapon + '  ' + killed + '\n';
   var feed = pOne + pTwo + pThree;
   fs.writeFile('overlay/killfeed.txt', feed, function(err) {
