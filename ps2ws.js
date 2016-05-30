@@ -153,6 +153,14 @@ function teamObject(team) {
   return outfit_obj;
 }
 
+function sendScore() {
+  if(roundTracker != 0) {
+    if (teamOneObject.name != undefined) {
+      app.sendScores(teamOneObject, teamTwoObject);
+    }
+  }
+}
+
 function dealWithTheData(raw) {
   raw = raw.replace(': :', ':');
   var data = JSON.parse(raw).payload;
@@ -627,3 +635,4 @@ function final() {
 exports.startUp = startUp;
 exports.createStream = createStream;
 exports.stopTheMatch = stopTheMatch;
+exports.sendScore = sendScore;

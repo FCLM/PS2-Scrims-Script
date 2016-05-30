@@ -98,6 +98,7 @@ io.on('connection', function(sock) {
         }
       };
       io.emit('teams', {obj: teams});
+      ps2ws.sendScore();
     } else {
       console.log(teamOneObject + '\n' + teamTwoObject);
     }
