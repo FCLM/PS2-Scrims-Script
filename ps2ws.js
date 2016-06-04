@@ -587,7 +587,7 @@ function final() {
   for (keys in teamOneObject.members) {
     teamOneActivePlayers.push(teamOneObject.members[keys])
   }
-  var teamOneActive = lengthenName(teamOneObject.alias) + ' ' + lengthenStats(teamOneObject.points.toString()) + ' '  + lengthenStats(teamOneObject.netScore.toString()) + ' ' + lengthenStats(teamOneObject.kills.toString())  + ' ' + lengthenStats(teamOneObject.deaths.toString())  + '\n\n';
+  var teamOneActive = lengthenName(teamOneObject.alias) + '  ' + lengthenStats(teamOneObject.points.toString()) + '  '  + lengthenStats(teamOneObject.netScore.toString()) + '  ' + lengthenStats(teamOneObject.kills.toString())  + '  ' + lengthenStats(teamOneObject.deaths.toString())  + '\n\n';
   teamOneActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
       var memName = lengthenName(member.name);
@@ -602,7 +602,7 @@ function final() {
   for (keys in teamTwoObject.members) {
     teamTwoPlayers.push(teamTwoObject.members[keys])
   }
-  var teamTwoActive = lengthenName(teamTwoObject.alias) + ' ' + lengthenStats(teamTwoObject.points.toString()) + ' '  + lengthenStats(teamTwoObject.netScore.toString()) + ' ' + lengthenStats(teamTwoObject.kills.toString())  + ' ' + lengthenStats(teamTwoObject.deaths.toString())  + '\n\n';
+  var teamTwoActive = lengthenName(teamTwoObject.alias) + '  ' + lengthenStats(teamTwoObject.points.toString()) + '  '  + lengthenStats(teamTwoObject.netScore.toString()) + '  ' + lengthenStats(teamTwoObject.kills.toString())  + '  ' + lengthenStats(teamTwoObject.deaths.toString())  + '\n\n';
   teamTwoPlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
       var memName = lengthenStats(member.name);
