@@ -57,7 +57,7 @@ function scoreUpdate() {
   var i = 0;
   teamOneActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
-      var memName = lengthenName(member.name);
+      var memName = lengthenName(member.name);``
       var netScore = lengthenStats(member.netScore.toString());
       teamOneActive += memName + '  ' + netScore;
       if (i % 2 == 0) {
@@ -105,7 +105,7 @@ function killfeedUpdate(killObj) {
   pThree = pTwo;
   pTwo = pOne;
   var killer = lengthenName(killObj.winner);
-  var weapon = '[' + lengthenName(killObj.weapon) + ']';
+  var weapon = lengthenName('[' + killObj.weapon + ']');
   var  killed = lengthenName(killObj.loser);
   pOne = killer + ' ' + weapon + '  ' + killed + '\n';
   var feed = pOne + pTwo + pThree;
@@ -205,11 +205,9 @@ function itsPlayerData(data) {
     // Suicides team One lol
     if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
       //suicided as a max lol
-      console.log('MAX: \n' + data);
       points = 5;
     } else {
       //just infantry suicide
-      console.log(data);
       points = 2;
     }
     teamOneSuicide(data, points, item);
@@ -594,9 +592,9 @@ function final() {
     if ((member.points > 0) || (member.netScore != 0)) {
       var memName = lengthenName(member.name);
       var points = lengthenStats(member.points.toString());
-      var netScore = lengthenStats(mmember.netScore.toString());
-      var kills = lengthenStats(mmember.kills.toString());
-      var deaths = lengthenStats(mmember.deaths.toString());
+      var netScore = lengthenStats(member.netScore.toString());
+      var kills = lengthenStats(member.kills.toString());
+      var deaths = lengthenStats(member.deaths.toString());
       teamOneActive += memName + '  ' + points + '  ' + netScore + '  ' + kills + '  ' + deaths + '  ' + '\n';
     }
   });
@@ -608,10 +606,10 @@ function final() {
   teamTwoPlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
       var memName = lengthenStats(member.name);
-      var points = lengthenStats(mmember.points.toString());
-      var netScore = lengthenStats(mmember.netScore.toString());
-      var kills = lengthenStats(mmember.kills.toString());
-      var deaths = lengthenStats(mmember.deaths.toString());
+      var points = lengthenStats(member.points.toString());
+      var netScore = lengthenStats(member.netScore.toString());
+      var kills = lengthenStats(member.kills.toString());
+      var deaths = lengthenStats(member.deaths.toString());
       teamTwoActive += memName + '  ' + points + '  ' + netScore + '  ' + kills + '  ' + deaths + '  ' + '\n';
     }
   });
