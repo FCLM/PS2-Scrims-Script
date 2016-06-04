@@ -48,58 +48,6 @@ var alias = {
   "5428285306548260353" : {
     name : "RHSixSixOne",
     actual : "FCLMxPractice4VS"
-  },
-  "5428285306548265121" : {
-    name : "RetroGhost4",
-    actual : "JUGAxPractice1VS"
-  },
-  "5428285306548265217" : {
-    name : "Pazzword",
-    actual : "JUGAxPractice2VS"
-  },
-  "5428285306548265345" : {
-    name : "Dragonroco",
-    actual : "JUGAxPractice3VS"
-  },
-  "5428285306548264833" : {
-    name : "Jarrodlebox",
-    actual : "JUGAxJackmacVS"
-  },
-  "5428285306548264929" : {
-    name : "RetroLegacy",
-    actual : "JUGAxNiocoraVS"
-  },
-  "5428285306548265025" : {
-    name : "Coolys1000",
-    actual : "JUGAxGootsVS"
-  },
-  "5428285306548263681" : {
-    name : "TheOriginalDirt",
-    actual : "SOCAxPractice1TR"
-  },
-  "5428285306548263841" : {
-    name : "DonkeyRainbows",
-    actual : "SOCAxPractice2TR"
-  },
-  "5428285306548264033" : {
-    name : "Polarisation",
-    actual : "SOCAxPractice3TR"
-  },
-  "5428285306548266273" : {
-    name : "Fallin",
-    actual : "RSNCxPractice1NC"
-  },
-  "5428285306548266369" : {
-    name: "Syreni",
-    actual: "RSNCxPractice2NC"
-  },
-  "5428285306548266465" : {
-    name : "LtDavidson",
-    actual : "RSNCxPractice3NC"
-  },
-  "5428285306548266561" : {
-    name : "60Seconds",
-    actual : "RSNCxPractice4NC"
   }
 };
 
