@@ -120,6 +120,12 @@ function killfeedBaseUpdate(tag, points) {
   pThree = pTwo;
   pTwo = pOne;
   pOne = '       [' + tag + '] Captured the base (+' + points + ')\n';
+  var feed = pOne + pTwo + pThree;
+  fs.writeFile('overlay/killfeed.txt', feed, function(err) {
+    if (err) {
+      return console.log('killfeed.txt Error: ' + err);
+    }
+  })
 }
 
 function teamObject(team) {
