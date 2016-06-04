@@ -57,7 +57,7 @@ function scoreUpdate() {
   var i = 0;
   teamOneActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
-      var memName = lengthenName(member.name);``
+      var memName = lengthenName(member.name);
       var netScore = lengthenStats(member.netScore.toString());
       teamOneActive += memName + '  ' + netScore;
       if (i % 2 == 0) {
