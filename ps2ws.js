@@ -565,7 +565,7 @@ function debugWebSocket() {
 
 function lengthenName(name) {
   if (name.length > 16) {
-    name = name.substring(0,13) + "...";
+    name = name.substring(0,15) + ".";
   }
   while (name.length < 16) {
     name += ' ';
