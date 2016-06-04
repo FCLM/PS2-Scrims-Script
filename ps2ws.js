@@ -605,7 +605,7 @@ function final() {
   var teamTwoActive = lengthenName(teamTwoObject.alias) + '  ' + lengthenStats(teamTwoObject.points.toString()) + '  '  + lengthenStats(teamTwoObject.netScore.toString()) + '  ' + lengthenStats(teamTwoObject.kills.toString())  + '  ' + lengthenStats(teamTwoObject.deaths.toString())  + '\n\n';
   teamTwoPlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore != 0)) {
-      var memName = lengthenStats(member.name);
+      var memName = lengthenName(member.name);
       var points = lengthenStats(member.points.toString());
       var netScore = lengthenStats(member.netScore.toString());
       var kills = lengthenStats(member.kills.toString());
