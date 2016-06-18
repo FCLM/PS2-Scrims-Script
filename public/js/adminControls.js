@@ -6,6 +6,8 @@ var socket = io();
 function submitForm (button)
 {
     if (button.value == "Track") {
+        var track = $('#start');
+        track.prop('disabled', true);
         var tagOne = $("#T1Tag").val();
         var tagTwo = $("#T2Tag").val();
         var pw = $('#pwStart').val();
@@ -17,13 +19,17 @@ function submitForm (button)
         console.log(obj);
         socket.emit('start', { obj: obj});
     } else if (button.value == "Stop") {
-       pw = $('#pwstop').val();
-       obj = {
+        var stop = $('#stop');
+        stop.prop('disabled', true);
+        pw = $('#pwstop').val();
+        obj = {
             auth: pw
         };
-       socket.emit('stop', { obj: obj});
+        socket.emit('stop', { obj: obj});
         console.log(pw);
     } else if (button.value == "Start Second Round") {
+        var round2 = $('#Round2');
+        round2.prop('disabled', true);
         pw = $('#pwRound2').val();
         obj = {
             auth: pw
