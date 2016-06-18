@@ -481,8 +481,6 @@ function subscribe(ws) {
 function unsubscribe(ws) {
   //unsubscribes from all events
   ws.send('{"service":"event","action":"clearSubscribe","all":"true"}');
-  //resubscribe to trigger characters event
-  ws.send('{"service":"event","action":"subscribe","characters":["' + triggerCharacter + '"],"eventNames":["Death"]}');
   console.log('Unsubscribed from facility and kill/death events between ' + teamOneObject.alias + ' and '  +teamTwoObject.alias);
 }
 
@@ -495,6 +493,7 @@ function startTimer(ws) {
       clearInterval(time);
       unsubscribe(ws);
       final();
+      app.matchFinished();
     }
     var sec = parseInt(timeCounter % 60),
         min = parseInt(timeCounter / 60);

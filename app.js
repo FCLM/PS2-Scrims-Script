@@ -18,7 +18,9 @@ var ps2ws         = require('./ps2ws.js'),
 
 //global variable for use in different functions
 var teamOneObject, teamTwoObject;
-
+// running variable stores the state of a match (true means a match is in progress) and is used to prevent multiple streams being opened for the same data.
+// should prevent the double tracking issues of round 2 of thunderdome.
+var running = false;
 var app = express();
 
 // view engine setup
@@ -104,41 +106,55 @@ io.on('connection', function(sock) {
     }
   });
   sock.on('start', function (data) {
+    io.emit('redirect');
     var event = data.obj;
     if (event.auth == password.KEY) {
       if ((event.hasOwnProperty('teamOne')) && (event.hasOwnProperty('teamTwo'))) {
-        start(event.teamOne, event.teamTwo);
-        console.log('Admin entered a start match command involving: ' + event.teamOne + ' ' + event.teamTwo);
+        if (running != true) {
+          start(event.teamOne, event.teamTwo);
+          console.log('Admin entered a start match command involving: ' + event.teamOne + ' ' + event.teamTwo);
+          running = true;
+        }
+        else {
+          console.error('Admin entered a start match command involving: ' + event.teamOne + ' ' + event.teamTwo + ' But a match is already running');
+        }
       } else {
         console.error('No data sent: ' + event.teamOne + ' ' + event.teamTwo);
       }
     }
-    io.emit('redirect');
   });
   sock.on('newRound', function(data) {
+    io.emit('redirect');
     var event = data.obj;
     if (event.auth == password.KEY) {
-      console.log('Admin entered New Round command, new round starting: ');
-      console.log(data);
-      ps2ws.createStream();
-      io.emit('redirect');
+      if (running != true) {
+        console.log('Admin entered New Round command, new round starting: ');
+        console.log(data);
+        ps2ws.createStream();
+        running = true;
+      }
+      else {
+        console.error('Admin entered New Round command, but a match is already running');
+      }
     } else {
-      io.emit('redirect');
       console.log(data);
     }
   });
   sock.on('stop', function(data) {
+    io.emit('redirect');
     var event = data.obj;
     if (event.auth == password.KEY) {
       console.log('Admin entered Stop command, match stopping: ');
       console.log(data);
       ps2ws.stopTheMatch();
-      io.emit('redirect');
-    } else {
-      io.emit('redirect');
     }
   });
 });
+
+function matchFinished() {
+  // called from ps2ws when a match is finished
+  running = false;
+}
 
 console.log('Listening on port %d', server.address().port);
 
@@ -226,3 +242,4 @@ exports.refreshPage   = refreshPage;
 exports.playerDataT1  = playerDataT1;
 exports.playerDataT2  = playerDataT2;
 exports.timerEmit     = timerEmit;
+exports.matchFinished = matchFinished;
