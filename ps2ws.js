@@ -195,7 +195,7 @@ function itsPlayerData(data) {
     }
   } else if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
     //defender used a max
-    points = 5;
+    points = 4;
   }
   if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
     oneIvITwo(data, points, item);
@@ -205,20 +205,20 @@ function itsPlayerData(data) {
     // Suicides team One lol
     if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
       //suicided as a max lol
-      points = 5;
+      points = 4;
     } else {
       //just infantry suicide
-      points = 2;
+      points = 3;
     }
     teamOneSuicide(data, points, item);
   } else if ((data.attacker_character_id == data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
     // Suicides team Two lol
     if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
       //suicided as a max lol
-      points = 5;
+      points = 4;
     } else {
       //just infantry suicide
-      points = 2;
+      points = 3;
     }
     teamTwoSuicide(data, points, item);
   } else if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
@@ -341,7 +341,7 @@ function teamTwoSuicide (data, points, item) {
 }
 
 function teamOneTeamkill (data, item) {
-  var points = 5;
+  var points = 3;
   teamOneObject.points -= points;
   teamOneObject.netScore -= points;
   teamOneObject.deaths++;
@@ -366,7 +366,7 @@ function teamOneTeamkill (data, item) {
 }
 
 function teamTwoTeamkill (data, item) {
-  var points = 5;
+  var points = 3;
   teamTwoObject.points -= points;
   teamTwoObject.netScore -= points;
   teamTwoObject.deaths++;
