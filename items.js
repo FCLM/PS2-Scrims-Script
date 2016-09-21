@@ -23,7 +23,7 @@ var category_map = {
   '11':  { 'category' : 'Sniper Rifle',               points : 2 },
   '12':  { 'category' : 'Scout Rifle',                points : 2 },
   '13':  { 'category' : 'Rocket Launcher',            points : 0 },
-  '14':  { 'category' : 'Heavy Gun',                  points : 1 },
+  '14':  { 'category' : 'Heavy Gun',                  points : 0 },
   '15':  { 'category' : 'Flamethrower MAX',           points : 1 },
   '16':  { 'category' : 'Flak MAX',                   points : 1 },
   '17':  { 'category' : 'Grenade',                    points : 2 },
