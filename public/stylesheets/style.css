@@ -25,19 +25,13 @@
 
 .inlinePad {
   padding: 20px;
-  display: inline;
+  display: inline-block;
   text-align: center;
-}
-
-.score {
-  display: inline;
-  padding-left: 10px;
-  padding-right: 10px;
-  text-align: center;
+  width: 35%;
 }
 
 .v {
-  display: inline;
+  display: inline-block;
   text-align: center;
 }
 
