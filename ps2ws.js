@@ -191,7 +191,7 @@ function itsPlayerData(data) {
       points = 3;
     } else {
       //max v infantry
-      points = 1;
+      points = 0;
     }
   } else if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
     //defender used a max
