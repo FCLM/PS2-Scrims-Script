@@ -74,7 +74,7 @@ var category_map = {
   '136': { 'category' : 'Male VO Pack',               points : null },
   '137': { 'category' : 'Female VO Pack',             points : null },
   '138': { 'category' : 'Valkyrie Nose Gunner',       points : null },
-  '139': { 'category' : 'Engineer Turrets',           points : 1 }
+  '139': { 'category' : 'Engineer Turrets',           points : 0 }
 };
 
 var mItemTemplate = JSON.stringify({
