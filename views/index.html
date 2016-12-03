@@ -28,33 +28,49 @@
 </head>
 
 <body role="document">
-
-<div id="stats">
+<div class="jumbotron text-center">
     <h1>{{ title }}</h1>
-    <h3 class="inlinePad" id="outfitT1"></h3><h1 class="score" id="T1Score"></h1>
-    <h1 class="v">v</h1>
-    <h1 class="score" id="T2Score"></h1><h3 class="inlinePad" id="outfitT2"></h3>
+    <div class="inlinePad">
+        <h2 id="outfitT1"></h2>
+        <h1 id="T1Score"></h1>
+    </div>
+    <div class="v">
+        <h1>v</h1>
+    </div>
+    <div class="inlinePad">
+        <h2 id="outfitT2"></h2>
+        <h1 id="T2Score"></h1>
+    </div>
     <h1 id="timer">15 : 00</h1>
-    <table class="inline">
-        <thead><tr><th class="pad">Team One: </th><th class="pad">Score: </th><th class="pad">Net Score: </th><th class="pad">Kills: </th><th class="pad">Deaths: </th></tr></thead>
-        <tbody id="Team1">
-        <tr id="T1">
-        </tr>
-        </tbody>
-    </table>
-    <table class="inline">
-        <thead><tr><th class="pad">Team Two: </th><th class="pad">Score: </th><th class="pad">Net Score: </th><th class="pad">Kills: </th><th class="pad">Deaths: </th></tr></thead>
-        <tbody id="Team2">
-        <tr id="T2">
-        </tr>
-        </tbody>
-    </table>
-    <br>
-    <br>
 </div>
 <div class="main_area container" role="main">
     <section>
-
+        <div class="table-responsive" style="display:inline-block; width:49%;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="pad">Team One: </th>
+                    <th class="pad">Score: </th>
+                    <th class="pad">Net Score: </th>
+                    <th class="pad">Kills: </th>
+                    <th class="pad">Deaths: </th>
+                </tr>
+                </thead>
+                <tbody id="Team1">
+                <tr id="T1">
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive" style="display:inline-block; width:49%;">
+            <table class="table">
+                <thead><tr><th class="pad">Team Two: </th><th class="pad">Score: </th><th class="pad">Net Score: </th><th class="pad">Kills: </th><th class="pad">Deaths: </th></tr></thead>
+                <tbody id="Team2">
+                <tr id="T2">
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </section>
     <section>
         <p>Killfeed: </p>
