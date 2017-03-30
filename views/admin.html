@@ -14,32 +14,75 @@
 
 <body role="document">
 
-<div id="stats">
-    <h1>{{ title }}</h1>
-    <form id="outfits">
-        <input type="text" size="4" maxlength="4" id="T1Tag" placeholder="FCLM">
-        <h3 id="verse" class="inline"> v </h3>
-        <input type="text" size="4" maxlength="4" id="T2Tag" placeholder="FCLN">
-        <br> <br>
-        <h3 id="passw" class="inline">Password: </h3>
-        <input type="text" size="8" id="pwStart">
-        <input id="start" type="submit" value="Track" onclick="return submitForm(this)">
-    </form>
-    <br>
-    <br>
-    <form id="stopRestart">
-        <h3>Stop Match:</h3>
-        <input id="pwstop" size="8" type="text">
-        <input id="stop" type="submit" value="Stop" onclick="return submitForm(this)">
-    </form>
-    <br>
-    <br>
-    <form id="">
-        <h3>Second (or more) Round: (only use AFTER round one is finished) </h3>
-        <input id="pwRound2" type="text" size="8">
-        <input id="Round2" type="submit" value="Start Second Round" onclick="return submitForm(this)">
-    </form>
+<div class="page-header">
+    <h1 style="text-align: center">{{ title }}</h1>
 </div>
+
+<div>
+    <!-- Left Side -->
+    <div class="col-md-6">
+        <div class="adminForm">
+            <form id="outfits">
+                <h3>Start Match</h3>
+                <p class="inline">Team 1 Tag: </p><input type="text" size="4" maxlength="4" id="T1Tag" placeholder="FCLM">
+                <br> <br>
+                <p class="inline">Team 2 Tag: </p><input type="text" size="4" maxlength="4" id="T2Tag" placeholder="FCLN">
+                <br> <br>
+                <p class="passw inline">Password: </p><input type="text" size="8" id="pwStart">
+                <input id="start" type="submit" value="Track" onclick="return submitForm(this)">
+            </form>
+        </div>
+        <hr class="feature-divider">
+        <!-- Stop Match -->
+        <div class="adminForm">
+            <form id="stopRestart">
+                <h3>Stop Match</h3>
+                <p class="passw inline">Password: </p><input id="pwstop" size="8" type="text">
+                <input id="stop" type="submit" value="Stop" onclick="return submitForm(this)">
+            </form>
+        </div>
+        <hr class="feature-divider">
+        <!-- Start a New Round -->
+        <div class="adminForm">
+            <form id="">
+                <h3>Second Round (only use AFTER round one is finished) </h3>
+                <p class="passw inline">Password: </p><input id="pwRound2" type="text" size="8">
+                <input id="Round2" type="submit" value="Start Second Round" onclick="return submitForm(this)">
+            </form>
+        </div>
+        <hr class="feature-divider">
+    </div>
+    <!-- Right Side -->
+    <div class="col-md-6">
+        <!-- Adjust score -->
+        <div class="adminForm">
+            <form id="adustScore">
+                <h3>Adjust Score</h3>
+                <p class="inline">Team 1: </p><input type="text" size="4" maxlength="4" id="T1Adjust" placeholder="2">
+                <br> <br>
+                <p class="inline">Team 2: </p><input type="text" size="4" maxlength="4" id="T2Adjust" placeholder="-8">
+                <br> <br>
+                <p class="passw inline">Password: </p><input type="text" size="8" id="pwAdjust">
+                <input id="Adjust" type="submit" value="Track" onclick="return submitForm(this)">
+            </form>
+        </div>
+        <hr class="feature-divider">
+        <!-- Ruleset -->
+        <div class="adminForm">
+            <form id="rules">
+                <h3>Rule Set</h3>
+                <p>Current: {{rules}}</p>
+
+            </form>
+        </div>
+        <hr class="feature-divider">
+    </div>
+</div>
+
+<hr class="feature-divider">
+<footer class="col-md-12">
+    <p style="text-align: center">All participants must be in the participating outfit ~60seconds before starting the script to ensure they are tracked</p>
+</footer>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
