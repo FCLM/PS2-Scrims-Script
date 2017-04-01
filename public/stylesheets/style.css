@@ -51,3 +51,9 @@
 .adminForm {
   /*border: 1px solid #000;*/
 }
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
