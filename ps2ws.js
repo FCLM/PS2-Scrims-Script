@@ -90,17 +90,17 @@ function scoreUpdate() {
   });
   //Writes player data to a text file
   var teamOneActivePlayers = [];
-  for (keys in teamOneObject.members) {
+  for (var keys in teamOneObject.members) {
     teamOneActivePlayers.push(teamOneObject.members[keys])
   }
   var teamOneActive = '';
   var i = 0;
   teamOneActivePlayers.forEach(function (member) {
-    if ((member.points > 0) || (member.netScore != 0)) {
+    if ((member.points > 0) || (member.netScore !== 0)) {
       var memName = lengthenName(member.name);
       var netScore = lengthenStats(member.netScore.toString());
       teamOneActive += memName + '  ' + netScore;
-      if (i % 2 == 0) {
+      if (i % 2 === 0) {
         teamOneActive += ' | ';
         i++
       } else {
@@ -121,11 +121,11 @@ function scoreUpdate() {
   var teamTwoActive = '';
   i = 0;
   teamTwoActivePlayers.forEach(function (member) {
-    if ((member.points > 0) || (member.netScore != 0)) {
+    if ((member.points > 0) || (member.netScore !== 0)) {
       var memName = lengthenName(member.name);
       var netScore = lengthenStats(member.netScore.toString());
       teamTwoActive += memName + '  ' + netScore;
-      if (i % 2 == 0) {
+      if (i % 2 === 0) {
         teamTwoActive += ' | ';
         i++
       } else {
@@ -200,8 +200,8 @@ function teamObject(team) {
 }
 
 function sendScore() {
-  if(roundTracker != 0) {
-    if (teamOneObject.name != undefined) {
+  if(roundTracker !== 0) {
+    if (teamOneObject.name !== undefined) {
       app.sendScores(teamOneObject, teamTwoObject);
     }
   }
@@ -210,9 +210,9 @@ function sendScore() {
 function dealWithTheData(raw) {
   raw = raw.replace(': :', ':');
   var data = JSON.parse(raw).payload;
-  if (data.event_name == "Death") {
+  if (data.event_name === "Death") {
     itsPlayerData(data);
-  } else if (data.name == "Death") {
+  } else if (data.name === "Death") {
     //debugging match only
     itsPlayerData(data);
   } else {
@@ -226,14 +226,14 @@ function itsPlayerData(data) {
   var points = items.lookupPointsfromCategory(item.category_id);
   if ((data.attacker_loadout_id === 7) || (data.attacker_loadout_id === 14) || (data.attacker_loadout_id === 21)) {
     //Attacker using a max
-    if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
+    if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
       //Attacker used a max to kill a max
       points = pointMap['12'].points;
     } else {
       //max v infantry
       points = pointMap['11'].points;
     }
-  } else if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
+  } else if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
     //defender used a max
     points = pointMap['23'].points;
   }
@@ -241,8 +241,8 @@ function itsPlayerData(data) {
     oneIvITwo(data, points, item);
   } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
     twoIvIOne(data, points, item);
-  } else if ((data.attacker_character_id == data.character_id) && (teamOneObject.members.hasOwnProperty(data.character_id))){
-    if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
+  } else if ((data.attacker_character_id === data.character_id) && (teamOneObject.members.hasOwnProperty(data.character_id))){
+    if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
       //suicided as a max lol
       points = pointMap['13'].points;
     } else {
@@ -250,8 +250,8 @@ function itsPlayerData(data) {
       points = pointMap['22'].points;
     }
     teamOneSuicide(data, points, item);
-  } else if ((data.attacker_character_id == data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
-    if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
+  } else if ((data.attacker_character_id === data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
+    if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
       //suicided as a max lol
       points = pointMap['13'].points;
     } else {
@@ -430,10 +430,10 @@ function teamTwoTeamkill (data, item) {
 
 function itsFacilityData(data) {
   //deals with adding points to the correct team
-  if (data.new_faction_id != data.old_faction_id) {
-    if (data.outfit_id == teamOneObject.outfit_id) {
+  if (data.new_faction_id !== data.old_faction_id) {
+    if (data.outfit_id === teamOneObject.outfit_id) {
       var points;
-      if (captures == 0) {
+      if (captures === 0) {
         points = pointMap['0'].points;
         teamOneObject.points += points;
         teamOneObject.netScore += points;
@@ -453,8 +453,8 @@ function itsFacilityData(data) {
         killfeedBaseUpdate(teamOneObject.alias, points);
       }
       captures++;
-    } else if (data.outfit_id == teamTwoObject.outfit_id) {
-      if (captures == 0) {
+    } else if (data.outfit_id === teamTwoObject.outfit_id) {
+      if (captures === 0) {
         points = pointMap['0'].points;
         teamTwoObject.points += points;
         teamTwoObject.netScore += points;
@@ -487,7 +487,7 @@ function createStream() {
     subscribe(ws);
   });
   ws.on('message', function (data) {
-    if (data.indexOf("payload") == 2) {
+    if (data.indexOf("payload") === 2) {
         dealWithTheData(data);
     }
     //store the data somewhere - possibly a txt file in case something gets disputed
@@ -619,12 +619,12 @@ function final() {
   var path = 'match' + roundTracker + '.txt';
   console.log(path);
   var teamOneActivePlayers = [];
-  for (keys in teamOneObject.members) {
+  for (var keys in teamOneObject.members) {
     teamOneActivePlayers.push(teamOneObject.members[keys])
   }
   var teamOneActive = lengthenName(teamOneObject.alias) + '  ' + lengthenStats(teamOneObject.points.toString()) + '  '  + lengthenStats(teamOneObject.netScore.toString()) + '  ' + lengthenStats(teamOneObject.kills.toString())  + '  ' + lengthenStats(teamOneObject.deaths.toString())  + '\n\n';
   teamOneActivePlayers.forEach(function (member) {
-    if ((member.points > 0) || (member.netScore != 0)) {
+    if ((member.points > 0) || (member.netScore !== 0)) {
       var memName = lengthenName(member.name);
       var points = lengthenStats(member.points.toString());
       var netScore = lengthenStats(member.netScore.toString());
@@ -639,7 +639,7 @@ function final() {
   }
   var teamTwoActive = lengthenName(teamTwoObject.alias) + '  ' + lengthenStats(teamTwoObject.points.toString()) + '  '  + lengthenStats(teamTwoObject.netScore.toString()) + '  ' + lengthenStats(teamTwoObject.kills.toString())  + '  ' + lengthenStats(teamTwoObject.deaths.toString())  + '\n\n';
   teamTwoPlayers.forEach(function (member) {
-    if ((member.points > 0) || (member.netScore != 0)) {
+    if ((member.points > 0) || (member.netScore !== 0)) {
       var memName = lengthenName(member.name);
       var points = lengthenStats(member.points.toString());
       var netScore = lengthenStats(member.netScore.toString());
