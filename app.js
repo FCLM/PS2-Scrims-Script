@@ -154,6 +154,7 @@ io.on('connection', function(sock) {
         if (event.auth === password.KEY) {
             console.log('Admin adjusted score: ');
             console.log(data);
+            ps2ws.adjustScore(event.t1, event.t2, event.reason);
         }
   });
 });

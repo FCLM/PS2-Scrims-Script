@@ -10,7 +10,7 @@ var categoryMap = 0;
 //N.B: category 0 doesn't exist in the API but i assume it is for being killed by wreckage or terrain and it was annoying me with error messages so its now in the map
 // You can edit this bit to have it return whatever points you want, so this can be used for most rulesets
 // Briggs Thunderdome (2016) Scoring:
-var thunderDomeCategoryMap = {
+var thunderdomeCategoryMap = {
   '0':   { 'category' : 'Unknown (could be anything', points : 0 },
   '2':   { 'category' : 'Knife',                      points : 2 },
   '3':   { 'category' : 'Pistol',                     points : 2 },
@@ -183,6 +183,21 @@ var ovoCategoryMap = {
     '147': { 'category' : 'Aerial Combat Weapon',       points : 0 }
 };
 
+var categoryMaps = {
+    current     : categoryMap,
+    thunderdome : thunderdomeCategoryMap,
+    emerald     : emeraldCategoryMap,
+    OvO         : ovoCategoryMap
+};
+
+function getCategoryMaps() {
+    return categoryMaps;
+}
+
+function updateCategoryMap(catMap) {
+    categoryMap = catMap;
+}
+
 var mItemTemplate = JSON.stringify({
   _id :  0,
   category_id: 0,
@@ -192,7 +207,7 @@ var mItemTemplate = JSON.stringify({
 });
 
 function initialise() {
-  if (categoryMap === 0) { categoryMap = thunderDomeCategoryMap;}
+  if (categoryMap === 0) { categoryMap = thunderdomeCategoryMap;}
   var response = Q.defer();
   var url = 'https://census.daybreakgames.com/s:' + api_key.KEY + '/get/ps2/item?item_type_id=26&c:limit=5000&c:hide=,skill_set_id,is_vehicle_weapon,item_type_id,faction_id,max_stack_size,image_set_id,image_path,is_default_attachment&c:lang=en';
   prequest(url).then(function (body) {
@@ -231,22 +246,16 @@ function lookupItem(item_id) {
 }
 
 function lookupPointsFromCategory(id) {
-  if (category_map.hasOwnProperty(id)) {
-    return category_map[id].points;
+  if (categoryMap.hasOwnProperty(id)) {
+    return categoryMap[id].points;
   } else {
     console.error('missing category: ' + id);
     return 0;
   }
 }
 
-function getCategoryMap() {
-  return category_map;
-}
-
-function updateCategoryMap(categoryMap) {
-  category_map = categoryMap;
-}
-
-exports.initialise = initialise;
-exports.lookupItem = lookupItem;
+exports.initialise               = initialise;
+exports.lookupItem               = lookupItem;
 exports.lookupPointsfromCategory = lookupPointsFromCategory;
+exports.getCategoryMaps          = getCategoryMaps;
+exports.updateCategoryMap        = updateCategoryMap;

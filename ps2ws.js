@@ -68,6 +68,21 @@ var ovoPointMap = {
   '23' : { "Action" : "Infantry v Max",          points : 12 }
 };
 
+var pointMaps = {
+  current     : pointMap,
+  thunderdome : thunderdomePointMap,
+  emerald     : emeraldPointMap,
+  OvO         : ovoPointMap
+};
+
+function getPointMaps() {
+  return pointMaps;
+}
+
+function updatePointMap(pMap) {
+  pointMap = pMap;
+}
+
  /*
   Overlay Code
   Writes to 5 files to allow a streamer to use them in OBS to display the match stats
@@ -89,7 +104,7 @@ function scoreUpdate() {
   });
   //Writes player data to a text file
   var teamOneActivePlayers = [];
-  for (var keys in teamOneObject.members) {
+  for (keys in teamOneObject.members) {
     teamOneActivePlayers.push(teamOneObject.members[keys])
   }
   var teamOneActive = '';
@@ -181,19 +196,11 @@ function teamObject(team) {
     members : {}
   };
   team.members.forEach(function(member) {
-    if (config.DEBUG) {
       var obj = JSON.parse(memberTemplate);
-      obj.name = teams.removeNameParts(member.name);
-      if (!outfit_obj.hasOwnProperty(member.character_id)) {
-        outfit_obj.members[member.character_id] = obj;
-      }
-    } else {
-      obj = JSON.parse(memberTemplate);
       obj.name = member.name;
       if (!outfit_obj.hasOwnProperty(member.character_id)) {
         outfit_obj.members[member.character_id] = obj;
       }
-    }
   });
   return outfit_obj;
 }
@@ -598,7 +605,7 @@ function final() {
   var path = 'match' + roundTracker + '.txt';
   console.log(path);
   var teamOneActivePlayers = [];
-  for (var keys in teamOneObject.members) {
+  for (keys in teamOneObject.members) {
     teamOneActivePlayers.push(teamOneObject.members[keys])
   }
   var teamOneActive = lengthenName(teamOneObject.alias) + '  ' + lengthenStats(teamOneObject.points.toString()) + '  '  + lengthenStats(teamOneObject.netScore.toString()) + '  ' + lengthenStats(teamOneObject.kills.toString())  + '  ' + lengthenStats(teamOneObject.deaths.toString())  + '\n\n';
@@ -650,7 +657,27 @@ function final() {
   });
 }
 
-exports.startUp = startUp;
-exports.createStream = createStream;
-exports.stopTheMatch = stopTheMatch;
-exports.sendScore = sendScore;
+function adjustScore(t1, t2, reason) {
+    if (t1 !== '' && teamOneObject !== undefined) {
+        teamOneObject.points += t1;
+        var obj = JSON.parse(memberTemplate);
+        obj.name = reason;
+        obj.points = t1;
+        teamOneObject.add(obj);
+    }
+    if (t2 !== '' && teamTwoObject !== undefined) {
+        teamOneObject.points += t2;
+        obj = JSON.parse(memberTemplate);
+        obj.name = reason;
+        obj.points = t2;
+        teamTwoObject.add(obj);
+    }
+}
+
+exports.startUp        = startUp;
+exports.createStream   = createStream;
+exports.stopTheMatch   = stopTheMatch;
+exports.sendScore      = sendScore;
+exports.getPointMaps   = getPointMaps;
+exports.updatePointMap = updatePointMap;
+exports.adjustScore    = adjustScore;

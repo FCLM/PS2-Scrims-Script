@@ -42,10 +42,12 @@ function submitForm (button)
         pw = $('#pwAdjust').val();
         var t1 = $('#T1Adjust').val();
         var t2 = $('#T2Adjust').val();
+        var reason = $('#reason').val();
         obj = {
             auth: pw,
             t1: t1,
-            t2: t2
+            t2: t2,
+            reason: reason
         };
         socket.emit('adjust', { obj: obj});
         console.log(pw);
