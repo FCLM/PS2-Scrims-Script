@@ -10,7 +10,7 @@ var items = {};
 // You can edit this bit to have it return whatever points you want, so this can be used for most rulesets
 // Briggs Thunderdome (2016) Scoring:
 var thunderdomeCategoryMap = {
-  '0':   { 'category' : 'Unknown (could be anything', points : 0 },
+  '0':   { 'category' : 'Unknown (could be anything)',points : 0 },
   '2':   { 'category' : 'Knife',                      points : 2 },
   '3':   { 'category' : 'Pistol',                     points : 2 },
   '4':   { 'category' : 'Shotgun',                    points : 0 },
@@ -69,7 +69,7 @@ var thunderdomeCategoryMap = {
 
 // Emerald "DurdleDome" (2016)
 var emeraldCategoryMap = {
-    '0':   { 'category' : 'Unknown (could be anything', points : 0 },
+    '0':   { 'category' : 'Unknown (could be anything)',points : 0 },
     '2':   { 'category' : 'Knife',                      points : 2 },
     '3':   { 'category' : 'Pistol',                     points : 2 },
     '4':   { 'category' : 'Shotgun',                    points : 0 },
@@ -128,7 +128,7 @@ var emeraldCategoryMap = {
 
 // Briggs OvO (2017)
 var ovoCategoryMap = {
-    '0':   { 'category' : 'Unknown (could be anything', points : 0 },
+    '0':   { 'category' : 'Unknown (could be anything)',points : 0 },
     '2':   { 'category' : 'Knife',                      points : 2 },
     '3':   { 'category' : 'Pistol',                     points : 2 },
     '4':   { 'category' : 'Shotgun',                    points : 0 },

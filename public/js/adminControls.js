@@ -73,6 +73,10 @@ $(document).on('click', '#weaponRule li a', function () {
     }
 });
 
+function valueChange(button) {
+
+}
+
 
 socket.on('connect', function() {
     socket.on ('redirect', function() {

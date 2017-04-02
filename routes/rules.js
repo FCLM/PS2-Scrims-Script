@@ -9,12 +9,10 @@ router.get('/', function(req, res, next) {
     var catMaps = items.getCategoryMaps();
     var currentCatMapName = catMaps.current.name;
     var currentCatMap = catMaps.current;
-    delete currentCatMap.name;
 
     var pointMaps = ps2ws.getPointMaps();
     var currentPointMapName = pointMaps.current.name;
     var currentPointMap = pointMaps.current;
-    delete currentPointMap.name;
 
     res.render('rules', {
         title: 'PS2 Scrim Script: Admin Controls',

@@ -24,7 +24,7 @@
     <div class="col-md-6">
         <h3>Weapon Category Rules:</h3>
         <hr class="feature-divider">
-        <div class="table-responsive">
+        <div class="table-responsive tableDiv">
             <table class="table">
                 <thead>
                     <th>Category</th>
@@ -33,16 +33,23 @@
                 </thead>
                 <tbody>
                 {{#each catMap}}
+                {{#if points}}
                     <tr>
                         <td>{{this.category}}</td>
                         <td>{{this.points}}</td>
                         <td><input type="text" size="8" id="Weapon{{this.category}}"></td>
                     </tr>
+                {{/if}}
                 {{/each}}
                 </tbody>
             </table>
         </div>
-        <div class="inline">
+        <div style="text-align:right">
+            <br>
+            <input id="adjust" type="submit" value="Save changes (ensure password is entered)" onclick="return valueChange(this)">
+            <br>
+        </div>
+        <div>
             <button class="btn btn-default dropdown-toggle" type="button" id="weaponRuleMenu" data-toggle="dropdown">Change to a default weapon ruleset <span class="caret"></span></button>
             <ul class="dropdown-menu right" role="menu" aria-labelledby="weaponRuleMenu" id="weaponRule">
                 <li role="presentation" value="weaponThunderdome"><a role="menuitem" tabindex="1" href="#" onclick="submitForm(this)">Thunderdome</a></li>
@@ -58,25 +65,32 @@
     <div class="col-md-6">
         <h3>Class & Interaction Rules:</h3>
         <hr class="feature-divider">
-        <div class="table-responsive">
+        <div class="table-responsive tableDiv">
             <table class="table">
                 <thead>
-                <th>Category</th>
-                <th>Value</th>
-                <th>Update to</th>
+                    <th>Category</th>
+                    <th>Value</th>
+                    <th>Update to</th>
                 </thead>
                 <tbody>
                 {{#each pointMap}}
-                <tr>
-                    <td>{{this.action}}</td>
-                    <td>{{this.points}}</td>
-                    <td><input type="text" size="8" id="{{this.action}}"></td>
-                </tr>
+                {{#if points}}
+                    <tr>
+                        <td>{{this.action}}</td>
+                        <td>{{this.points}}</td>
+                        <td><input type="text" size="8" id="{{this.action}}"></td>
+                    </tr>
+                {{/if}}
                 {{/each}}
                 </tbody>
             </table>
         </div>
-        <div class="inline">
+        <div style="text-align:right">
+            <br>
+            <input id="adjust" type="submit" value="Save changes (ensure password is entered)" onclick="return valueChange(this)">
+            <br>
+        </div>
+        <div>
             <button class="btn btn-default dropdown-toggle" type="button" id="classRuleMenu" data-toggle="dropdown">Change to a default class ruleset <span class="caret"></span></button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="classRuleMenu">
                 <li role="presentation" value="classThunderdome" onclick="submitForm(this)"><a role="menuitem" tabindex="1" href="#">Thunderdome</a></li>
