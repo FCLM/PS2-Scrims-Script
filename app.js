@@ -226,19 +226,12 @@ function start(one, two) {
   promises.push(teams.fetchTeamData(teamOneTag));
   promises.push(teams.fetchTeamData(teamTwoTag));
   Q.allSettled(promises).then(function (results) {
-    if (config.DEBUG) {
-      console.log('T1 - ' + config.debug.team1);
-      console.log('T2 - ' + config.debug.team2);
-      teamOneObject = JSON.parse(config.debug.team1);
-      teamTwoObject = JSON.parse(config.debug.team2);
-    } else {
       console.log('T1 - ' + JSON.stringify(results[0].value));
       console.log('T2 - ' + JSON.stringify(results[1].value));
       teamOneObject = results[0].value;
       teamTwoObject = results[1].value;
-    }
-    ps2ws.startUp(teamOneObject, teamTwoObject);
-    return response.promise;
+      ps2ws.startUp(teamOneObject, teamTwoObject);
+      return response.promise;
   });
 }
 
