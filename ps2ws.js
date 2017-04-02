@@ -29,6 +29,46 @@ var memberTemplate = JSON.stringify({
   kills : 0,
   deaths : 0
 });
+
+// Point Map assigned to one of the preset objects
+var pointMap = 0;
+
+// Thunderdome (2016)
+var thunderdomePointMap = {
+    '0' : { "Action" : "First Base Capture",       points : 10 },
+    '1' : { "Action" : "Subsequent Base Capture",  points : 25 },
+    '11' : { "Action" : "Max v Infantry Kill",     points : 1 },
+    '12' : { "Action" : "Max v Max Kill",          points : 3 },
+    '13' : { "Action" : "Max Suicide",             points : 5 }, // Applied as a negative
+    '21' : { "Action" : "Infantry TK",             points : 5 }, // Applied as a negative
+    '22' : { "Action" : "Infantry Suicide",        points : 2 }, // Applied as a negative
+    '23' : { "Action" : "Infantry v Max",          points : 5 }
+};
+
+// Emerald "Durdledome" (2016)
+var emeraldPointMap = {
+    '0' : { "Action" : "First Base Capture",       points : 10 },
+    '1' : { "Action" : "Subsequent Base Capture",  points : 25 },
+    '11' : { "Action" : "Max v Inf Kill",          points : 0 },
+    '12' : { "Action" : "Max v Max Kill",          points : 3 },
+    '13' : { "Action" : "Max Suicide",             points : 4 }, // Applied as a negative
+    '21' : { "Action" : "Infantry TK",             points : 3 }, // Applied as a negative
+    '22' : { "Action" : "Infantry Suicide",        points : 3 }, // Applied as a negative
+    '23' : { "Action" : "Infantry v Max",          points : 4 }
+};
+
+// Briggs OvO (2017)
+var ovoPointMap = {
+  '0' : { "Action" : "First Base Capture",       points : 12 },
+  '1' : { "Action" : "Subsequent Base Capture",  points : 24 },
+  '11' : { "Action" : "Max v Inf Kill",          points : 0 },
+  '12' : { "Action" : "Max v Max Kill",          points : 2 },
+  '13' : { "Action" : "Max Suicide",             points : 12 }, // Applied as a negative
+  '21' : { "Action" : "Infantry TK",             points : 3 }, // Applied as a negative
+  '22' : { "Action" : "Infantry Suicide",        points : 3 }, // Applied as a negative
+  '23' : { "Action" : "Infantry v Max",          points : 12 }
+};
+
  /*
   Overlay Code
   Writes to 5 files to allow a streamer to use them in OBS to display the match stats
@@ -184,41 +224,39 @@ function itsPlayerData(data) {
   //deals with adding points to the correct player & team
   var item = items.lookupItem(data.attacker_weapon_id);
   var points = items.lookupPointsfromCategory(item.category_id);
-  if ((data.attacker_loadout_id == 7) || (data.attacker_loadout_id == 14) || (data.attacker_loadout_id == 21)) {
+  if ((data.attacker_loadout_id === 7) || (data.attacker_loadout_id === 14) || (data.attacker_loadout_id === 21)) {
     //Attacker using a max
     if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
       //Attacker used a max to kill a max
-      points = 3;
+      points = pointMap['12'].points;
     } else {
       //max v infantry
-      points = 1;
+      points = pointMap['11'].points;
     }
   } else if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
     //defender used a max
-    points = 5;
+    points = pointMap['23'].points;
   }
   if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
     oneIvITwo(data, points, item);
   } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
     twoIvIOne(data, points, item);
   } else if ((data.attacker_character_id == data.character_id) && (teamOneObject.members.hasOwnProperty(data.character_id))){
-    // Suicides team One lol
     if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
       //suicided as a max lol
-      points = 5;
+      points = pointMap['13'].points;
     } else {
       //just infantry suicide
-      points = 2;
+      points = pointMap['22'].points;
     }
     teamOneSuicide(data, points, item);
   } else if ((data.attacker_character_id == data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
-    // Suicides team Two lol
     if ((data.character_loadout_id == 7) || (data.character_loadout_id == 14) || (data.character_loadout_id == 21)) {
       //suicided as a max lol
-      points = 5;
+      points = pointMap['13'].points;
     } else {
       //just infantry suicide
-      points = 2;
+      points = pointMap['22'].points;
     }
     teamTwoSuicide(data, points, item);
   } else if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
@@ -341,7 +379,7 @@ function teamTwoSuicide (data, points, item) {
 }
 
 function teamOneTeamkill (data, item) {
-  var points = 5;
+  var points = pointMap['21'].points;
   teamOneObject.points -= points;
   teamOneObject.netScore -= points;
   teamOneObject.deaths++;
@@ -366,7 +404,7 @@ function teamOneTeamkill (data, item) {
 }
 
 function teamTwoTeamkill (data, item) {
-  var points = 5;
+  var points = pointMap['21'].points;
   teamTwoObject.points -= points;
   teamTwoObject.netScore -= points;
   teamTwoObject.deaths++;
@@ -396,7 +434,7 @@ function itsFacilityData(data) {
     if (data.outfit_id == teamOneObject.outfit_id) {
       var points;
       if (captures == 0) {
-        points = 10;
+        points = pointMap['0'].points;
         teamOneObject.points += points;
         teamOneObject.netScore += points;
         teamTwoObject.netScore -= points;
@@ -405,7 +443,7 @@ function itsFacilityData(data) {
         app.sendScores(teamOneObject, teamTwoObject);
         killfeedBaseUpdate(teamOneObject.alias, points);
       } else {
-        points = 25;
+        points = pointMap['1'].points;
         teamOneObject.points += points;
         teamOneObject.netScore += points;
         teamTwoObject.netScore -= points;
@@ -417,7 +455,7 @@ function itsFacilityData(data) {
       captures++;
     } else if (data.outfit_id == teamTwoObject.outfit_id) {
       if (captures == 0) {
-        points = 10;
+        points = pointMap['0'].points;
         teamTwoObject.points += points;
         teamTwoObject.netScore += points;
         teamOneObject.netScore -= points;
@@ -426,7 +464,7 @@ function itsFacilityData(data) {
         app.sendScores(teamOneObject, teamTwoObject);
         killfeedBaseUpdate(teamTwoObject.alias, points);
       } else {
-        points = 25;
+        points = pointMap['1'].points;
         teamTwoObject.points += points;
         teamTwoObject.netScore += points;
         teamOneObject.netScore -= points;
@@ -441,13 +479,11 @@ function itsFacilityData(data) {
   //else it was captured by neither outfit
 }
 
-var triggerCharacter = '';//enter a character ID for someone who can /suicide to start the match
-
 function createStream() {
+  if (pointMap === 0) { pointMap = thunderdomePointMap; } // default to thunderdome rule set
   var ws = new WebSocket('wss://push.planetside2.com/streaming?environment=ps2&service-id=s:' + api_key.KEY);
   ws.on('open', function open() {
     console.log('stream opened');
-    ws.send('{"service":"event","action":"subscribe","characters":["' + triggerCharacter + '"],"eventNames":["Death"]}');
     subscribe(ws);
   });
   ws.on('message', function (data) {
