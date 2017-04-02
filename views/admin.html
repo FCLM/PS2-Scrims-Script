@@ -17,7 +17,7 @@
 <div class="page-header">
     <h1 style="text-align: center">{{ title }}</h1>
 </div>
-<div>
+<div id="adminPanel">
     <!-- Left Side -->
     <div class="col-md-6">
         <div class="adminForm">
@@ -71,11 +71,10 @@
         <hr class="feature-divider">
         <!-- Ruleset -->
         <div class="adminForm">
-            <form id="rules">
-                <h3>Rule Set</h3>
-                <p>Current: {{rules}}</p>
-
-            </form>
+            <h3>Rule Set</h3>
+            <p>Current weapon rules: {{catMap}}</p>
+            <p>Current class rules: {{pointMap}}</p>
+            <a href="rules">View / Adjust rules >></a>
         </div>
         <hr class="feature-divider">
     </div>

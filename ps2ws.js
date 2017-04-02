@@ -29,9 +29,6 @@ var memberTemplate = JSON.stringify({
   deaths : 0
 });
 
-// Point Map assigned to one of the preset objects
-var pointMap = 0;
-
 // Thunderdome (2016)
 var thunderdomePointMap = {
     '0' : { "Action" : "First Base Capture",       points : 10 },
@@ -41,7 +38,8 @@ var thunderdomePointMap = {
     '13' : { "Action" : "Max Suicide",             points : 5 }, // Applied as a negative
     '21' : { "Action" : "Infantry TK",             points : 5 }, // Applied as a negative
     '22' : { "Action" : "Infantry Suicide",        points : 2 }, // Applied as a negative
-    '23' : { "Action" : "Infantry v Max",          points : 5 }
+    '23' : { "Action" : "Infantry v Max",          points : 5 },
+    'name': 'Thunderdome Ruleset'
 };
 
 // Emerald "Durdledome" (2016)
@@ -53,7 +51,8 @@ var emeraldPointMap = {
     '13' : { "Action" : "Max Suicide",             points : 4 }, // Applied as a negative
     '21' : { "Action" : "Infantry TK",             points : 3 }, // Applied as a negative
     '22' : { "Action" : "Infantry Suicide",        points : 3 }, // Applied as a negative
-    '23' : { "Action" : "Infantry v Max",          points : 4 }
+    '23' : { "Action" : "Infantry v Max",          points : 4 },
+    'name': 'Emerald Ruleset'
 };
 
 // Briggs OvO (2017)
@@ -65,8 +64,12 @@ var ovoPointMap = {
   '13' : { "Action" : "Max Suicide",             points : 12 }, // Applied as a negative
   '21' : { "Action" : "Infantry TK",             points : 3 }, // Applied as a negative
   '22' : { "Action" : "Infantry Suicide",        points : 3 }, // Applied as a negative
-  '23' : { "Action" : "Infantry v Max",          points : 12 }
+  '23' : { "Action" : "Infantry v Max",          points : 12 },
+  'name': 'Briggs OvO Ruleset'
 };
+
+// Point Map assigned to one of the preset objects
+var pointMap = thunderdomePointMap;
 
 var pointMaps = {
   current     : pointMap,

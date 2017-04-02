@@ -6,7 +6,6 @@ var prequest = require('prequest');
 var Q = require('q');
 
 var items = {};
-var categoryMap = 0;
 //N.B: category 0 doesn't exist in the API but i assume it is for being killed by wreckage or terrain and it was annoying me with error messages so its now in the map
 // You can edit this bit to have it return whatever points you want, so this can be used for most rulesets
 // Briggs Thunderdome (2016) Scoring:
@@ -64,7 +63,8 @@ var thunderdomeCategoryMap = {
   '131': { 'category' : 'Vanguard Gunner Weapon',     points : 0 },
   '132': { 'category' : 'Vanguard Primary Weapon',    points : 0 },
   '139': { 'category' : 'Engineer Turrets',           points : 1 },
-  '147': { 'category' : 'Aerial Combat Weapon',       points : 0 }
+  '147': { 'category' : 'Aerial Combat Weapon',       points : 0 },
+  'name': 'Thunderdome Ruleset'
 };
 
 // Emerald "DurdleDome" (2016)
@@ -122,7 +122,8 @@ var emeraldCategoryMap = {
     '131': { 'category' : 'Vanguard Gunner Weapon',     points : 0 },
     '132': { 'category' : 'Vanguard Primary Weapon',    points : 0 },
     '139': { 'category' : 'Engineer Turrets',           points : 0 },
-    '147': { 'category' : 'Aerial Combat Weapon',       points : 0 }
+    '147': { 'category' : 'Aerial Combat Weapon',       points : 0 },
+    'name': 'Emerald Ruleset'
 };
 
 // Briggs OvO (2017)
@@ -180,8 +181,11 @@ var ovoCategoryMap = {
     '131': { 'category' : 'Vanguard Gunner Weapon',     points : 0 },
     '132': { 'category' : 'Vanguard Primary Weapon',    points : 0 },
     '139': { 'category' : 'Engineer Turrets',           points : 0 },
-    '147': { 'category' : 'Aerial Combat Weapon',       points : 0 }
+    '147': { 'category' : 'Aerial Combat Weapon',       points : 0 },
+    'name': 'Briggs OvO Ruleset'
 };
+
+var categoryMap = thunderdomeCategoryMap;
 
 var categoryMaps = {
     current     : categoryMap,

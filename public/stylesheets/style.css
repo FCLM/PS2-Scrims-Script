@@ -57,3 +57,8 @@
   width: 100%;
   text-align: center;
 }
+
+#adminPanel {
+  margin-left: 5%;
+  margin-right: 5%;
+}
