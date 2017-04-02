@@ -17,7 +17,6 @@
 <div class="page-header">
     <h1 style="text-align: center">{{ title }}</h1>
 </div>
-
 <div>
     <!-- Left Side -->
     <div class="col-md-6">
@@ -56,15 +55,16 @@
     <div class="col-md-6">
         <!-- Adjust score -->
         <div class="adminForm">
-            <form id="adustScore">
+            <form id="adjustScore">
                 <h3>Adjust Score</h3>
-                <p class="inline">Team 1: </p><input type="text" size="4" maxlength="4" id="T1Adjust" placeholder="2">
+                <p class="inline">Team 1: </p><input type="number" size="4" maxlength="4" id="T1Adjust" placeholder="2">
                 <br> <br>
-                <p class="inline">Team 2: </p><input type="text" size="4" maxlength="4" id="T2Adjust" placeholder="-8">
+                <p class="inline">Team 2: </p><input type="number" size="4" maxlength="4" id="T2Adjust" placeholder="-8">
                 <br> <br>
                 <p class="passw inline">Password: </p><input type="text" size="8" id="pwAdjust">
-                <input id="Adjust" type="submit" value="Track" onclick="return submitForm(this)">
+                <input id="adjust" type="submit" value="Adjust" onclick="return submitForm(this)">
             </form>
+            <p>Leave team blank if only adjusting one side</p>
         </div>
         <hr class="feature-divider">
         <!-- Ruleset -->
@@ -80,7 +80,6 @@
 </div>
 
 <footer class="footer">
-
     <p style="text-align: center">All participants must be in the participating outfit ~60seconds before starting the script to ensure they are tracked</p>
     <hr class="feature-divider">
     <p>Created by Dylan C (DylanNZ), Jared H (MonoNZ) and Richard (Dalordish) of

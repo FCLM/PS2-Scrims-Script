@@ -5,7 +5,7 @@ var socket = io();
 
 function submitForm (button)
 {
-    if (button.value == "Track") {
+    if (button.value === "Track") {
         var track = $('#start');
         track.prop('disabled', true);
         var tagOne = $("#T1Tag").val();
@@ -18,7 +18,7 @@ function submitForm (button)
         };
         console.log(obj);
         socket.emit('start', { obj: obj});
-    } else if (button.value == "Stop") {
+    } else if (button.value === "Stop") {
         var stop = $('#stop');
         stop.prop('disabled', true);
         pw = $('#pwstop').val();
@@ -27,7 +27,7 @@ function submitForm (button)
         };
         socket.emit('stop', { obj: obj});
         console.log(pw);
-    } else if (button.value == "Start Second Round") {
+    } else if (button.value === "Start Second Round") {
         var round2 = $('#Round2');
         round2.prop('disabled', true);
         pw = $('#pwRound2').val();
@@ -35,6 +35,19 @@ function submitForm (button)
             auth: pw
         };
         socket.emit('newRound', { obj: obj});
+        console.log(pw);
+    } else if (button.value === "Adjust") {
+        var adjust = $('#adjust');
+        adjust.prop('disabled', true);
+        pw = $('#pwAdjust').val();
+        var t1 = $('#T1Adjust').val();
+        var t2 = $('#T2Adjust').val();
+        obj = {
+            auth: pw,
+            t1: t1,
+            t2: t2
+        };
+        socket.emit('adjust', { obj: obj});
         console.log(pw);
     }
     return false;
