@@ -86,7 +86,7 @@ var server = http.createServer(app).listen(app.get('port'));
 var io = require('socket.io').listen(server);
 io.on('connection', function(sock) {
   sock.on('backchat', function (data) {
-    if (teamOneObject != undefined) {
+    if (teamOneObject !== undefined) {
       var teams = {
         teamOne: {
           alias: teamOneObject.alias,
@@ -108,9 +108,9 @@ io.on('connection', function(sock) {
   sock.on('start', function (data) {
     io.emit('redirect');
     var event = data.obj;
-    if (event.auth == password.KEY) {
+    if (event.auth === password.KEY) {
       if ((event.hasOwnProperty('teamOne')) && (event.hasOwnProperty('teamTwo'))) {
-        if (running != true) {
+        if (running !== true) {
           start(event.teamOne, event.teamTwo);
           console.log('Admin entered a start match command involving: ' + event.teamOne + ' ' + event.teamTwo);
           running = true;
@@ -126,8 +126,8 @@ io.on('connection', function(sock) {
   sock.on('newRound', function(data) {
     io.emit('redirect');
     var event = data.obj;
-    if (event.auth == password.KEY) {
-      if (running != true) {
+    if (event.auth === password.KEY) {
+      if (running !== true) {
         console.log('Admin entered New Round command, new round starting: ');
         console.log(data);
         ps2ws.createStream();
@@ -143,11 +143,19 @@ io.on('connection', function(sock) {
   sock.on('stop', function(data) {
     io.emit('redirect');
     var event = data.obj;
-    if (event.auth == password.KEY) {
+    if (event.auth === password.KEY) {
       console.log('Admin entered Stop command, match stopping: ');
       console.log(data);
       ps2ws.stopTheMatch();
     }
+  });
+  sock.on('adjust', function(data) {
+        io.emit('redirect');
+        var event = data.obj;
+        if (event.auth === password.KEY) {
+            console.log('Admin adjusted score: ');
+            console.log(data);
+        }
   });
 });
 
