@@ -32,12 +32,13 @@
                     <th>Update to</th>
                 </thead>
                 <tbody>
-                {{weaponRules}}
+                {{#each catMap}}
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{this.category}}</td>
+                        <td>{{this.points}}</td>
+                        <td><input type="text" size="8" id="Weapon{{this.category}}"></td>
                     </tr>
+                {{/each}}
                 </tbody>
             </table>
         </div>
@@ -50,7 +51,7 @@
             </ul>
         </div>
         <div class="inline right">
-            <p>Current Ruleset: {{catMap}}</p>
+            <p>Current Ruleset: {{catMapName}}</p>
         </div>
     </div>
     <!-- Class/Interaction Rules -->
@@ -65,12 +66,13 @@
                 <th>Update to</th>
                 </thead>
                 <tbody>
-                {{weaponRules}}
+                {{#each pointMap}}
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{this.action}}</td>
+                    <td>{{this.points}}</td>
+                    <td><input type="text" size="8" id="{{this.action}}"></td>
                 </tr>
+                {{/each}}
                 </tbody>
             </table>
         </div>
@@ -83,7 +85,7 @@
             </ul>
         </div>
         <div class="inline right">
-            <p>Current Ruleset: {{pointMap}}</p>
+            <p>Current Ruleset: {{pointMapName}}</p>
         </div>
     </div>
 </div>

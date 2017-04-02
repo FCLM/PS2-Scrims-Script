@@ -5,7 +5,6 @@ var express       = require('express'),
     cookieParser  = require('cookie-parser'),
     bodyParser    = require('body-parser'),
     Q             = require('q'),
-    nunjucks      = require('nunjucks'),
     http          = require('http');
 
 var ps2ws         = require('./ps2ws.js'),
@@ -26,7 +25,7 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', '.html');
+app.set('view engine', '.hbs');
 app.use(express.static(__dirname + '/public'));
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -72,11 +71,6 @@ app.use(function(err, req, res) {
 });
 
 app.set('port', 3001);
-
-nunjucks.configure('views', {
-  autoescape: true,
-  express: app
-});
 
 // Render main html
 app.get('/', function(req, res) {
