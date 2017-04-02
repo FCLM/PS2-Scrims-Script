@@ -82,8 +82,10 @@ function getPointMaps() {
   return pointMaps;
 }
 
-function updatePointMap(pMap) {
-  pointMap = pMap;
+function updatePointMap(number) {
+    if (number === 0) { pointMap = thunderdomePointMap; }
+    if (number === 1) { pointMap = emeraldPointMap; }
+    if (number === 2) { pointMap = ovoPointMap; }
 }
 
  /*

@@ -10,6 +10,7 @@ var express       = require('express'),
 
 var ps2ws         = require('./ps2ws.js'),
     teams         = require('./teams.js'),
+    items         = require('./items.js'),
     routes        = require('./routes/index.js'),
     adminControls = require('./routes/admin.js'),
     rules         = require('./routes/rules.js'),
@@ -158,6 +159,28 @@ io.on('connection', function(sock) {
             console.log(data);
             ps2ws.adjustScore(event.t1, event.t2, event.reason);
         }
+  });
+  sock.on('weaponDefault',function (data) {
+      io.emit('redirect');
+      var event = data.obj;
+      if (event.auth === password.KEY) {
+          if (event.ruleset === "weaponThunderdome") { items.updateCategoryMap(0); }
+          if (event.ruleset === "weaponEmerald") { items.updateCategoryMap(1); }
+          if (event.ruleset === "weaponOvO") { items.updateCategoryMap(2); }
+          console.log('Admin set default weapon rules: ');
+          console.log(data);
+      }
+  });
+  sock.on('classDefault', function (data) {
+      io.emit('redirect');
+      var event = data.obj;
+      if (event.auth === password.KEY) {
+          if (event.ruleset === "classThunderdome") { ps2ws.updatePointMap(0); }
+          if (event.ruleset === "classEmerald") { ps2ws.updatePointMap(1); }
+          if (event.ruleset === "classOvO") { ps2ws.updatePointMap(2); }
+          console.log('Admin set default class rules: ');
+          console.log(data);
+      }
   });
 });
 

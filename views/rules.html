@@ -17,6 +17,9 @@
 </div>
 
 <div id="adminPanel">
+    <div class="col-md-12" style="text-align: center">
+        <p class="inline">Password: </p> <input type="text" size="8" id="password">
+    </div>
     <!-- Weapon Rules -->
     <div class="col-md-6">
         <h3>Weapon Category Rules:</h3>
@@ -40,10 +43,10 @@
         </div>
         <div class="inline">
             <button class="btn btn-default dropdown-toggle" type="button" id="weaponRuleMenu" data-toggle="dropdown">Change to a default weapon ruleset <span class="caret"></span></button>
-            <ul class="dropdown-menu right" role="menu" aria-labelledby="weaponRuleMenu">
-                <li role="presentation"><a role="menuitem" tabindex="1" href="#">Thunderdome</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="2" href="#">Emerald</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="3" href="#">Briggs OvO</a></li>
+            <ul class="dropdown-menu right" role="menu" aria-labelledby="weaponRuleMenu" id="weaponRule">
+                <li role="presentation" value="weaponThunderdome"><a role="menuitem" tabindex="1" href="#" onclick="submitForm(this)">Thunderdome</a></li>
+                <li role="presentation" value="weaponEmerald" onclick="submitForm(this)"><a role="menuitem" tabindex="2" href="#">Emerald</a></li>
+                <li role="presentation" value="weaponOvO" onclick="submitForm(this)"><a role="menuitem" tabindex="3" href="#">Briggs OvO</a></li>
             </ul>
         </div>
         <div class="inline right">
@@ -74,9 +77,9 @@
         <div class="inline">
             <button class="btn btn-default dropdown-toggle" type="button" id="classRuleMenu" data-toggle="dropdown">Change to a default class ruleset <span class="caret"></span></button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="classRuleMenu">
-                <li role="presentation"><a role="menuitem" tabindex="1" href="#">Thunderdome</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="2" href="#">Emerald</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="3" href="#">Briggs OvO</a></li>
+                <li role="presentation" value="classThunderdome" onclick="submitForm(this)"><a role="menuitem" tabindex="1" href="#">Thunderdome</a></li>
+                <li role="presentation" value="classEmerald" onclick="submitForm(this)"><a role="menuitem" tabindex="2" href="#">Emerald</a></li>
+                <li role="presentation" value="classOvO" onclick="submitForm(this)"><a role="menuitem" tabindex="3"  href="#">Briggs OvO</a></li>
             </ul>
         </div>
         <div class="inline right">
@@ -90,7 +93,7 @@
     <hr class="feature-divider">
     <p>Created by Dylan C (DylanNZ), Jared H (MonoNZ) and Richard H (Dalordish) of
         <a href="https://fifthcolumngaming.com">[FCLM] Fifth Column</a> ·
-        For any changes to the script send a message to DylanNZ on <a href="https://www.reddit.com/message/compose?to=Dylan_NZL">reddit</a> ·
+        For any changes to the script send a message to DylanNZ on <a href="https://www.reddit.com/message/compose?to=Dylan_NZL">Reddit</a> ·
         Credit to x who developed the original concept
     </p>
 </footer>

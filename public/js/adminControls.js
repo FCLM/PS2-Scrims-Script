@@ -16,7 +16,6 @@ function submitForm (button)
             teamTwo : tagTwo,
             auth: pw
         };
-        console.log(obj);
         socket.emit('start', { obj: obj});
     } else if (button.value === "Stop") {
         var stop = $('#stop');
@@ -26,7 +25,6 @@ function submitForm (button)
             auth: pw
         };
         socket.emit('stop', { obj: obj});
-        console.log(pw);
     } else if (button.value === "Start Second Round") {
         var round2 = $('#Round2');
         round2.prop('disabled', true);
@@ -35,7 +33,6 @@ function submitForm (button)
             auth: pw
         };
         socket.emit('newRound', { obj: obj});
-        console.log(pw);
     } else if (button.value === "Adjust") {
         var adjust = $('#adjust');
         adjust.prop('disabled', true);
@@ -50,10 +47,32 @@ function submitForm (button)
             reason: reason
         };
         socket.emit('adjust', { obj: obj});
-        console.log(pw);
     }
     return false;
 }
+
+$(document).on('click', '#weaponRule li a', function () {
+    var value = $(this).parent().attr('value');
+    console.log(value);
+    if (value === "classThunderdome" || value === "classEmerald" || value === "classOvO") {
+        console.log('asd');
+        var pw = $('#password').val();
+        var obj = {
+            auth: pw,
+            ruleset: value
+        };
+        socket.emit('classDefault', { obj : obj });
+    } else if (value === "weaponThunderdome" || value === "weaponEmerald" || value === "weaponOvO") {
+        console.log('asd');
+        pw = $('#password').val();
+        obj = {
+            auth: pw,
+            ruleset: value
+        };
+        socket.emit('weaponDefault', { obj : obj });
+    }
+});
+
 
 socket.on('connect', function() {
     socket.on ('redirect', function() {

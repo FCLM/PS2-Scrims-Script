@@ -198,8 +198,10 @@ function getCategoryMaps() {
     return categoryMaps;
 }
 
-function updateCategoryMap(catMap) {
-    categoryMap = catMap;
+function updateCategoryMap(number) {
+    if (number === 0) { categoryMap = thunderdomeCategoryMap; }
+    if (number === 1) { categoryMap = emeraldCategoryMap; }
+    if (number === 2) { categoryMap = ovoCategoryMap; }
 }
 
 var mItemTemplate = JSON.stringify({
