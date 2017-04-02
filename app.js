@@ -10,10 +10,11 @@ var express       = require('express'),
 
 var ps2ws         = require('./ps2ws.js'),
     teams         = require('./teams.js'),
-    routes        = require('./routes/index'),
-    adminControls = require('./routes/admin'),
-    api_key       = require('./api_key'),
-    password      = require('./password');
+    routes        = require('./routes/index.js'),
+    adminControls = require('./routes/admin.js'),
+    rules         = require('./routes/rules.js'),
+    api_key       = require('./api_key.js'),
+    password      = require('./password.js');
 
 //global variable for use in different functions
 var teamOneObject, teamTwoObject;
@@ -36,6 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/admin', adminControls);
+app.use('/rules', rules);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
