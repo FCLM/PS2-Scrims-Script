@@ -31,40 +31,40 @@ var memberTemplate = JSON.stringify({
 
 // Thunderdome (2016)
 var thunderdomePointMap = {
-    '0' : { "Action" : "First Base Capture",       points : 10 },
-    '1' : { "Action" : "Subsequent Base Capture",  points : 25 },
-    '11' : { "Action" : "Max v Infantry Kill",     points : 1 },
-    '12' : { "Action" : "Max v Max Kill",          points : 3 },
-    '13' : { "Action" : "Max Suicide",             points : 5 }, // Applied as a negative
-    '21' : { "Action" : "Infantry TK",             points : 5 }, // Applied as a negative
-    '22' : { "Action" : "Infantry Suicide",        points : 2 }, // Applied as a negative
-    '23' : { "Action" : "Infantry v Max",          points : 5 },
+    '0' : { "action" : "First Base Capture",       points : 10 },
+    '1' : { "action" : "Subsequent Base Capture",  points : 25 },
+    '11' : { "action" : "Max v Infantry Kill",     points : 1 },
+    '12' : { "action" : "Max v Max Kill",          points : 3 },
+    '13' : { "action" : "Max Suicide",             points : 5 }, // Applied as a negative
+    '21' : { "action" : "Infantry TK",             points : 5 }, // Applied as a negative
+    '22' : { "action" : "Infantry Suicide",        points : 2 }, // Applied as a negative
+    '23' : { "action" : "Infantry v Max",          points : 5 },
     'name': 'Thunderdome Ruleset'
 };
 
 // Emerald "Durdledome" (2016)
 var emeraldPointMap = {
-    '0' : { "Action" : "First Base Capture",       points : 10 },
-    '1' : { "Action" : "Subsequent Base Capture",  points : 25 },
-    '11' : { "Action" : "Max v Inf Kill",          points : 0 },
-    '12' : { "Action" : "Max v Max Kill",          points : 3 },
-    '13' : { "Action" : "Max Suicide",             points : 4 }, // Applied as a negative
-    '21' : { "Action" : "Infantry TK",             points : 3 }, // Applied as a negative
-    '22' : { "Action" : "Infantry Suicide",        points : 3 }, // Applied as a negative
-    '23' : { "Action" : "Infantry v Max",          points : 4 },
+    '0' : { "action" : "First Base Capture",       points : 10 },
+    '1' : { "action" : "Subsequent Base Capture",  points : 25 },
+    '11' : { "action" : "Max v Inf Kill",          points : 0 },
+    '12' : { "action" : "Max v Max Kill",          points : 3 },
+    '13' : { "action" : "Max Suicide",             points : 4 }, // Applied as a negative
+    '21' : { "action" : "Infantry TK",             points : 3 }, // Applied as a negative
+    '22' : { "action" : "Infantry Suicide",        points : 3 }, // Applied as a negative
+    '23' : { "action" : "Infantry v Max",          points : 4 },
     'name': 'Emerald Ruleset'
 };
 
 // Briggs OvO (2017)
 var ovoPointMap = {
-  '0' : { "Action" : "First Base Capture",       points : 12 },
-  '1' : { "Action" : "Subsequent Base Capture",  points : 24 },
-  '11' : { "Action" : "Max v Inf Kill",          points : 0 },
-  '12' : { "Action" : "Max v Max Kill",          points : 2 },
-  '13' : { "Action" : "Max Suicide",             points : 12 }, // Applied as a negative
-  '21' : { "Action" : "Infantry TK",             points : 3 }, // Applied as a negative
-  '22' : { "Action" : "Infantry Suicide",        points : 3 }, // Applied as a negative
-  '23' : { "Action" : "Infantry v Max",          points : 12 },
+  '0' : { "action" : "First Base Capture",       points : 12 },
+  '1' : { "action" : "Subsequent Base Capture",  points : 24 },
+  '11' : { "action" : "Max v Inf Kill",          points : 0 },
+  '12' : { "action" : "Max v Max Kill",          points : 2 },
+  '13' : { "action" : "Max Suicide",             points : 12 }, // Applied as a negative
+  '21' : { "action" : "Infantry TK",             points : 3 }, // Applied as a negative
+  '22' : { "action" : "Infantry Suicide",        points : 3 }, // Applied as a negative
+  '23' : { "action" : "Infantry v Max",          points : 12 },
   'name': 'Briggs OvO Ruleset'
 };
 

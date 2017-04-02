@@ -76,8 +76,8 @@ $(document).on('click', '#weaponRule li a', function () {
 
 socket.on('connect', function() {
     socket.on ('redirect', function() {
-    //redirect to index.html
-        console.log('Session started, redirecting to index.html');
+    //redirect to index.hbs
+        console.log('Session started, redirecting to index.hbs');
         window.location.replace("/");
     });
 });
