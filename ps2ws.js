@@ -6,7 +6,6 @@ var api_key   = require('./api_key.js'),
     items     = require('./items.js'),
     WebSocket = require('ws'),
     app       = require('./app'),
-    config    = require('./config'),
     fs        = require('fs'),
     io        = require('socket.io');
 
@@ -570,32 +569,12 @@ function startUp(tOne, tTwo) {
       teamOneObject = teamObject(teamOne);
       teamTwo = tTwo;
       teamTwoObject= teamObject(teamTwo);
-      if (config.DEBUG) {
-        debugWebSocket();
-        app.refreshPage();
-      } else {
-        createStream();
-        app.refreshPage();
-      }
+      createStream();
+      app.refreshPage();
     } else {
       console.error('Items did not initialise!!');
     }
   });
-}
-
-function debugWebSocket() {
-  initialiseOverlay();
-  var round = config.debug.round;
-  var counter = 15000;
-  var i = setInterval(function(){
-    if (round.hasOwnProperty('' + counter)) {
-      dealWithTheData(config.debug.round['' + counter]);
-    }
-    counter++;
-    if(counter === 600000) {
-      clearInterval(i);
-    }
-  }, 1);
 }
 
 function lengthenName(name) {

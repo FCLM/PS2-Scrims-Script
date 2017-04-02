@@ -12,7 +12,6 @@ var ps2ws         = require('./ps2ws.js'),
     teams         = require('./teams.js'),
     routes        = require('./routes/index'),
     adminControls = require('./routes/admin'),
-    config        = require('./config'),
     api_key       = require('./api_key'),
     password      = require('./password');
 
