@@ -22,8 +22,6 @@
         <h3>Weapon Category Rules:</h3>
         <hr class="feature-divider">
         <div class="table-responsive">
-            <p>Current Ruleset: {{catMap}}</p>
-
             <table class="table">
                 <thead>
                     <th>Category</th>
@@ -40,13 +38,23 @@
                 </tbody>
             </table>
         </div>
+        <div class="inline">
+            <button class="btn btn-default dropdown-toggle" type="button" id="weaponRuleMenu" data-toggle="dropdown">Change to a default weapon ruleset <span class="caret"></span></button>
+            <ul class="dropdown-menu right" role="menu" aria-labelledby="weaponRuleMenu">
+                <li role="presentation"><a role="menuitem" tabindex="1" href="#">Thunderdome</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="2" href="#">Emerald</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="3" href="#">Briggs OvO</a></li>
+            </ul>
+        </div>
+        <div class="inline right">
+            <p>Current Ruleset: {{catMap}}</p>
+        </div>
     </div>
     <!-- Class/Interaction Rules -->
     <div class="col-md-6">
         <h3>Class & Interaction Rules:</h3>
         <hr class="feature-divider">
         <div class="table-responsive">
-            <p>Current Ruleset: {{pointMap}}</p>
             <table class="table">
                 <thead>
                 <th>Category</th>
@@ -62,6 +70,17 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="inline">
+            <button class="btn btn-default dropdown-toggle" type="button" id="classRuleMenu" data-toggle="dropdown">Change to a default class ruleset <span class="caret"></span></button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="classRuleMenu">
+                <li role="presentation"><a role="menuitem" tabindex="1" href="#">Thunderdome</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="2" href="#">Emerald</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="3" href="#">Briggs OvO</a></li>
+            </ul>
+        </div>
+        <div class="inline right">
+            <p>Current Ruleset: {{pointMap}}</p>
         </div>
     </div>
 </div>
