@@ -176,6 +176,24 @@ io.on('connection', function(sock) {
           console.log(data);
       }
   });
+  sock.on('weaponUpdate', function(data) {
+      io.emit('redirect');
+      var event = data.obj;
+      if (event.auth === password.KEY && running === false) {
+          console.log('Admin updated weapon rules');
+          console.log(data);
+          items.individualCategoryUpdate(event);
+      }
+  });
+  sock.on('classUpdate', function(data) {
+      io.emit('redirect');
+      var event = data.obj;
+      if (event.auth === password.KEY && running === false) {
+          console.log('Admin updated class rules: ');
+          console.log(data);
+          ps2ws.individualPointUpdate(event);
+      }
+  });
 });
 
 function matchFinished() {

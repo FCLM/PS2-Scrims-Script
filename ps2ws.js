@@ -93,9 +93,51 @@ function getPointMaps() {
 }
 
 function updatePointMap(number) {
-    if (number === 0) { pointMap = thunderdomePointMap; }
-    if (number === 1) { pointMap = emeraldPointMap; }
-    if (number === 2) { pointMap = ovoPointMap; }
+    if (number === 0) {
+        pointMap['0'].points  = thunderdomePointMap['0'].points;
+        pointMap['1'].points  = thunderdomePointMap['1'].points;
+        pointMap['11'].points = thunderdomePointMap['11'].points;
+        pointMap['12'].points = thunderdomePointMap['12'].points;
+        pointMap['13'].points = thunderdomePointMap['13'].points;
+        pointMap['21'].points = thunderdomePointMap['21'].points;
+        pointMap['22'].points = thunderdomePointMap['22'].points;
+        pointMap['23'].points = thunderdomePointMap['23'].points;
+        pointMap['name'].points = thunderdomePointMap['name'].points;
+    }
+    if (number === 1) {
+        pointMap['0'].points  = emeraldPointMap['0'].points;
+        pointMap['1'].points  = emeraldPointMap['1'].points;
+        pointMap['11'].points = emeraldPointMap['11'].points;
+        pointMap['12'].points = emeraldPointMap['12'].points;
+        pointMap['13'].points = emeraldPointMap['13'].points;
+        pointMap['21'].points = emeraldPointMap['21'].points;
+        pointMap['22'].points = emeraldPointMap['22'].points;
+        pointMap['23'].points = emeraldPointMap['23'].points;
+        pointMap['name'].points = emeraldPointMap['name'].points;
+    }
+    if (number === 2) {
+        pointMap['0'].points  = ovoPointMap['0'].points;
+        pointMap['1'].points  = ovoPointMap['1'].points;
+        pointMap['11'].points = ovoPointMap['11'].points;
+        pointMap['12'].points = ovoPointMap['12'].points;
+        pointMap['13'].points = ovoPointMap['13'].points;
+        pointMap['21'].points = ovoPointMap['21'].points;
+        pointMap['22'].points = ovoPointMap['22'].points;
+        pointMap['23'].points = ovoPointMap['23'].points;
+        pointMap['name'].points = ovoPointMap['name'].points;
+    }
+}
+
+function individualPointUpdate(event) {
+    if (event.class0  !== '') { pointMap['0'].points = event.class0; }
+    if (event.class1  !== '') { pointMap['1'].points = event.class1; }
+    if (event.class11 !== '') { pointMap['11'].points = event.class11; }
+    if (event.class12 !== '') { pointMap['12'].points = event.class12; }
+    if (event.class13 !== '') { pointMap['13'].points = event.class13; }
+    if (event.class21 !== '') { pointMap['21'].points = event.class21; }
+    if (event.class22 !== '') { pointMap['22'].points = event.class22; }
+    if (event.class23 !== '') { pointMap['23'].points = event.class23; }
+    pointMap.name = 'Custom';
 }
 
  /*
@@ -695,4 +737,5 @@ exports.stopTheMatch   = stopTheMatch;
 exports.sendScore      = sendScore;
 exports.getPointMaps   = getPointMaps;
 exports.updatePointMap = updatePointMap;
+exports.individualPointUpdate = individualPointUpdate;
 exports.adjustScore    = adjustScore;

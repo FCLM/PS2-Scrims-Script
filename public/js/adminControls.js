@@ -54,18 +54,9 @@ function submitForm (button)
 $(document).on('click', '#weaponRule li a', function () {
     var value = $(this).parent().attr('value');
     console.log(value);
-    if (value === "classThunderdome" || value === "classEmerald" || value === "classOvO") {
-        console.log('asd');
+    if (value === "weaponThunderdome" || value === "weaponEmerald" || value === "weaponOvO") {
         var pw = $('#password').val();
         var obj = {
-            auth: pw,
-            ruleset: value
-        };
-        socket.emit('classDefault', { obj : obj });
-    } else if (value === "weaponThunderdome" || value === "weaponEmerald" || value === "weaponOvO") {
-        console.log('asd');
-        pw = $('#password').val();
-        obj = {
             auth: pw,
             ruleset: value
         };
@@ -73,11 +64,92 @@ $(document).on('click', '#weaponRule li a', function () {
     }
 });
 
+$(document).on('click', '#classRule li a', function () {
+    var value = $(this).parent().attr('value');
+    console.log(value);
+    if (value === "classThunderdome" || value === "classEmerald" || value === "classOvO") {
+        var pw = $('#password').val();
+        var obj = {
+            auth: pw,
+            ruleset: value
+        };
+        socket.emit('classDefault', { obj : obj });
+    }
+});
+
 function valueChange(button) {
     if (button.value === "Save weapon changes (ensure password is entered)") {
-
+        var obj = {
+            auth : $('#password').val(),
+            item0: $('#item0').val(),
+            item2: $('#item2').val(),
+            item3: $('#item3').val(),
+            item4: $('#item4').val(),
+            item5: $('#item5').val(),
+            item6: $('#item6').val(),
+            item7: $('#item7').val(),
+            item8: $('#item8').val(),
+            item9: $('#item9').val(),
+            item10: $('#item10').val(),
+            item11: $('#item11').val(),
+            item12: $('#item12').val(),
+            item13: $('#item13').val(),
+            item14: $('#item14').val(),
+            item15: $('#item15').val(),
+            item16: $('#item16').val(),
+            item17: $('#item17').val(),
+            item18: $('#item18').val(),
+            item19: $('#item19').val(),
+            item20: $('#item20').val(),
+            item21: $('#item21').val(),
+            item22: $('#item22').val(),
+            item23: $('#item23').val(),
+            item24: $('#item24').val(),
+            item100: $('#item100').val(),
+            item101: $('#item101').val(),
+            item102: $('#item102').val(),
+            item104: $('#item104').val(),
+            item109: $('#item109').val(),
+            item110: $('#item110').val(),
+            item111: $('#item111').val(),
+            item112: $('#item112').val(),
+            item113: $('#item113').val(),
+            item114: $('#item114').val(),
+            item115: $('#item115').val(),
+            item116: $('#item116').val(),
+            item117: $('#item117').val(),
+            item118: $('#item118').val(),
+            item119: $('#item119').val(),
+            item120: $('#item120').val(),
+            item121: $('#item121').val(),
+            item122: $('#item122').val(),
+            item123: $('#item123').val(),
+            item124: $('#item124').val(),
+            item125: $('#item125').val(),
+            item126: $('#item126').val(),
+            item127: $('#item127').val(),
+            item128: $('#item128').val(),
+            item129: $('#item129').val(),
+            item130: $('#item130').val(),
+            item131: $('#item131').val(),
+            item132: $('#item132').val(),
+            item139: $('#item139').val(),
+            item147: $('#item147').val()
+        };
+        socket.emit('weaponUpdate', { obj : obj });
     } else if (button.value === "Save class changes (ensure password is entered)") {
-
+        var obj = {
+            auth: $('#password').val(),
+            class0 : $('#class0').val(),
+            class1 : $('#class1').val(),
+            class11 : $('#class11').val(),
+            class12 : $('#class12').val(),
+            class13 : $('#class13').val(),
+            class21 : $('#class21').val(),
+            class22 : $('#class22').val(),
+            class23 : $('#class23').val()
+        };
+        socket.emit('classUpdate', { obj : obj });
     }
 }
 
