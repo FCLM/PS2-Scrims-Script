@@ -16,7 +16,7 @@ function removeNameParts(name) {
   }
   // remove faction from end
   var end = name.length-2;
-  if (name.indexOf('VS') == end || name.indexOf('NC') == end || name.indexOf('TR') == end) {
+  if (name.indexOf('VS') === end || name.indexOf('NC') === end || name.indexOf('TR') === end) {
     name = name.substring(0, end);
   }
   return name;

@@ -6,20 +6,16 @@ var ps2ws = require('../ps2ws.js');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    var catMaps = items.getCategoryMaps();
-    var currentCatMapName = catMaps.current.name;
-    var currentCatMap = catMaps.current;
-
-    var pointMaps = ps2ws.getPointMaps();
-    var currentPointMapName = pointMaps.current.name;
-    var currentPointMap = pointMaps.current;
-
+    var catMap = items.getCategoryMaps();
+    var catMapName = catMap.name;
+    var pointMap = ps2ws.getPointMaps();
+    var pointMapName = pointMap.name;
     res.render('rules', {
         title: 'PS2 Scrim Script: Admin Controls',
-        catMapName: currentCatMapName,
-        catMap: currentCatMap,
-        pointMapName: currentPointMapName,
-        pointMap: currentPointMap
+        catMapName: catMapName,
+        catMap: catMap,
+        pointMapName: pointMapName,
+        pointMap: pointMap
     });
 });
 

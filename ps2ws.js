@@ -29,103 +29,43 @@ var memberTemplate = JSON.stringify({
   deaths : 0
 });
 
-// Point Map assigned to one of the preset objects
+var pointNumbers = ['0','1','11','12','13','21','22','23'];
+
+// Point Map default to thunderdome ruleset
 var pointMap = {
-    '0' : { "action" : "First Base Capture",       points : 10 , id : "class0"},
-    '1' : { "action" : "Subsequent Base Capture",  points : 25 , id : "class1"},
-    '11' : { "action" : "Max v Infantry Kill",     points : 1 , id : "class11"},
-    '12' : { "action" : "Max v Max Kill",          points : 3 , id : "class12"},
-    '13' : { "action" : "Max Suicide",             points : 5 , id : "class13"}, // Applied as a negative
-    '21' : { "action" : "Infantry TK",             points : 5 , id : "class21"}, // Applied as a negative
-    '22' : { "action" : "Infantry Suicide",        points : 2 , id : "class22"}, // Applied as a negative
-    '23' : { "action" : "Infantry v Max",          points : 5 , id : "class23"},
+    '0'  : { "action" : "First Base Capture",      points : 10, id : "class0"},
+    '1'  : { "action" : "Subsequent Base Capture", points : 25, id : "class1"},
+    '11' : { "action" : "Max v Infantry Kill",     points : 1,  id : "class11"},
+    '12' : { "action" : "Max v Max Kill",          points : 3,  id : "class12"},
+    '13' : { "action" : "Max Suicide",             points : -5, id : "class13"},
+    '21' : { "action" : "Infantry TK",             points : -5, id : "class21"},
+    '22' : { "action" : "Infantry Suicide",        points : -2, id : "class22"},
+    '23' : { "action" : "Infantry v Max",          points : 5,  id : "class23"},
     'name': 'Thunderdome Ruleset'
 };
 
 // Thunderdome (2016)
-var thunderdomePointMap = {
-    '0' : { "action" : "First Base Capture",       points : 10 , id : "class0"},
-    '1' : { "action" : "Subsequent Base Capture",  points : 25 , id : "class1"},
-    '11' : { "action" : "Max v Infantry Kill",     points : 1 , id : "class11"},
-    '12' : { "action" : "Max v Max Kill",          points : 3 , id : "class12"},
-    '13' : { "action" : "Max Suicide",             points : 5 , id : "class13"}, // Applied as a negative
-    '21' : { "action" : "Infantry TK",             points : 5 , id : "class21"}, // Applied as a negative
-    '22' : { "action" : "Infantry Suicide",        points : 2 , id : "class22"}, // Applied as a negative
-    '23' : { "action" : "Infantry v Max",          points : 5 , id : "class23"},
-    'name': 'Thunderdome Ruleset'
-};
+var thunderdomePointMap = {'0':10, '1':25, '11':1, '12':3, '13':-5, '21':-5, '22':-2, '23':5 };
 
 // Emerald "Durdledome" (2016)
-var emeraldPointMap = {
-    '0' : { "action" : "First Base Capture",       points : 10 , id : "class0"},
-    '1' : { "action" : "Subsequent Base Capture",  points : 25 , id : "class1"},
-    '11' : { "action" : "Max v Inf Kill",          points : 0 , id : "class11"},
-    '12' : { "action" : "Max v Max Kill",          points : 3 , id : "class12"},
-    '13' : { "action" : "Max Suicide",             points : 4 , id : "class13"}, // Applied as a negative
-    '21' : { "action" : "Infantry TK",             points : 3 , id : "class21"}, // Applied as a negative
-    '22' : { "action" : "Infantry Suicide",        points : 3 , id : "class22"}, // Applied as a negative
-    '23' : { "action" : "Infantry v Max",          points : 4 , id : "class23"},
-    'name': 'Emerald Ruleset'
-};
+var emeraldPointMap = { '0':10, '1':25, '11':0, '12':3, '13':-4, '21':-3, '22':-3, '23':4 };
 
 // Briggs OvO (2017)
-var ovoPointMap = {
-  '0' : { "action" : "First Base Capture",       points : 12 , id : "class0"},
-  '1' : { "action" : "Subsequent Base Capture",  points : 24 , id : "class1"},
-  '11' : { "action" : "Max v Inf Kill",          points : 0 , id : "class11"},
-  '12' : { "action" : "Max v Max Kill",          points : 2 , id : "class12"},
-  '13' : { "action" : "Max Suicide",             points : 12, id : "class13"}, // Applied as a negative
-  '21' : { "action" : "Infantry TK",             points : 3 , id : "class21"}, // Applied as a negative
-  '22' : { "action" : "Infantry Suicide",        points : 3 , id : "class22"}, // Applied as a negative
-  '23' : { "action" : "Infantry v Max",          points : 12, id : "class23"},
-  'name': 'Briggs OvO Ruleset'
-};
-
-var pointMaps = {
-  current     : pointMap,
-  thunderdome : thunderdomePointMap,
-  emerald     : emeraldPointMap,
-  OvO         : ovoPointMap
-};
+var ovoPointMap = { '0':12, '1':24, '11':0, '12':2, '13':-12, '21':-3, '22':-3, '23':12 };
 
 function getPointMaps() {
-  return pointMaps;
+  return pointMap;
 }
 
 function updatePointMap(number) {
-    if (number === 0) {
-        pointMap['0'].points  = thunderdomePointMap['0'].points;
-        pointMap['1'].points  = thunderdomePointMap['1'].points;
-        pointMap['11'].points = thunderdomePointMap['11'].points;
-        pointMap['12'].points = thunderdomePointMap['12'].points;
-        pointMap['13'].points = thunderdomePointMap['13'].points;
-        pointMap['21'].points = thunderdomePointMap['21'].points;
-        pointMap['22'].points = thunderdomePointMap['22'].points;
-        pointMap['23'].points = thunderdomePointMap['23'].points;
-        pointMap['name'].points = thunderdomePointMap['name'].points;
-    }
-    if (number === 1) {
-        pointMap['0'].points  = emeraldPointMap['0'].points;
-        pointMap['1'].points  = emeraldPointMap['1'].points;
-        pointMap['11'].points = emeraldPointMap['11'].points;
-        pointMap['12'].points = emeraldPointMap['12'].points;
-        pointMap['13'].points = emeraldPointMap['13'].points;
-        pointMap['21'].points = emeraldPointMap['21'].points;
-        pointMap['22'].points = emeraldPointMap['22'].points;
-        pointMap['23'].points = emeraldPointMap['23'].points;
-        pointMap['name'].points = emeraldPointMap['name'].points;
-    }
-    if (number === 2) {
-        pointMap['0'].points  = ovoPointMap['0'].points;
-        pointMap['1'].points  = ovoPointMap['1'].points;
-        pointMap['11'].points = ovoPointMap['11'].points;
-        pointMap['12'].points = ovoPointMap['12'].points;
-        pointMap['13'].points = ovoPointMap['13'].points;
-        pointMap['21'].points = ovoPointMap['21'].points;
-        pointMap['22'].points = ovoPointMap['22'].points;
-        pointMap['23'].points = ovoPointMap['23'].points;
-        pointMap['name'].points = ovoPointMap['name'].points;
-    }
+  pointNumbers.forEach(function (data) {
+    if (number === 0) { pointMap[data].points = thunderdomePointMap[data]; }
+    else if (number === 1) { pointMap[data].points = emeraldPointMap[data]; }
+    else if (number === 2) { pointMap[data].points = ovoPointMap[data]; }
+  });
+  if (number === 0) { pointMap['name'] = 'Thunderdome'; }
+  if (number === 1) { pointMap['name'] = 'Emerald'; }
+  if (number === 2) { pointMap['name'] = 'Briggs OvO'; }
 }
 
 function individualPointUpdate(event) {
@@ -392,11 +332,11 @@ function twoIvIOne (data, points, item) {
 }
 
 function teamOneSuicide (data, points, item) {
-  teamOneObject.points -= points;
-  teamOneObject.netScore -= points;
+  teamOneObject.points += points;
+  teamOneObject.netScore += points;
   teamOneObject.deaths++;
-  teamOneObject.members[data.attacker_character_id].points -= points;
-  teamOneObject.members[data.attacker_character_id].netScore -= points;
+  teamOneObject.members[data.attacker_character_id].points += points;
+  teamOneObject.members[data.attacker_character_id].netScore += points;
   teamOneObject.members[data.attacker_character_id].deaths++;
   //logging
   console.log(teamOneObject.members[data.attacker_character_id].name + ' Killed himself -' + points);
@@ -409,7 +349,7 @@ function teamOneSuicide (data, points, item) {
     loser_faction: teamOneObject.faction,
     weapon: item.name,
     image: item.image,
-    points: 0 - points,
+    points: points,
     time: 0
   };
   app.killfeedEmit(obj);
@@ -417,14 +357,14 @@ function teamOneSuicide (data, points, item) {
 }
 
 function teamTwoSuicide (data, points, item) {
-  teamTwoObject.points -= points;
-  teamTwoObject.netScore -= points;
+  teamTwoObject.points += points;
+  teamTwoObject.netScore += points;
   teamTwoObject.deaths++;
-  teamTwoObject.members[data.attacker_character_id].points -= points;
-  teamTwoObject.members[data.attacker_character_id].netScore -= points;
+  teamTwoObject.members[data.attacker_character_id].points += points;
+  teamTwoObject.members[data.attacker_character_id].netScore += points;
   teamTwoObject.members[data.attacker_character_id].deaths++;
   //logging
-  console.log(teamTwoObject.members[data.attacker_character_id].name + ' Killed himself -' + points);
+  console.log(teamTwoObject.members[data.attacker_character_id].name + ' Killed himself ' + points);
   console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   //create a JSON and send it to the web
   var obj = {
@@ -434,7 +374,7 @@ function teamTwoSuicide (data, points, item) {
     loser_faction: teamTwoObject.faction,
     weapon: item.name,
     image: item.image,
-    points: 0 - points,
+    points: points,
     time: 0
   };
   app.killfeedEmit(obj);
@@ -443,13 +383,13 @@ function teamTwoSuicide (data, points, item) {
 
 function teamOneTeamkill (data, item) {
   var points = pointMap['21'].points;
-  teamOneObject.points -= points;
-  teamOneObject.netScore -= points;
+  teamOneObject.points += points;
+  teamOneObject.netScore += points;
   teamOneObject.deaths++;
-  teamOneObject.members[data.attacker_character_id].points -= points;
+  teamOneObject.members[data.attacker_character_id].points += points;
   teamOneObject.members[data.character_id].deaths++;
   //logging
-  console.log(teamOneObject.members[data.attacker_character_id].name + ' teamkilled ' + teamOneObject.members[data.character_id].name + ' -' + points);
+  console.log(teamOneObject.members[data.attacker_character_id].name + ' teamkilled ' + teamOneObject.members[data.character_id].name + ' ' + points);
   console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   //create a JSON and send it to the web
   var obj = {
@@ -459,7 +399,7 @@ function teamOneTeamkill (data, item) {
    loser_faction: teamOneObject.faction,
    weapon: item.name,
    image: item.image,
-   points: 0 - points,
+   points: points,
    time: 0
    };
   app.killfeedEmit(obj);
@@ -468,13 +408,13 @@ function teamOneTeamkill (data, item) {
 
 function teamTwoTeamkill (data, item) {
   var points = pointMap['21'].points;
-  teamTwoObject.points -= points;
-  teamTwoObject.netScore -= points;
+  teamTwoObject.points += points;
+  teamTwoObject.netScore += points;
   teamTwoObject.deaths++;
-  teamTwoObject.members[data.attacker_character_id].points -= points;
+  teamTwoObject.members[data.attacker_character_id].points += points;
   teamTwoObject.members[data.character_id].deaths++;
   //logging
-  console.log(teamTwoObject.members[data.attacker_character_id].name + ' teamkilled ' + teamTwoObject.members[data.character_id].name + ' -' + points);
+  console.log(teamTwoObject.members[data.attacker_character_id].name + ' teamkilled ' + teamTwoObject.members[data.character_id].name + ' ' + points);
   console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   //create a JSON and send it to the web
   var obj = {
@@ -484,7 +424,7 @@ function teamTwoTeamkill (data, item) {
     loser_faction: teamTwoObject.faction,
     weapon: item.name,
     image: item.image,
-    points: 0 - points,
+    points: points,
     time: 0
   };
   app.killfeedEmit(obj);

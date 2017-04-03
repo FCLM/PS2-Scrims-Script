@@ -6,13 +6,13 @@ var ps2ws = require('../ps2ws.js');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    var pointMaps = ps2ws.getPointMaps();
-    var catMaps = items.getCategoryMaps();
+    var pointMap = ps2ws.getPointMaps();
+    var catMap = items.getCategoryMaps();
 
     res.render('admin', {
         title: 'PS2 Scrim Script: Admin Controls',
-        catMap: catMaps.current.name,
-        pointMap: pointMaps.current.name
+        catMap: catMap.name,
+        pointMap: pointMap.name
     });
 });
 

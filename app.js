@@ -169,7 +169,7 @@ io.on('connection', function(sock) {
       io.emit('redirect');
       var event = data.obj;
       if (event.auth === password.KEY) {
-          if (event.ruleset === "classThunderdome") { ps2ws.updatePointMap(0); }
+          if (event.ruleset === "classThunderdome") { ps2ws.updatePointMap(0);}
           if (event.ruleset === "classEmerald") { ps2ws.updatePointMap(1); }
           if (event.ruleset === "classOvO") { ps2ws.updatePointMap(2); }
           console.log('Admin set default class rules: ');
