@@ -74,7 +74,11 @@ $(document).on('click', '#weaponRule li a', function () {
 });
 
 function valueChange(button) {
+    if (button.value === "Save weapon changes (ensure password is entered)") {
 
+    } else if (button.value === "Save class changes (ensure password is entered)") {
+
+    }
 }
 
 
