@@ -50,13 +50,7 @@
 
 .adminForm {
   /*border: 1px solid #000;*/
-}
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-}
+
 
 #adminPanel {
   margin-left: 5%;
@@ -71,3 +65,25 @@
   height: 450px;
   overflow-y: auto;
 }
+
+
+
+/* Footer related styles (For credits)
+Slight hack (ends main page x pixels above, then puts footer there)
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body { /* The page needs a margin to allow the footer to exist */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed footer height (update body too)*/
+  height: 60px;
+}
+  
+  
