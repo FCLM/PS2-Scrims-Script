@@ -2,29 +2,19 @@
  * Created by Dylan on 03-Apr-16.
  */
 const api_key   = require('./api_key.js'),
-    items     = require('./items.js'),
-    WebSocket = require('ws'),
-    app       = require('./app'),
-    fs        = require('fs'),
-    io        = require('socket.io'),
-    overlay   = require('./overlay.js');
+    items       = require('./items.js'),
+    WebSocket   = require('ws'),
+    app         = require('./app'),
+    io          = require('socket.io'),
+    overlay     = require('./overlay.js'),
+    team        = require('./team.js');
 
-let  teamOne,
-     teamOneObject,
+let  teamOneObject,
      teamTwoObject,
-     teamTwo,
      captures = 0,
      roundTracker = 0,
-     time = Date.now(),
-     timeCounter = 0;
-
-let memberTemplate = JSON.stringify({
-    name : '',
-    points : 0,
-    netScore : 0,
-    kills : 0,
-    deaths : 0
-});
+     timeCounter = 0,
+     time = Date.now();
 
 const pointNumbers = ['0','1','11','12','13','21','22','23'];
 
@@ -79,29 +69,6 @@ function individualPointUpdate(event) {
 
 function getRound() { return roundTracker; }
 
-function teamObject(team) {
-    // Create a new indexable team object
-    let outfit_obj = {
-        alias : team.alias,
-        outfit_id : team.outfit_id,
-        name : team.name,
-        faction : team.faction,
-        points : 0,
-        netScore : 0,
-        kills : 0,
-        deaths : 0,
-        members : {}
-    };
-    team.members.forEach(function(member) {
-        let obj = JSON.parse(memberTemplate);
-        obj.name = member.name;
-        if (!outfit_obj.hasOwnProperty(member.character_id)) {
-            outfit_obj.members[member.character_id] = obj;
-        }
-    });
-    return outfit_obj;
-}
-
 function sendScore() {
     if(roundTracker !== 0) {
         if (teamOneObject.name !== undefined) {
@@ -124,20 +91,20 @@ function dealWithTheData(raw) {
 }
 
 function itsPlayerData(data) {
-    //deals with adding points to the correct player & team
+    // deals with adding points to the correct player & team
     const item = items.lookupItem(data.attacker_weapon_id);
     let points = items.lookupPointsfromCategory(item.category_id);
     if ((data.attacker_loadout_id === 7) || (data.attacker_loadout_id === 14) || (data.attacker_loadout_id === 21)) {
-        //Attacker using a max
+        // Attacker using a max
         if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
-            //Attacker used a max to kill a max
+            // Attacker used a max to kill a max
             points = pointMap['12'].points;
         } else {
-            //max v infantry
+            // max v infantry
             points = pointMap['11'].points;
         }
     } else if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
-        //defender used a max
+        // defender used a max
         points = pointMap['23'].points;
     }
     if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
@@ -146,47 +113,35 @@ function itsPlayerData(data) {
         twoIvIOne(data, points, item);
     } else if ((data.attacker_character_id === data.character_id) && (teamOneObject.members.hasOwnProperty(data.character_id))){
         if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
-            //suicided as a max lol
+            // suicided as a max lol
             points = pointMap['13'].points;
         } else {
-            //just infantry suicide
+            // just infantry suicide
             points = pointMap['22'].points;
         }
         teamOneSuicide(data, points, item);
     } else if ((data.attacker_character_id === data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
         if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
-            //suicided as a max lol
+            // suicided as a max lol
             points = pointMap['13'].points;
         } else {
-            //just infantry suicide
+            // just infantry suicide
             points = pointMap['22'].points;
         }
         teamTwoSuicide(data, points, item);
     } else if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
         // Hahahaha he killed his mate
-        teamOneTeamkill(data, item);
+        teamOneTeamkill(data, item, pointMap['21'].points);
     } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
         // Hahahaha he killed his mate
-        teamTwoTeamkill(data, item);
+        teamTwoTeamkill(data, item, pointMap['21'].points);
     }
     app.sendScores(teamOneObject, teamTwoObject);
     overlay.updateScoreOverlay(teamOneObject, teamTwoObject);
 }
 
 function oneIvITwo (data, points, item) {
-    teamOneObject.points += points;
-    teamOneObject.netScore += points;
-    teamTwoObject.netScore -= points;
-    teamOneObject.kills++;
-    teamTwoObject.deaths++;
-    teamOneObject.members[data.attacker_character_id].points += points;
-    teamOneObject.members[data.attacker_character_id].netScore += points;
-    teamTwoObject.members[data.character_id].netScore -= points;
-    teamOneObject.members[data.attacker_character_id].kills++;
-    teamTwoObject.members[data.character_id].deaths++;
-    //logging
-    console.log(teamOneObject.members[data.attacker_character_id].name + ' -->  ' + teamTwoObject.members[data.character_id].name + ' for ' + points + ' points (' + item.name + ')');
-    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+    team.oneIvITwo(data.attacker_character_id, data.character_id, points, item);
     //create a JSON and send it to the web
     const obj = {
         winner: teamOneObject.members[data.attacker_character_id].name,
@@ -203,19 +158,7 @@ function oneIvITwo (data, points, item) {
 }
 
 function twoIvIOne (data, points, item) {
-    teamTwoObject.points += points;
-    teamTwoObject.netScore += points;
-    teamOneObject.netScore -= points;
-    teamTwoObject.kills++;
-    teamOneObject.deaths++;
-    teamTwoObject.members[data.attacker_character_id].points += points;
-    teamTwoObject.members[data.attacker_character_id].netScore += points;
-    teamOneObject.members[data.character_id].netScore -= points;
-    teamTwoObject.members[data.attacker_character_id].kills++;
-    teamOneObject.members[data.character_id].deaths++;
-    //logging
-    console.log(teamTwoObject.members[data.attacker_character_id].name + ' --> ' + teamOneObject.members[data.character_id].name + ' for ' + points + ' points (' + item.name + ')');
-    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+    team.twoIvIOne(data.character_id, data.character_id, points, item);
     //create a JSON and send it to the web
     const obj = {
         winner: teamTwoObject.members[data.attacker_character_id].name,
@@ -232,15 +175,7 @@ function twoIvIOne (data, points, item) {
 }
 
 function teamOneSuicide (data, points, item) {
-    teamOneObject.points += points;
-    teamOneObject.netScore += points;
-    teamOneObject.deaths++;
-    teamOneObject.members[data.attacker_character_id].points += points;
-    teamOneObject.members[data.attacker_character_id].netScore += points;
-    teamOneObject.members[data.attacker_character_id].deaths++;
-    //logging
-    console.log(teamOneObject.members[data.attacker_character_id].name + ' Killed himself -' + points);
-    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+    team.oneSuicide(one, points);
     //create a JSON and send it to the web
     const obj = {
         winner: teamOneObject.members[data.attacker_character_id].name,
@@ -257,15 +192,7 @@ function teamOneSuicide (data, points, item) {
 }
 
 function teamTwoSuicide (data, points, item) {
-    teamTwoObject.points += points;
-    teamTwoObject.netScore += points;
-    teamTwoObject.deaths++;
-    teamTwoObject.members[data.attacker_character_id].points += points;
-    teamTwoObject.members[data.attacker_character_id].netScore += points;
-    teamTwoObject.members[data.attacker_character_id].deaths++;
-    //logging
-    console.log(teamTwoObject.members[data.attacker_character_id].name + ' Killed himself ' + points);
-    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+    team.twoSuicide(data.attacker_character_id, points);
     //create a JSON and send it to the web
     const obj = {
         winner: teamTwoObject.members[data.attacker_character_id].name,
@@ -281,16 +208,8 @@ function teamTwoSuicide (data, points, item) {
     overlay.updateKillfeedPlayer(obj);
 }
 
-function teamOneTeamkill (data, item) {
-    const points = pointMap['21'].points;
-    teamOneObject.points += points;
-    teamOneObject.netScore += points;
-    teamOneObject.deaths++;
-    teamOneObject.members[data.attacker_character_id].points += points;
-    teamOneObject.members[data.character_id].deaths++;
-    //logging
-    console.log(teamOneObject.members[data.attacker_character_id].name + ' teamkilled ' + teamOneObject.members[data.character_id].name + ' ' + points);
-    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+function teamOneTeamkill (data, item, points) {
+    team.oneTeamKill(data.attacker_character_id, data.character_id, points);
     //create a JSON and send it to the web
     const obj = {
         winner: teamOneObject.members[data.attacker_character_id].name,
@@ -306,16 +225,8 @@ function teamOneTeamkill (data, item) {
     overlay.updateKillfeedPlayer(obj);
 }
 
-function teamTwoTeamkill (data, item) {
-    const points = pointMap['21'].points;
-    teamTwoObject.points += points;
-    teamTwoObject.netScore += points;
-    teamTwoObject.deaths++;
-    teamTwoObject.members[data.attacker_character_id].points += points;
-    teamTwoObject.members[data.character_id].deaths++;
-    //logging
-    console.log(teamTwoObject.members[data.attacker_character_id].name + ' teamkilled ' + teamTwoObject.members[data.character_id].name + ' ' + points);
-    console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+function teamTwoTeamkill (data, item, points) {
+    team.twoTeamKill(data.attacker_character_id, data.character_id, points);
     //create a JSON and send it to the web
     const obj = {
         winner: teamTwoObject.members[data.attacker_character_id].name,
@@ -335,45 +246,23 @@ function itsFacilityData(data) {
     //deals with adding points to the correct team
     if (data.new_faction_id !== data.old_faction_id) {
         if (data.outfit_id === teamOneObject.outfit_id) {
-            let points = 0;
             if (captures === 0) {
-                points = pointMap['0'].points;
-                teamOneObject.points += points;
-                teamOneObject.netScore += points;
-                teamTwoObject.netScore -= points;
-                console.log(teamOneObject.name + ' captured the base +' + points);
-                console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+                team.oneBaseCap(pointMap['0'].points);
                 app.sendScores(teamOneObject, teamTwoObject);
                 overlay.updateKillfeedFacility(teamOneObject.alias,points);
             } else {
-                points = pointMap['1'].points;
-                teamOneObject.points += points;
-                teamOneObject.netScore += points;
-                teamTwoObject.netScore -= points;
-                console.log(teamOneObject.name + ' captured the base +' + points);
-                console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+                team.oneBaseCap(pointMap['1'].points);
                 app.sendScores(teamOneObject, teamTwoObject);
                 overlay.updateKillfeedFacility(teamOneObject.alias,points);
             }
             captures++;
         } else if (data.outfit_id === teamTwoObject.outfit_id) {
-            let points = 0;
             if (captures === 0) {
-                points = pointMap['0'].points;
-                teamTwoObject.points += points;
-                teamTwoObject.netScore += points;
-                teamOneObject.netScore -= points;
-                console.log(teamTwoObject.name + ' captured the base +' + points);
-                console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+                team.twoBaseCap(pointMap['0'].points);
                 app.sendScores(teamOneObject, teamTwoObject);
                 overlay.updateKillfeedFacility(teamTwoObject.alias,points);
             } else {
-                points = pointMap['1'].points;
-                teamTwoObject.points += points;
-                teamTwoObject.netScore += points;
-                teamOneObject.netScore -= points;
-                console.log(teamTwoObject.name + ' captured the base +' + points);
-                console.log(teamOneObject.points + ' ' + teamTwoObject.points);
+                team.twoBaseCap(pointMap['1'].points);
                 app.sendScores(teamOneObject, teamTwoObject);
                 overlay.updateKillfeedFacility(teamTwoObject.alias,points);
             }
@@ -400,11 +289,11 @@ function createStream() {
 function subscribe(ws) {
     //team1 subscribing
     //{"service":"event","action":"subscribe","characters":["5428010618035589553"],"eventNames":["Death"]}
-    teamOne.members.forEach(function (member) {
+    teamOneObject.memberArray.forEach(function (member) {
         ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
     });
     //team2 subscribing
-    teamTwo.members.forEach(function (member) {
+    teamTwoObject.memberArray.forEach(function (member) {
         ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
     });
     //facility Subscribing - subscribes to all capture data
@@ -440,38 +329,19 @@ function stopTheMatch() {
     timeCounter = 0;
 }
 
-function startUp(tOne, tTwo) {
+function startUp() {
     items.initialise().then(function() {
         time = Date.now();
         console.log(time + ' start match');
         console.log('=====================================================================================================================================');
-        teamOne = tOne;
-        teamOneObject = teamObject(teamOne);
-        teamTwo = tTwo;
-        teamTwoObject= teamObject(teamTwo);
+        teamOneObject = team.getT1();
+        teamTwoObject = team.getT2();
         createStream();
         app.refreshPage();
     }).catch(function (err) {
         console.error('Items did not initialise!!');
         console.error(err);
     });
-}
-
-function adjustScore(t1, t2, reason) {
-    if (t1 !== '' && teamOneObject !== undefined) {
-        teamOneObject.points += t1;
-        let obj = JSON.parse(memberTemplate);
-        obj.name = reason;
-        obj.points = t1;
-        teamOneObject.add(obj);
-    }
-    if (t2 !== '' && teamTwoObject !== undefined) {
-        teamOneObject.points += t2;
-        let obj = JSON.parse(memberTemplate);
-        obj.name = reason;
-        obj.points = t2;
-        teamTwoObject.add(obj);
-    }
 }
 
 exports.startUp        = startUp;
@@ -481,5 +351,4 @@ exports.sendScore      = sendScore;
 exports.getPointMaps   = getPointMaps;
 exports.updatePointMap = updatePointMap;
 exports.individualPointUpdate = individualPointUpdate;
-exports.adjustScore    = adjustScore;
 exports.getRound       = getRound;

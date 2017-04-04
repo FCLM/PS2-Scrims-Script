@@ -7,13 +7,14 @@ const express       = require('express'),
     http          = require('http');
 
 const ps2ws         = require('./ps2ws.js'),
-    teams         = require('./outfit.js'),
-    items         = require('./items.js'),
-    routes        = require('./routes/index.js'),
-    adminControls = require('./routes/admin.js'),
-    rules         = require('./routes/rules.js'),
-    api_key       = require('./api_key.js'),
-    password      = require('./password.js');
+      teams         = require('./outfit.js'),
+      items         = require('./items.js'),
+      routes        = require('./routes/index.js'),
+      adminControls = require('./routes/admin.js'),
+      rules         = require('./routes/rules.js'),
+      api_key       = require('./api_key.js'),
+      password      = require('./password.js'),
+      team          = require('./team.js');
 
 //global variable for use in different functions
 let teamOneObject, teamTwoObject;
@@ -77,13 +78,20 @@ app.get('/', function(req, res) {
 });
 
 async function start(one, two) {
-    teamOneObject = await teams.fetchTeamData(one);
-    teamTwoObject = await teams.fetchTeamData(two);
+    await teams.fetchTeamData(one, 1).catch(function (err) {
+        console.log("Error fetching data for team one: " + one);
+        console.error(err);
+        // Failure means match should not go ahead so return (exit function)
+        return;
+    });
+    await teams.fetchTeamData(two, 2).catch(function (err) {
+        console.log("Error fetching data for team two: " + two);
+        console.error(err);
+        // Failure means match should not go ahead so return (exit function)
+        return;
+    });
 
-    console.log('T1 - ' + JSON.stringify(teamOneObject));
-    console.log('T2 - ' + JSON.stringify(teamTwoObject));
-
-    ps2ws.startUp(teamOneObject, teamTwoObject);
+    ps2ws.startUp();
     running = true;
 }
 
@@ -164,7 +172,7 @@ io.on('connection', function(sock) {
         if (event.auth === password.KEY) {
             console.log('Admin adjusted score: ');
             console.log(data);
-            ps2ws.adjustScore(event.t1, event.t2, event.reason);
+            team.adjustScore(event.t1, event.t2, event.reason);
         }
     });
     sock.on('weaponDefault',function (data) {
@@ -257,15 +265,15 @@ function sendScores(teamOneObject, teamTwoObject) {
 }
 
 function playerDataT1 (obj) {
-    io.emit('playerDataT1', {obj: obj});
+    io.emit('playerDataT1', { obj: obj});
 }
 
 function playerDataT2 (obj) {
-    io.emit('playerDataT2', {obj: obj});
+    io.emit('playerDataT2', { obj: obj});
 }
 
 function timerEmit (obj) {
-    io.emit('time', {obj: obj});
+    io.emit('time', { obj: obj});
 }
 
 module.exports        = app;
