@@ -1,6 +1,6 @@
 # PS2 Scrims Script
 
-_Make sure you have the latest [node.js](https://nodejs.org/en/) installed_
+_Make sure you have the latest [node.js](https://nodejs.org/en/) installed (This application requires at least Node 7.6.0 to run)_
 
 **N.B: If you don't know computers then use _install.bat_ followed by _start.bat_ to install and start the script**
 
