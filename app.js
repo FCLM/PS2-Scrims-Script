@@ -157,7 +157,7 @@ io.on('connection', function(sock) {
   sock.on('weaponDefault',function (data) {
       io.emit('redirect');
       var event = data.obj;
-      if (event.auth === password.KEY) {
+      if (event.auth === password.KEY && running === false) {
           if (event.ruleset === "weaponThunderdome") { items.updateCategoryMap(0); }
           if (event.ruleset === "weaponEmerald") { items.updateCategoryMap(1); }
           if (event.ruleset === "weaponOvO") { items.updateCategoryMap(2); }
@@ -168,7 +168,7 @@ io.on('connection', function(sock) {
   sock.on('classDefault', function (data) {
       io.emit('redirect');
       var event = data.obj;
-      if (event.auth === password.KEY) {
+      if (event.auth === password.KEY && running === false) {
           if (event.ruleset === "classThunderdome") { ps2ws.updatePointMap(0);}
           if (event.ruleset === "classEmerald") { ps2ws.updatePointMap(1); }
           if (event.ruleset === "classOvO") { ps2ws.updatePointMap(2); }
