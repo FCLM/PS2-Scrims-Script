@@ -4,7 +4,6 @@ const express       = require('express'),
       logger        = require('morgan'),
       cookieParser  = require('cookie-parser'),
       bodyParser    = require('body-parser'),
-      Q             = require('q'),
       http          = require('http');
 
 const ps2ws         = require('./ps2ws.js'),
@@ -92,7 +91,7 @@ console.log('Starting server...');
 const server = http.createServer(app).listen(app.get('port'));
 const io = require('socket.io').listen(server);
 io.on('connection', function(sock) {
-  sock.on('backchat', function (data) {
+  sock.on('backchat', function () {
     if (teamOneObject !== undefined) {
       const teams = {
         teamOne: {
