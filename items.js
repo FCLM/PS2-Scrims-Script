@@ -2,7 +2,7 @@
  * Created by Mono on 04-Apr-16.
  */
 const api_key   = require('./api_key.js'),
-      prequest  = require('prequest');
+    prequest  = require('prequest');
 
 let items = [];
 
@@ -206,19 +206,19 @@ async function initialise() {
 }
 
 function lookupItem(item_id) {
-  if (items.hasOwnProperty('item_' + item_id)) {
-    return items['item_' + item_id];
-  }
-  return JSON.parse(mItemTemplate);
+    if (items.hasOwnProperty('item_' + item_id)) {
+        return items['item_' + item_id];
+    }
+    return JSON.parse(mItemTemplate);
 }
 
 function lookupPointsFromCategory(id) {
-  if (categoryMap.hasOwnProperty(id)) {
-    return categoryMap[id].points;
-  } else {
-    console.error('missing category: ' + id);
-    return 0;
-  }
+    if (categoryMap.hasOwnProperty(id)) {
+        return categoryMap[id].points;
+    } else {
+        console.error('missing category: ' + id);
+        return 0;
+    }
 }
 
 exports.initialise               = initialise;

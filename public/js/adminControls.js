@@ -156,7 +156,7 @@ function valueChange(button) {
 
 socket.on('connect', function() {
     socket.on ('redirect', function() {
-    //redirect to index.hbs
+        //redirect to index.hbs
         console.log('Session started, redirecting to index.hbs');
         window.location.replace("/");
     });
