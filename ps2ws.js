@@ -565,8 +565,7 @@ function stopTheMatch() {
 }
 
 function startUp(tOne, tTwo) {
-  items.initialise().then(function(result) {
-    if (result) {
+  items.initialise().then(function() {
       time = Date.now();
       console.log(time + ' start match');
       console.log('=====================================================================================================================================');
@@ -576,9 +575,9 @@ function startUp(tOne, tTwo) {
       teamTwoObject= teamObject(teamTwo);
       createStream();
       app.refreshPage();
-    } else {
+  }).catch(function (err) {
       console.error('Items did not initialise!!');
-    }
+      console.error(err);
   });
 }
 

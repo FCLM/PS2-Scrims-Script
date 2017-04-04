@@ -77,6 +77,17 @@ app.get('/', function(req, res) {
   res.render('killfeed', {title: 'Killfeed'});
 });
 
+async function start(one, two) {
+    teamOneObject = await teams.fetchTeamData(one);
+    teamTwoObject = await teams.fetchTeamData(two);
+
+    console.log('T1 - ' + JSON.stringify(teamOneObject));
+    console.log('T2 - ' + JSON.stringify(teamTwoObject));
+
+    ps2ws.startUp(teamOneObject, teamTwoObject);
+    running = true;
+}
+
 console.log('Starting server...');
 const server = http.createServer(app).listen(app.get('port'));
 const io = require('socket.io').listen(server);
@@ -107,9 +118,12 @@ io.on('connection', function(sock) {
     if (event.auth === password.KEY) {
       if ((event.hasOwnProperty('teamOne')) && (event.hasOwnProperty('teamTwo'))) {
         if (running !== true) {
-          start(event.teamOne, event.teamTwo);
-          console.log('Admin entered a start match command involving: ' + event.teamOne + ' ' + event.teamTwo);
-          running = true;
+          start(event.teamOne, event.teamTwo).then(function () {
+              console.log('Admin entered a start match command involving: ' + event.teamOne + ' ' + event.teamTwo);
+          }).catch(function (err) {
+              console.error("Failed to start match between " + event.teamOne + ' ' + event.teamTwo);
+              console.error(err);
+          });
         }
         else {
           console.error('Admin entered a start match command involving: ' + event.teamOne + ' ' + event.teamTwo + ' But a match is already running');
@@ -253,24 +267,6 @@ function playerDataT2 (obj) {
 
 function timerEmit (obj) {
   io.emit('time', {obj: obj});
-}
-
-
-function start(one, two) {
-  let teamOneTag = one,
-      teamTwoTag = two;
-  let response = Q.defer();
-  let promises = [];
-  promises.push(teams.fetchTeamData(teamOneTag));
-  promises.push(teams.fetchTeamData(teamTwoTag));
-  Q.allSettled(promises).then(function (results) {
-      console.log('T1 - ' + JSON.stringify(results[0].value));
-      console.log('T2 - ' + JSON.stringify(results[1].value));
-      teamOneObject = results[0].value;
-      teamTwoObject = results[1].value;
-      ps2ws.startUp(teamOneObject, teamTwoObject);
-      return response.promise;
-  });
 }
 
 module.exports        = app;
