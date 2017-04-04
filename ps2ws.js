@@ -2,24 +2,21 @@
  * Created by Dylan on 03-Apr-16.
  */
 const api_key   = require('./api_key.js'),
-    teams     = require('./teams.js'),
     items     = require('./items.js'),
     WebSocket = require('ws'),
     app       = require('./app'),
     fs        = require('fs'),
-    io        = require('socket.io');
+    io        = require('socket.io'),
+    overlay   = require('./overlay.js');
 
 let  teamOne,
-    teamOneObject,
-    teamTwoObject,
-    teamTwo,
-    captures = 0,
-    roundTracker = 0,
-    time = Date.now(),
-    pOne = '',
-    pTwo = '',
-    pThree = '',
-    timeCounter = 0;
+     teamOneObject,
+     teamTwoObject,
+     teamTwo,
+     captures = 0,
+     roundTracker = 0,
+     time = Date.now(),
+     timeCounter = 0;
 
 let memberTemplate = JSON.stringify({
     name : '',
@@ -80,104 +77,7 @@ function individualPointUpdate(event) {
     pointMap.name = 'Custom';
 }
 
-/*
- Overlay Code
- Writes to 5 files to allow a streamer to use them in OBS to display the match stats
- */
-
-function scoreUpdate() {
-    //for use in OBS for the overlay
-    //writes to multiple text files the current team score
-    fs.writeFile('overlay/scoreT1.txt', teamOneObject.points, function (err) {
-        if (err) {
-            return console.log('scoreT1.txt Error: ' + err);
-        }
-    });
-
-    fs.writeFile('overlay/scoreT2.txt', teamTwoObject.points, function (err) {
-        if (err) {
-            return console.log('scoreT2.txt Error: ' + err);
-        }
-    });
-    //Writes player data to a text file
-    let teamOneActivePlayers = [];
-    for (keys in teamOneObject.members) {
-        teamOneActivePlayers.push(teamOneObject.members[keys])
-    }
-    let teamOneActive = '';
-    let i = 0;
-    teamOneActivePlayers.forEach(function (member) {
-        if ((member.points > 0) || (member.netScore !== 0)) {
-            let memName = lengthenName(member.name);
-            let netScore = lengthenStats(member.netScore.toString());
-            teamOneActive += memName + '  ' + netScore;
-            if (i % 2 === 0) {
-                teamOneActive += ' | ';
-                i++
-            } else {
-                teamOneActive += '\n';
-                i++;
-            }
-        }
-    });
-    fs.writeFile('overlay/playersT1.txt', teamOneActive, function (err) {
-        if (err) {
-            return console.log('playersT1.txt Error: ' + err);
-        }
-    });
-    let teamTwoActivePlayers = [];
-    for (keys in teamTwoObject.members) {
-        teamTwoActivePlayers.push(teamTwoObject.members[keys])
-    }
-    let teamTwoActive = '';
-    i = 0;
-    teamTwoActivePlayers.forEach(function (member) {
-        if ((member.points > 0) || (member.netScore !== 0)) {
-            let memName = lengthenName(member.name);
-            let netScore = lengthenStats(member.netScore.toString());
-            teamTwoActive += memName + '  ' + netScore;
-            if (i % 2 === 0) {
-                teamTwoActive += ' | ';
-                i++
-            } else {
-                teamTwoActive += '\n';
-                i++;
-            }
-        }
-    });
-    fs.writeFile('overlay/playersT2.txt', teamTwoActive, function (err) {
-        if (err) {
-            return console.log('playersT2.txt Error: ' + err);
-        }
-    });
-}
-
-function killfeedUpdate(killObj) {
-    pThree = pTwo;
-    pTwo = pOne;
-    let killer = lengthenName(killObj.winner);
-    let weapon = lengthenName('[' + killObj.weapon + ']');
-    let  killed = lengthenName(killObj.loser);
-    pOne = killer + ' ' + weapon + '  ' + killed + '\n';
-    let feed = pOne + pTwo + pThree;
-    fs.writeFile('overlay/killfeed.txt', feed, function(err) {
-        if (err) {
-            return console.log('killfeed.txt Error: ' + err);
-        }
-    })
-}
-
-function killfeedBaseUpdate(tag, points) {
-    pThree = pTwo;
-    pTwo = pOne;
-    pOne = '       [' + tag + '] Captured the base (+' + points + ')\n';
-    let feed = pOne + pTwo + pThree;
-    fs.writeFile('overlay/killfeed.txt', feed, function(err) {
-        if (err) {
-            return console.log('killfeed.txt Error: ' + err);
-        }
-    })
-}
+function getRound() { return roundTracker; }
 
 function teamObject(team) {
     // Create a new indexable team object
@@ -270,7 +170,7 @@ function itsPlayerData(data) {
         teamTwoTeamkill(data, item);
     }
     app.sendScores(teamOneObject, teamTwoObject);
-    scoreUpdate();
+    overlay.updateScoreOverlay(teamOneObject, teamTwoObject);
 }
 
 function oneIvITwo (data, points, item) {
@@ -299,7 +199,7 @@ function oneIvITwo (data, points, item) {
         time: 0
     };
     app.killfeedEmit(obj);
-    killfeedUpdate(obj);
+    overlay.updateKillfeedPlayer(obj);
 }
 
 function twoIvIOne (data, points, item) {
@@ -328,7 +228,7 @@ function twoIvIOne (data, points, item) {
         time: 0
     };
     app.killfeedEmit(obj);
-    killfeedUpdate(obj);
+    overlay.updateKillfeedPlayer(obj);
 }
 
 function teamOneSuicide (data, points, item) {
@@ -353,7 +253,7 @@ function teamOneSuicide (data, points, item) {
         time: 0
     };
     app.killfeedEmit(obj);
-    killfeedUpdate(obj);
+    overlay.updateKillfeedPlayer(obj);
 }
 
 function teamTwoSuicide (data, points, item) {
@@ -378,7 +278,7 @@ function teamTwoSuicide (data, points, item) {
         time: 0
     };
     app.killfeedEmit(obj);
-    killfeedUpdate(obj);
+    overlay.updateKillfeedPlayer(obj);
 }
 
 function teamOneTeamkill (data, item) {
@@ -403,7 +303,7 @@ function teamOneTeamkill (data, item) {
         time: 0
     };
     app.killfeedEmit(obj);
-    killfeedUpdate(obj);
+    overlay.updateKillfeedPlayer(obj);
 }
 
 function teamTwoTeamkill (data, item) {
@@ -428,7 +328,7 @@ function teamTwoTeamkill (data, item) {
         time: 0
     };
     app.killfeedEmit(obj);
-    killfeedUpdate(obj);
+    overlay.updateKillfeedPlayer(obj);
 }
 
 function itsFacilityData(data) {
@@ -444,7 +344,7 @@ function itsFacilityData(data) {
                 console.log(teamOneObject.name + ' captured the base +' + points);
                 console.log(teamOneObject.points + ' ' + teamTwoObject.points);
                 app.sendScores(teamOneObject, teamTwoObject);
-                killfeedBaseUpdate(teamOneObject.alias, points);
+                overlay.updateKillfeedFacility(teamOneObject.alias,points);
             } else {
                 points = pointMap['1'].points;
                 teamOneObject.points += points;
@@ -453,7 +353,7 @@ function itsFacilityData(data) {
                 console.log(teamOneObject.name + ' captured the base +' + points);
                 console.log(teamOneObject.points + ' ' + teamTwoObject.points);
                 app.sendScores(teamOneObject, teamTwoObject);
-                killfeedBaseUpdate(teamOneObject.alias, points);
+                overlay.updateKillfeedFacility(teamOneObject.alias,points);
             }
             captures++;
         } else if (data.outfit_id === teamTwoObject.outfit_id) {
@@ -466,7 +366,7 @@ function itsFacilityData(data) {
                 console.log(teamTwoObject.name + ' captured the base +' + points);
                 console.log(teamOneObject.points + ' ' + teamTwoObject.points);
                 app.sendScores(teamOneObject, teamTwoObject);
-                killfeedBaseUpdate(teamTwoObject.alias, points);
+                overlay.updateKillfeedFacility(teamTwoObject.alias,points);
             } else {
                 points = pointMap['1'].points;
                 teamTwoObject.points += points;
@@ -475,7 +375,7 @@ function itsFacilityData(data) {
                 console.log(teamTwoObject.name + ' captured the base +' + points);
                 console.log(teamOneObject.points + ' ' + teamTwoObject.points);
                 app.sendScores(teamOneObject, teamTwoObject);
-                killfeedBaseUpdate(teamTwoObject.alias, points);
+                overlay.updateKillfeedFacility(teamTwoObject.alias,points);
             }
             captures++;
         }
@@ -484,7 +384,6 @@ function itsFacilityData(data) {
 }
 
 function createStream() {
-    if (pointMap === 0) { pointMap = thunderdomePointMap; } // default to thunderdome rule set
     const ws = new WebSocket('wss://push.planetside2.com/streaming?environment=ps2&service-id=s:' + api_key.KEY);
     ws.on('open', function open() {
         console.log('stream opened');
@@ -494,7 +393,6 @@ function createStream() {
         if (data.indexOf("payload") === 2) {
             dealWithTheData(data);
         }
-        //store the data somewhere - possibly a txt file in case something gets disputed
     });
     captures = 0;
 }
@@ -504,12 +402,10 @@ function subscribe(ws) {
     //{"service":"event","action":"subscribe","characters":["5428010618035589553"],"eventNames":["Death"]}
     teamOne.members.forEach(function (member) {
         ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
-        //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id +'"],"eventNames":["Death"]}')
     });
     //team2 subscribing
     teamTwo.members.forEach(function (member) {
         ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
-        //console.log('Sent: {"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
     });
     //facility Subscribing - subscribes to all capture data
     ws.send('{"service":"event","action":"subscribe","worlds":["1","10","13","17","19","25"],"eventNames":["FacilityControl"]}');
@@ -532,30 +428,10 @@ function startTimer(ws) {
         if (timeCounter < 1) {
             clearInterval(time);
             unsubscribe(ws);
-            final();
+            overlay.writeFinalStats(teamOneObject,teamTwoObject);
             app.matchFinished();
         }
-        let sec = parseInt(timeCounter % 60),
-            min = parseInt(timeCounter / 60);
-        min = min.toString();
-        if (min.length < 2) {
-            min = '0' + min;
-        }
-        sec = sec.toString();
-        if (sec.length < 2) {
-            sec = '0' + sec;
-        }
-        let timerObj = {
-            minutes: min,
-            seconds: sec
-        };
-        let timeString = min + ' : ' + sec;
-        fs.writeFile('overlay/time.txt', timeString, function (err) {
-            if (err) {
-                return console.log('time.txt Error: ' + err);
-            }
-        });
-        app.timerEmit(timerObj);
+        overlay.updateTime(timeCounter);
         timeCounter--;
     }, 1000);
 }
@@ -578,79 +454,6 @@ function startUp(tOne, tTwo) {
     }).catch(function (err) {
         console.error('Items did not initialise!!');
         console.error(err);
-    });
-}
-
-function lengthenName(name) {
-    if (name.length > 16) {
-        name = name.substring(0,15) + ".";
-    }
-    while (name.length < 16) {
-        name += ' ';
-    }
-    return name;
-}
-
-function lengthenStats(stat) {
-    while (stat.length < 4) {
-        stat = ' ' + stat;
-    }
-    return stat;
-}
-
-function final() {
-    const path = 'match' + roundTracker + '.txt';
-    console.log(path);
-    let teamOneActivePlayers = [];
-    for (keys in teamOneObject.members) {
-        teamOneActivePlayers.push(teamOneObject.members[keys])
-    }
-    let teamOneActive = lengthenName(teamOneObject.alias) + '  ' + lengthenStats(teamOneObject.points.toString()) + '  '  + lengthenStats(teamOneObject.netScore.toString()) + '  ' + lengthenStats(teamOneObject.kills.toString())  + '  ' + lengthenStats(teamOneObject.deaths.toString())  + '\n\n';
-    teamOneActivePlayers.forEach(function (member) {
-        if ((member.points > 0) || (member.netScore !== 0)) {
-            const memName = lengthenName(member.name);
-            const points = lengthenStats(member.points.toString());
-            const netScore = lengthenStats(member.netScore.toString());
-            const kills = lengthenStats(member.kills.toString());
-            const deaths = lengthenStats(member.deaths.toString());
-            teamOneActive += memName + '  ' + points + '  ' + netScore + '  ' + kills + '  ' + deaths + '  ' + '\n';
-        }
-    });
-    let teamTwoPlayers = [];
-    for (keys in teamTwoObject.members) {
-        teamTwoPlayers.push(teamTwoObject.members[keys])
-    }
-    let teamTwoActive = lengthenName(teamTwoObject.alias) + '  ' + lengthenStats(teamTwoObject.points.toString()) + '  '  + lengthenStats(teamTwoObject.netScore.toString()) + '  ' + lengthenStats(teamTwoObject.kills.toString())  + '  ' + lengthenStats(teamTwoObject.deaths.toString())  + '\n\n';
-    teamTwoPlayers.forEach(function (member) {
-        if ((member.points > 0) || (member.netScore !== 0)) {
-            const memName = lengthenName(member.name);
-            const points = lengthenStats(member.points.toString());
-            const netScore = lengthenStats(member.netScore.toString());
-            const kills = lengthenStats(member.kills.toString());
-            const deaths = lengthenStats(member.deaths.toString());
-            teamTwoActive += memName + '  ' + points + '  ' + netScore + '  ' + kills + '  ' + deaths + '  ' + '\n';
-        }
-    });
-    const stats = 'Final Scores for this match:\n\n' + teamOneActive + '\n\n' + teamTwoActive;
-    fs.writeFile(path, stats, function(err) {
-        if (err) {
-            return console.log(path +' Error: ' + err);
-        }
-        console.log('Match stats wrote to ' + path);
-    });
-    const teamOneStats = teamOneActive; const path1 = "match" + roundTracker + "TeamOne.txt";
-    fs.writeFile(path1, teamOneStats, function(err) {
-        if (err) {
-            return console.log(path + ' Error: ' + err);
-        }
-        console.log("Team One stats wrote to " + path1);
-    });
-    const teamTwoStats = teamTwoActive; const path2 = "match" + roundTracker + "TeamTwo.txt";
-    fs.writeFile(path2, teamTwoStats, function(err) {
-        if (err) {
-            return console.log(path + ' Error: ' + err);
-        }
-        console.log("Team two stats wrote to " + path2);
     });
 }
 
@@ -679,3 +482,4 @@ exports.getPointMaps   = getPointMaps;
 exports.updatePointMap = updatePointMap;
 exports.individualPointUpdate = individualPointUpdate;
 exports.adjustScore    = adjustScore;
+exports.getRound       = getRound;

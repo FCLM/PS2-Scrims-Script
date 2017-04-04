@@ -7,7 +7,7 @@ const express       = require('express'),
     http          = require('http');
 
 const ps2ws         = require('./ps2ws.js'),
-    teams         = require('./teams.js'),
+    teams         = require('./outfit.js'),
     items         = require('./items.js'),
     routes        = require('./routes/index.js'),
     adminControls = require('./routes/admin.js'),
