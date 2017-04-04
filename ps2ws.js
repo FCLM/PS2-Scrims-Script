@@ -1,38 +1,38 @@
 /**
  * Created by Dylan on 03-Apr-16.
  */
-var api_key   = require('./api_key.js'),
-    teams     = require('./teams.js'),
-    items     = require('./items.js'),
-    WebSocket = require('ws'),
-    app       = require('./app'),
-    fs        = require('fs'),
-    io        = require('socket.io');
+const api_key   = require('./api_key.js'),
+      teams     = require('./teams.js'),
+      items     = require('./items.js'),
+      WebSocket = require('ws'),
+      app       = require('./app'),
+      fs        = require('fs'),
+      io        = require('socket.io');
 
-var teamOne,
-    teamOneObject,
-    teamTwoObject,
-    teamTwo,
-    captures = 0,
-    roundTracker = 0,
-    time = Date.now(),
-    pOne = '',
-    pTwo = '',
-    pThree = '',
-    timeCounter = 0;
+let  teamOne,
+     teamOneObject,
+     teamTwoObject,
+     teamTwo,
+     captures = 0,
+     roundTracker = 0,
+     time = Date.now(),
+     pOne = '',
+     pTwo = '',
+     pThree = '',
+     timeCounter = 0;
 
-var memberTemplate = JSON.stringify({
-  name : '',
-  points : 0,
-  netScore : 0,
-  kills : 0,
-  deaths : 0
+let memberTemplate = JSON.stringify({
+    name : '',
+    points : 0,
+    netScore : 0,
+    kills : 0,
+    deaths : 0
 });
 
-var pointNumbers = ['0','1','11','12','13','21','22','23'];
+const pointNumbers = ['0','1','11','12','13','21','22','23'];
 
 // Point Map default to thunderdome ruleset
-var pointMap = {
+let pointMap = {
     '0'  : { "action" : "First Base Capture",      points : 10, id : "class0"},
     '1'  : { "action" : "Subsequent Base Capture", points : 25, id : "class1"},
     '11' : { "action" : "Max v Infantry Kill",     points : 1,  id : "class11"},
@@ -45,13 +45,13 @@ var pointMap = {
 };
 
 // Thunderdome (2016)
-var thunderdomePointMap = {'0':10, '1':25, '11':1, '12':3, '13':-5, '21':-5, '22':-2, '23':5 };
+const thunderdomePointMap = {'0':10, '1':25, '11':1, '12':3, '13':-5, '21':-5, '22':-2, '23':5 };
 
 // Emerald "Durdledome" (2016)
-var emeraldPointMap = { '0':10, '1':25, '11':0, '12':3, '13':-4, '21':-3, '22':-3, '23':4 };
+const emeraldPointMap = { '0':10, '1':25, '11':0, '12':3, '13':-4, '21':-3, '22':-3, '23':4 };
 
 // Briggs OvO (2017)
-var ovoPointMap = { '0':12, '1':24, '11':0, '12':2, '13':-12, '21':-3, '22':-3, '23':12 };
+const ovoPointMap = { '0':12, '1':24, '11':0, '12':2, '13':-12, '21':-3, '22':-3, '23':12 };
 
 function getPointMaps() {
   return pointMap;
@@ -100,16 +100,16 @@ function scoreUpdate() {
     }
   });
   //Writes player data to a text file
-  var teamOneActivePlayers = [];
+  let teamOneActivePlayers = [];
   for (keys in teamOneObject.members) {
     teamOneActivePlayers.push(teamOneObject.members[keys])
   }
-  var teamOneActive = '';
-  var i = 0;
+  let teamOneActive = '';
+  let i = 0;
   teamOneActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore !== 0)) {
-      var memName = lengthenName(member.name);
-      var netScore = lengthenStats(member.netScore.toString());
+      let memName = lengthenName(member.name);
+      let netScore = lengthenStats(member.netScore.toString());
       teamOneActive += memName + '  ' + netScore;
       if (i % 2 === 0) {
         teamOneActive += ' | ';
@@ -125,16 +125,16 @@ function scoreUpdate() {
       return console.log('playersT1.txt Error: ' + err);
     }
   });
-  var teamTwoActivePlayers = [];
+  let teamTwoActivePlayers = [];
   for (keys in teamTwoObject.members) {
     teamTwoActivePlayers.push(teamTwoObject.members[keys])
   }
-  var teamTwoActive = '';
+  let teamTwoActive = '';
   i = 0;
   teamTwoActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore !== 0)) {
-      var memName = lengthenName(member.name);
-      var netScore = lengthenStats(member.netScore.toString());
+      let memName = lengthenName(member.name);
+      let netScore = lengthenStats(member.netScore.toString());
       teamTwoActive += memName + '  ' + netScore;
       if (i % 2 === 0) {
         teamTwoActive += ' | ';
@@ -155,11 +155,11 @@ function scoreUpdate() {
 function killfeedUpdate(killObj) {
   pThree = pTwo;
   pTwo = pOne;
-  var killer = lengthenName(killObj.winner);
-  var weapon = lengthenName('[' + killObj.weapon + ']');
-  var  killed = lengthenName(killObj.loser);
+  let killer = lengthenName(killObj.winner);
+  let weapon = lengthenName('[' + killObj.weapon + ']');
+  let  killed = lengthenName(killObj.loser);
   pOne = killer + ' ' + weapon + '  ' + killed + '\n';
-  var feed = pOne + pTwo + pThree;
+  let feed = pOne + pTwo + pThree;
   fs.writeFile('overlay/killfeed.txt', feed, function(err) {
     if (err) {
       return console.log('killfeed.txt Error: ' + err);
@@ -171,7 +171,7 @@ function killfeedBaseUpdate(tag, points) {
   pThree = pTwo;
   pTwo = pOne;
   pOne = '       [' + tag + '] Captured the base (+' + points + ')\n';
-  var feed = pOne + pTwo + pThree;
+  let feed = pOne + pTwo + pThree;
   fs.writeFile('overlay/killfeed.txt', feed, function(err) {
     if (err) {
       return console.log('killfeed.txt Error: ' + err);
@@ -181,7 +181,7 @@ function killfeedBaseUpdate(tag, points) {
 
 function teamObject(team) {
   // Create a new indexable team object
-  var outfit_obj = {
+  let outfit_obj = {
     alias : team.alias,
     outfit_id : team.outfit_id,
     name : team.name,
@@ -193,7 +193,7 @@ function teamObject(team) {
     members : {}
   };
   team.members.forEach(function(member) {
-      var obj = JSON.parse(memberTemplate);
+      let obj = JSON.parse(memberTemplate);
       obj.name = member.name;
       if (!outfit_obj.hasOwnProperty(member.character_id)) {
         outfit_obj.members[member.character_id] = obj;
@@ -212,7 +212,7 @@ function sendScore() {
 
 function dealWithTheData(raw) {
   raw = raw.replace(': :', ':');
-  var data = JSON.parse(raw).payload;
+  const data = JSON.parse(raw).payload;
   if (data.event_name === "Death") {
     itsPlayerData(data);
   } else if (data.name === "Death") {
@@ -225,8 +225,8 @@ function dealWithTheData(raw) {
 
 function itsPlayerData(data) {
   //deals with adding points to the correct player & team
-  var item = items.lookupItem(data.attacker_weapon_id);
-  var points = items.lookupPointsfromCategory(item.category_id);
+  const item = items.lookupItem(data.attacker_weapon_id);
+  let points = items.lookupPointsfromCategory(item.category_id);
   if ((data.attacker_loadout_id === 7) || (data.attacker_loadout_id === 14) || (data.attacker_loadout_id === 21)) {
     //Attacker using a max
     if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
@@ -288,7 +288,7 @@ function oneIvITwo (data, points, item) {
   console.log(teamOneObject.members[data.attacker_character_id].name + ' -->  ' + teamTwoObject.members[data.character_id].name + ' for ' + points + ' points (' + item.name + ')');
   console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   //create a JSON and send it to the web
-  var obj = {
+  const obj = {
     winner: teamOneObject.members[data.attacker_character_id].name,
     winner_faction: teamOneObject.faction,
     loser: teamTwoObject.members[data.character_id].name,
@@ -317,7 +317,7 @@ function twoIvIOne (data, points, item) {
   console.log(teamTwoObject.members[data.attacker_character_id].name + ' --> ' + teamOneObject.members[data.character_id].name + ' for ' + points + ' points (' + item.name + ')');
   console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   //create a JSON and send it to the web
-  var obj = {
+  const obj = {
     winner: teamTwoObject.members[data.attacker_character_id].name,
     winner_faction: teamTwoObject.faction,
     loser: teamOneObject.members[data.character_id].name,
@@ -342,7 +342,7 @@ function teamOneSuicide (data, points, item) {
   console.log(teamOneObject.members[data.attacker_character_id].name + ' Killed himself -' + points);
   console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   //create a JSON and send it to the web
-  var obj = {
+  const obj = {
     winner: teamOneObject.members[data.attacker_character_id].name,
     winner_faction: teamOneObject.faction,
     loser: teamOneObject.members[data.character_id].name,
@@ -367,7 +367,7 @@ function teamTwoSuicide (data, points, item) {
   console.log(teamTwoObject.members[data.attacker_character_id].name + ' Killed himself ' + points);
   console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   //create a JSON and send it to the web
-  var obj = {
+  const obj = {
     winner: teamTwoObject.members[data.attacker_character_id].name,
     winner_faction: teamTwoObject.faction,
     loser: teamTwoObject.members[data.character_id].name,
@@ -382,7 +382,7 @@ function teamTwoSuicide (data, points, item) {
 }
 
 function teamOneTeamkill (data, item) {
-  var points = pointMap['21'].points;
+  const points = pointMap['21'].points;
   teamOneObject.points += points;
   teamOneObject.netScore += points;
   teamOneObject.deaths++;
@@ -392,7 +392,7 @@ function teamOneTeamkill (data, item) {
   console.log(teamOneObject.members[data.attacker_character_id].name + ' teamkilled ' + teamOneObject.members[data.character_id].name + ' ' + points);
   console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   //create a JSON and send it to the web
-  var obj = {
+  const obj = {
    winner: teamOneObject.members[data.attacker_character_id].name,
    winner_faction: teamOneObject.faction,
    loser: teamOneObject.members[data.character_id].name,
@@ -407,7 +407,7 @@ function teamOneTeamkill (data, item) {
 }
 
 function teamTwoTeamkill (data, item) {
-  var points = pointMap['21'].points;
+  const points = pointMap['21'].points;
   teamTwoObject.points += points;
   teamTwoObject.netScore += points;
   teamTwoObject.deaths++;
@@ -417,7 +417,7 @@ function teamTwoTeamkill (data, item) {
   console.log(teamTwoObject.members[data.attacker_character_id].name + ' teamkilled ' + teamTwoObject.members[data.character_id].name + ' ' + points);
   console.log(teamOneObject.points + ' ' + teamTwoObject.points);
   //create a JSON and send it to the web
-  var obj = {
+  const obj = {
     winner: teamTwoObject.members[data.attacker_character_id].name,
     winner_faction: teamTwoObject.faction,
     loser: teamTwoObject.members[data.character_id].name,
@@ -435,7 +435,7 @@ function itsFacilityData(data) {
   //deals with adding points to the correct team
   if (data.new_faction_id !== data.old_faction_id) {
     if (data.outfit_id === teamOneObject.outfit_id) {
-      var points;
+      let points = 0;
       if (captures === 0) {
         points = pointMap['0'].points;
         teamOneObject.points += points;
@@ -457,6 +457,7 @@ function itsFacilityData(data) {
       }
       captures++;
     } else if (data.outfit_id === teamTwoObject.outfit_id) {
+      let points = 0;
       if (captures === 0) {
         points = pointMap['0'].points;
         teamTwoObject.points += points;
@@ -484,7 +485,7 @@ function itsFacilityData(data) {
 
 function createStream() {
   if (pointMap === 0) { pointMap = thunderdomePointMap; } // default to thunderdome rule set
-  var ws = new WebSocket('wss://push.planetside2.com/streaming?environment=ps2&service-id=s:' + api_key.KEY);
+  const ws = new WebSocket('wss://push.planetside2.com/streaming?environment=ps2&service-id=s:' + api_key.KEY);
   ws.on('open', function open() {
     console.log('stream opened');
     subscribe(ws);
@@ -527,14 +528,14 @@ function startTimer(ws) {
   console.log('timer started');
   roundTracker++;
   timeCounter = 900;
-  var time = setInterval(function () {
+  let time = setInterval(function () {
     if (timeCounter < 1) {
       clearInterval(time);
       unsubscribe(ws);
       final();
       app.matchFinished();
     }
-    var sec = parseInt(timeCounter % 60),
+    let sec = parseInt(timeCounter % 60),
         min = parseInt(timeCounter / 60);
     min = min.toString();
     if (min.length < 2) {
@@ -544,11 +545,11 @@ function startTimer(ws) {
     if (sec.length < 2) {
       sec = '0' + sec;
     }
-    var timerObj = {
+    let timerObj = {
       minutes: min,
       seconds: sec
     };
-    var timeString = min + ' : ' + sec;
+    let timeString = min + ' : ' + sec;
     fs.writeFile('overlay/time.txt', timeString, function (err) {
       if (err) {
         return console.log('time.txt Error: ' + err);
@@ -599,53 +600,53 @@ function lengthenStats(stat) {
 }
 
 function final() {
-  var path = 'match' + roundTracker + '.txt';
+  const path = 'match' + roundTracker + '.txt';
   console.log(path);
-  var teamOneActivePlayers = [];
+  let teamOneActivePlayers = [];
   for (keys in teamOneObject.members) {
     teamOneActivePlayers.push(teamOneObject.members[keys])
   }
-  var teamOneActive = lengthenName(teamOneObject.alias) + '  ' + lengthenStats(teamOneObject.points.toString()) + '  '  + lengthenStats(teamOneObject.netScore.toString()) + '  ' + lengthenStats(teamOneObject.kills.toString())  + '  ' + lengthenStats(teamOneObject.deaths.toString())  + '\n\n';
+  let teamOneActive = lengthenName(teamOneObject.alias) + '  ' + lengthenStats(teamOneObject.points.toString()) + '  '  + lengthenStats(teamOneObject.netScore.toString()) + '  ' + lengthenStats(teamOneObject.kills.toString())  + '  ' + lengthenStats(teamOneObject.deaths.toString())  + '\n\n';
   teamOneActivePlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore !== 0)) {
-      var memName = lengthenName(member.name);
-      var points = lengthenStats(member.points.toString());
-      var netScore = lengthenStats(member.netScore.toString());
-      var kills = lengthenStats(member.kills.toString());
-      var deaths = lengthenStats(member.deaths.toString());
+      const memName = lengthenName(member.name);
+      const points = lengthenStats(member.points.toString());
+      const netScore = lengthenStats(member.netScore.toString());
+      const kills = lengthenStats(member.kills.toString());
+      const deaths = lengthenStats(member.deaths.toString());
       teamOneActive += memName + '  ' + points + '  ' + netScore + '  ' + kills + '  ' + deaths + '  ' + '\n';
     }
   });
-  var teamTwoPlayers = [];
+  let teamTwoPlayers = [];
   for (keys in teamTwoObject.members) {
     teamTwoPlayers.push(teamTwoObject.members[keys])
   }
-  var teamTwoActive = lengthenName(teamTwoObject.alias) + '  ' + lengthenStats(teamTwoObject.points.toString()) + '  '  + lengthenStats(teamTwoObject.netScore.toString()) + '  ' + lengthenStats(teamTwoObject.kills.toString())  + '  ' + lengthenStats(teamTwoObject.deaths.toString())  + '\n\n';
+  let teamTwoActive = lengthenName(teamTwoObject.alias) + '  ' + lengthenStats(teamTwoObject.points.toString()) + '  '  + lengthenStats(teamTwoObject.netScore.toString()) + '  ' + lengthenStats(teamTwoObject.kills.toString())  + '  ' + lengthenStats(teamTwoObject.deaths.toString())  + '\n\n';
   teamTwoPlayers.forEach(function (member) {
     if ((member.points > 0) || (member.netScore !== 0)) {
-      var memName = lengthenName(member.name);
-      var points = lengthenStats(member.points.toString());
-      var netScore = lengthenStats(member.netScore.toString());
-      var kills = lengthenStats(member.kills.toString());
-      var deaths = lengthenStats(member.deaths.toString());
+      const memName = lengthenName(member.name);
+      const points = lengthenStats(member.points.toString());
+      const netScore = lengthenStats(member.netScore.toString());
+      const kills = lengthenStats(member.kills.toString());
+      const deaths = lengthenStats(member.deaths.toString());
       teamTwoActive += memName + '  ' + points + '  ' + netScore + '  ' + kills + '  ' + deaths + '  ' + '\n';
     }
   });
-  var stats = 'Final Scores for this match:\n\n' + teamOneActive + '\n\n' + teamTwoActive;
+  const stats = 'Final Scores for this match:\n\n' + teamOneActive + '\n\n' + teamTwoActive;
   fs.writeFile(path, stats, function(err) {
     if (err) {
       return console.log(path +' Error: ' + err);
     }
     console.log('Match stats wrote to ' + path);
   });
-  var teamOneStats = teamOneActive; var path1 = "match" + roundTracker + "TeamOne.txt";
+  const teamOneStats = teamOneActive; const path1 = "match" + roundTracker + "TeamOne.txt";
   fs.writeFile(path1, teamOneStats, function(err) {
    if (err) {
      return console.log(path + ' Error: ' + err);
   }
   console.log("Team One stats wrote to " + path1);
   });
-  var teamTwoStats = teamTwoActive; var path2 = "match" + roundTracker + "TeamTwo.txt";
+  const teamTwoStats = teamTwoActive; const path2 = "match" + roundTracker + "TeamTwo.txt";
   fs.writeFile(path2, teamTwoStats, function(err) {
     if (err) {
       return console.log(path + ' Error: ' + err);
@@ -657,14 +658,14 @@ function final() {
 function adjustScore(t1, t2, reason) {
     if (t1 !== '' && teamOneObject !== undefined) {
         teamOneObject.points += t1;
-        var obj = JSON.parse(memberTemplate);
+        let obj = JSON.parse(memberTemplate);
         obj.name = reason;
         obj.points = t1;
         teamOneObject.add(obj);
     }
     if (t2 !== '' && teamTwoObject !== undefined) {
         teamOneObject.points += t2;
-        obj = JSON.parse(memberTemplate);
+        let obj = JSON.parse(memberTemplate);
         obj.name = reason;
         obj.points = t2;
         teamTwoObject.add(obj);

@@ -1,41 +1,41 @@
 /**
  * Created by Mono on 04-Apr-16.
  */
-var api_key = require('./api_key.js');
-var prequest = require('prequest');
-var Q = require('q');
+const api_key   = require('./api_key.js'),
+      prequest  = require('prequest'),
+      Q         = require('q');
 
-var items = [];
+let items = [];
 
-var categoryNumbers = ['0','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24',
+const categoryNumbers = ['0','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24',
     '100','101','102','104','109','110','111','112','113','114','115','116','117','118','119','120','121','122','123','124',
     '125','126','127','128','129','130','131','132','139','147'];
 
 //N.B: category 0 doesn't exist in the API but i assume it is for being killed by wreckage or terrain and it was annoying me with error messages so its now in the map
 // You can edit this bit to have it return whatever points you want, so this can be used for most rulesets
 // Briggs Thunderdome (2016) Scoring:
-var thunderdomeCategoryMap = { '0': 0, '2': 2, '3': 2, '4': 0, '5': 2, '6': 2, '7': 2, '8': 2, '9': 1, '10': 1, '11': 2,
+const thunderdomeCategoryMap = { '0': 0, '2': 2, '3': 2, '4': 0, '5': 2, '6': 2, '7': 2, '8': 2, '9': 1, '10': 1, '11': 2,
     '12': 2, '13':  0, '14': 1, '15': 1, '16': 1, '17': 2, '18': 0, '19': 2, '20': 1, '21': 1, '22': 1, '23': 1, '24': 2,
     '100': 1, '101': 0, '102': 1, '104': 0, '109': 0, '110': 0, '111': 0, '112': 0, '113': 0, '114': 0, '115': 0, '116': 0,
     '117': 0, '118': 0, '119': 0, '120': 0, '121': 0, '122': 0, '123': 0, '124': 0, '125': 0, '126': 0, '127': 0, '128': 0,
     '129': 0, '130': 0, '131': 0, '132': 0, '139': 1, '147': 0 };
 
 // Emerald "DurdleDome" (2016)
-var emeraldCategoryMap = {     '0': 0, '2': 2, '3': 2, '4': 0, '5': 2, '6': 2, '7': 2, '8': 2, '9': 1, '10': 1, '11': 2,
+const emeraldCategoryMap = {     '0': 0, '2': 2, '3': 2, '4': 0, '5': 2, '6': 2, '7': 2, '8': 2, '9': 1, '10': 1, '11': 2,
     '12': 2, '13': 0, '14': 0, '15': 1, '16': 1, '17': 2, '18': 0, '19': 2, '20': 0, '21': 0, '22': 0, '23': 0, '24': 2,
     '100': 1, '101': 0, '102': 1, '104': 0, '109': 0, '110': 0, '111': 0, '112': 0, '113': 0, '114': 0, '115': 0, '116': 0,
     '117': 0, '118': 0, '119': 0, '120': 0, '121': 0, '122': 0, '123': 0, '124': 0, '125': 0, '126': 0, '127': 0, '128': 0,
     '129': 0, '130': 0, '131': 0, '132': 0, '139': 0, '147': 0 };
 
 // Briggs OvO (2017)
-var ovoCategoryMap = {         '0': 0, '2': 2, '3': 2, '4': 0, '5': 2, '6': 2, '7': 2, '8': 2, '9': 1, '10': 1, '11': 2,
+const ovoCategoryMap = {         '0': 0, '2': 2, '3': 2, '4': 0, '5': 2, '6': 2, '7': 2, '8': 2, '9': 1, '10': 1, '11': 2,
     '12': 2, '13': 0, '14': 0, '15': 0, '16': 0, '17': 2, '18': 0, '19': 2, '20': 0, '21': 0, '22': 0, '23': 0, '24': 2,
     '100': 1, '101': 0, '102': 1, '104': 0, '109': 0, '110': 0, '111': 0, '112': 0, '113': 0, '114': 0, '115': 0, '116': 0,
     '117': 0, '118': 0, '119': 0, '120': 0, '121': 0, '122': 0, '123': 0, '124': 0, '125': 0, '126': 0, '127': 0, '128': 0,
     '129': 0, '130': 0, '131': 0, '132': 0, '139': 0, '147': 0 };
 
 // Default to thunderdome ruleset
-var categoryMap  = {
+let categoryMap  = {
     '0':   { 'category' : 'Unknown (could be anything)',points : 0, id: 'item0'},
     '2':   { 'category' : 'Knife',                      points : 2, id: 'item2'},
     '3':   { 'category' : 'Pistol',                     points : 2, id: 'item3'},
@@ -167,7 +167,7 @@ function individualCategoryUpdate(event) {
     categoryMap.name = 'Custom';
 }
 
-var mItemTemplate = JSON.stringify({
+const mItemTemplate = JSON.stringify({
     _id :  0,
     category_id: 0,
     name:  'Unknown',
@@ -177,12 +177,12 @@ var mItemTemplate = JSON.stringify({
 
 function initialise() {
   if (categoryMap === 0) { categoryMap = thunderdomeCategoryMap;}
-  var response = Q.defer();
-  var url = 'https://census.daybreakgames.com/s:' + api_key.KEY + '/get/ps2/item?item_type_id=26&c:limit=5000&c:hide=,skill_set_id,is_vehicle_weapon,item_type_id,faction_id,max_stack_size,image_set_id,image_path,is_default_attachment&c:lang=en';
+  let response = Q.defer();
+  const url = 'https://census.daybreakgames.com/s:' + api_key.KEY + '/get/ps2/item?item_type_id=26&c:limit=5000&c:hide=,skill_set_id,is_vehicle_weapon,item_type_id,faction_id,max_stack_size,image_set_id,image_path,is_default_attachment&c:lang=en';
   prequest(url).then(function (body) {
     body.item_list.forEach(function(item) {
       // use item template
-      var obj = JSON.parse(mItemTemplate);
+      let obj = JSON.parse(mItemTemplate);
       // check if item response from dbg has each json key before updating our template
       if (item.hasOwnProperty('item_id'))
         obj._id = item.item_id;

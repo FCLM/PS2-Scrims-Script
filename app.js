@@ -1,27 +1,27 @@
-var express       = require('express'),
-    path          = require('path'),
-    favicon       = require('serve-favicon'),
-    logger        = require('morgan'),
-    cookieParser  = require('cookie-parser'),
-    bodyParser    = require('body-parser'),
-    Q             = require('q'),
-    http          = require('http');
+const express       = require('express'),
+      path          = require('path'),
+      favicon       = require('serve-favicon'),
+      logger        = require('morgan'),
+      cookieParser  = require('cookie-parser'),
+      bodyParser    = require('body-parser'),
+      Q             = require('q'),
+      http          = require('http');
 
-var ps2ws         = require('./ps2ws.js'),
-    teams         = require('./teams.js'),
-    items         = require('./items.js'),
-    routes        = require('./routes/index.js'),
-    adminControls = require('./routes/admin.js'),
-    rules         = require('./routes/rules.js'),
-    api_key       = require('./api_key.js'),
-    password      = require('./password.js');
+const ps2ws         = require('./ps2ws.js'),
+      teams         = require('./teams.js'),
+      items         = require('./items.js'),
+      routes        = require('./routes/index.js'),
+      adminControls = require('./routes/admin.js'),
+      rules         = require('./routes/rules.js'),
+      api_key       = require('./api_key.js'),
+      password      = require('./password.js');
 
 //global variable for use in different functions
-var teamOneObject, teamTwoObject;
+let teamOneObject, teamTwoObject;
 // running variable stores the state of a match (true means a match is in progress) and is used to prevent multiple streams being opened for the same data.
 // should prevent the double tracking issues of round 2 of thunderdome.
-var running = false;
-var app = express();
+let running = false;
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,7 +41,7 @@ app.use('/rules', rules);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
@@ -78,12 +78,12 @@ app.get('/', function(req, res) {
 });
 
 console.log('Starting server...');
-var server = http.createServer(app).listen(app.get('port'));
-var io = require('socket.io').listen(server);
+const server = http.createServer(app).listen(app.get('port'));
+const io = require('socket.io').listen(server);
 io.on('connection', function(sock) {
   sock.on('backchat', function (data) {
     if (teamOneObject !== undefined) {
-      var teams = {
+      const teams = {
         teamOne: {
           alias: teamOneObject.alias,
           name: teamOneObject.name,
@@ -103,7 +103,7 @@ io.on('connection', function(sock) {
   });
   sock.on('start', function (data) {
     io.emit('redirect');
-    var event = data.obj;
+    const event = data.obj;
     if (event.auth === password.KEY) {
       if ((event.hasOwnProperty('teamOne')) && (event.hasOwnProperty('teamTwo'))) {
         if (running !== true) {
@@ -121,7 +121,7 @@ io.on('connection', function(sock) {
   });
   sock.on('newRound', function(data) {
     io.emit('redirect');
-    var event = data.obj;
+    const event = data.obj;
     if (event.auth === password.KEY) {
       if (running !== true) {
         console.log('Admin entered New Round command, new round starting: ');
@@ -138,7 +138,7 @@ io.on('connection', function(sock) {
   });
   sock.on('stop', function(data) {
     io.emit('redirect');
-    var event = data.obj;
+    const event = data.obj;
     if (event.auth === password.KEY) {
       console.log('Admin entered Stop command, match stopping: ');
       console.log(data);
@@ -147,7 +147,7 @@ io.on('connection', function(sock) {
   });
   sock.on('adjust', function(data) {
         io.emit('redirect');
-        var event = data.obj;
+        const event = data.obj;
         if (event.auth === password.KEY) {
             console.log('Admin adjusted score: ');
             console.log(data);
@@ -156,7 +156,7 @@ io.on('connection', function(sock) {
   });
   sock.on('weaponDefault',function (data) {
       io.emit('redirect');
-      var event = data.obj;
+      const event = data.obj;
       if (event.auth === password.KEY && running === false) {
           if (event.ruleset === "weaponThunderdome") { items.updateCategoryMap(0); }
           if (event.ruleset === "weaponEmerald") { items.updateCategoryMap(1); }
@@ -167,7 +167,7 @@ io.on('connection', function(sock) {
   });
   sock.on('classDefault', function (data) {
       io.emit('redirect');
-      var event = data.obj;
+      const event = data.obj;
       if (event.auth === password.KEY && running === false) {
           if (event.ruleset === "classThunderdome") { ps2ws.updatePointMap(0);}
           if (event.ruleset === "classEmerald") { ps2ws.updatePointMap(1); }
@@ -178,7 +178,7 @@ io.on('connection', function(sock) {
   });
   sock.on('weaponUpdate', function(data) {
       io.emit('redirect');
-      var event = data.obj;
+      const event = data.obj;
       if (event.auth === password.KEY && running === false) {
           console.log('Admin updated weapon rules');
           console.log(data);
@@ -187,7 +187,7 @@ io.on('connection', function(sock) {
   });
   sock.on('classUpdate', function(data) {
       io.emit('redirect');
-      var event = data.obj;
+      const event = data.obj;
       if (event.auth === password.KEY && running === false) {
           console.log('Admin updated class rules: ');
           console.log(data);
@@ -212,7 +212,7 @@ function killfeedEmit(killfeed) {
 }
 
 function sendScores(teamOneObject, teamTwoObject) {
-  var scoreboard = {
+  let scoreboard = {
     teamOne: {
       alias : teamOneObject.alias,
       name : teamOneObject.name,
@@ -257,10 +257,10 @@ function timerEmit (obj) {
 
 
 function start(one, two) {
-  var teamOneTag = one,
+  let teamOneTag = one,
       teamTwoTag = two;
-  var response = Q.defer();
-  var promises = [];
+  let response = Q.defer();
+  let promises = [];
   promises.push(teams.fetchTeamData(teamOneTag));
   promises.push(teams.fetchTeamData(teamTwoTag));
   Q.allSettled(promises).then(function (results) {

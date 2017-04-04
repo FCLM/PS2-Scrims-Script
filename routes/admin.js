@@ -1,13 +1,13 @@
-var express = require('express');
-var router = express.Router();
-var io = require('socket.io');
-var items = require('../items.js');
-var ps2ws = require('../ps2ws.js');
+const express = require('express');
+const router = express.Router();
+const io = require('socket.io');
+const items = require('../items.js');
+const ps2ws = require('../ps2ws.js');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    var pointMap = ps2ws.getPointMaps();
-    var catMap = items.getCategoryMaps();
+    const pointMap = ps2ws.getPointMaps();
+    const catMap = items.getCategoryMaps();
 
     res.render('admin', {
         title: 'PS2 Scrim Script: Admin Controls',
