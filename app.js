@@ -240,6 +240,15 @@ function sendScores(teamOneObject, teamTwoObject) {
   for (keys in teamTwoObject.members) {
     scoreboard.teamTwo.members.push(teamTwoObject.members[keys])
   }
+
+  // sort scoreboard by kills
+  scoreboard.teamOne.members.sort(function(a, b) {
+    return parseFloat(a.kills) - parseFloat(b.kills);
+  });
+  scoreboard.teamOne.members.sort(function(a, b) {
+    return parseFloat(a.kills) - parseFloat(b.kills);
+  });
+
   io.emit('score', {obj: scoreboard});
 }
 
