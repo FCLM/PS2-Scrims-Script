@@ -3,16 +3,17 @@
  * The functions on this page are used to create the overlay utilised in streams
  */
 
-const app   = require('./app.js'),
-      ps2ws = require('./ps2ws.js'),
-      fs    = require('fs');
+const app    = require('./app.js'),
+      ps2ws  = require('./ps2ws.js'),
+      fs     = require('fs'),
+      teams      = require('./team.js');
 
-const t1Score   = 'overlay/scoreT1.txt',
-      t1Players = 'overlay/playersT1.txt',
-      t2Score   = 'overlay/scoreT2.txt',
-      t2Players = 'overlay/playersT2.txt',
-      time      = 'overlay/time.txt',
-      killfeed  = 'overlay/killfeed.txt';
+const t1Score   = '../overlay/scoreT1.txt',
+      t1Players = '../overlay/playersT1.txt',
+      t2Score   = '../overlay/scoreT2.txt',
+      t2Players = '../overlay/playersT2.txt',
+      time      = '../overlay/time.txt',
+      killfeed  = '../overlay/killfeed.txt';
 
 // Three previous kills/caps stored to enable 3 events to be displayed
 let p1Kill = '',
@@ -56,14 +57,16 @@ function initialise() {
 }
 
 // Takes in the two team objects, writes the current scores
-function updateScoreOverlay(t1Object, t2Object) {
-    let one = playerNetscore(t1Object);
+function updateScoreOverlay() {
+    let one = playerNetscore(teams.getT1());
     write(t1Players, one);
-    write(t1Score, t1Object.points);
+    one = teams.getT1();
+    write(t1Score, one.points);
 
-    let two = playerNetscore(t2Object);
+    let two = playerNetscore(teams.getT2());
     write(t2Players, two);
-    write(t2Score, t2Object.points);
+    two = teams.getT2();
+    write(t2Score, two.points);
 }
 
 function playerNetscore(team) {
@@ -112,17 +115,15 @@ function updateTime(timeCounter) {
         minutes: min,
         seconds: sec
     };
-    app.timerEmit(timerObj);
+
+    app.send('time', timerObj);
     write(time, min + ' : ' + sec);
 }
 
 function updateKillfeedPlayer(killObj) {
     p3Kill = p2Kill;
     p2Kill = p1Kill;
-    let killer = lengthenName(killObj.winner);
-    let weapon = lengthenName('[' + killObj.weapon + ']');
-    let  killed = lengthenName(killObj.loser);
-    p1Kill = killer + ' ' + weapon + '  ' + killed + '\n';
+    p1Kill = lengthenName(killObj.winner) + ' ' + lengthenName('[' + killObj.weapon + ']') + '  ' + lengthenName(killObj.loser) + '\n';
     write(killed, p1Kill + p2Kill + p3Kill);
 }
 
@@ -133,12 +134,13 @@ function updateKillfeedFacility(tag, points) {
     write(killfeed, p1Kill + p2Kill + p3Kill);
 }
 
-function writeFinalStats(t1Object, t2Object) {
-    const full = 'match/' + ps2ws.getRound() + '.txt',
-          one  =  'match/' + ps2ws.getRound() + 'TeamOne.txt',
-          two  =  'match/' + ps2ws.getRound() + 'TeamTwo.txt';
-    let t1 = playerStats(t1Object);
-    let t2 = playerStats(t2Object);
+function writeFinalStats() {
+    const round = ps2ws.getRound();
+    const full = '../match/' + round + '.txt',
+          one  =  '../match/' + round + 'TeamOne.txt',
+          two  =  '../match/' + round + 'TeamTwo.txt';
+    const t1 = playerStats(teams.getT1());
+    const t2 = playerStats(teams.getT2());
 
     write(full, 'Final Scores for this match:\n\n' + t1 + '\n\n' + t2);
     write(one, t1);

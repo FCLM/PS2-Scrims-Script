@@ -2,12 +2,12 @@
  * Created by Dylan on 03-Apr-16.
  */
 const api_key   = require('./api_key.js'),
-    items       = require('./items.js'),
-    WebSocket   = require('ws'),
-    app         = require('./app'),
-    io          = require('socket.io'),
-    overlay     = require('./overlay.js'),
-    team        = require('./team.js');
+      items       = require('./items.js'),
+      WebSocket   = require('ws'),
+      app         = require('./app'),
+      overlay     = require('./overlay.js'),
+      team        = require('./team.js'),
+      socket      = require('./socket.js');
 
 let  teamOneObject,
      teamTwoObject,
@@ -70,11 +70,14 @@ function individualPointUpdate(event) {
 function getRound() { return roundTracker; }
 
 function sendScore() {
-    if(roundTracker !== 0) {
-        if (teamOneObject.name !== undefined) {
-            app.sendScores(teamOneObject, teamTwoObject);
-        }
+    if (roundTracker !== 0) {
+        app.send('score', { teamOne: team.getT1(), teamTwo: team.getT2() });
     }
+}
+
+function killfeedPlayer(obj) {
+    app.send('killfeed', obj);
+    overlay.updateKillfeedPlayer(obj);
 }
 
 function dealWithTheData(raw) {
@@ -136,31 +139,28 @@ function itsPlayerData(data) {
         // Hahahaha he killed his mate
         teamTwoTeamkill(data, item, pointMap['21'].points);
     }
-    app.sendScores(teamOneObject, teamTwoObject);
-    overlay.updateScoreOverlay(teamOneObject, teamTwoObject);
+    app.send('score', { teamOne: team.getT1(), teamTwo: team.getT2() });
+    overlay.updateScoreOverlay();
 }
 
 function oneIvITwo (data, points, item) {
     team.oneIvITwo(data.attacker_character_id, data.character_id, points, item);
     //create a JSON and send it to the web
-    const obj = {
+    killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
         loser: teamTwoObject.members[data.character_id].name,
         loser_faction: teamTwoObject.faction,
         weapon: item.name,
         image: item.image,
-        points: points,
-        time: 0
-    };
-    app.killfeedEmit(obj);
-    overlay.updateKillfeedPlayer(obj);
+        points: points
+    });
 }
 
 function twoIvIOne (data, points, item) {
     team.twoIvIOne(data.character_id, data.character_id, points, item);
     //create a JSON and send it to the web
-    const obj = {
+    killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
         loser: teamOneObject.members[data.character_id].name,
@@ -169,15 +169,13 @@ function twoIvIOne (data, points, item) {
         image: item.image,
         points: points,
         time: 0
-    };
-    app.killfeedEmit(obj);
-    overlay.updateKillfeedPlayer(obj);
+    });
 }
 
 function teamOneSuicide (data, points, item) {
     team.oneSuicide(one, points);
     //create a JSON and send it to the web
-    const obj = {
+    killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
         loser: teamOneObject.members[data.character_id].name,
@@ -186,15 +184,13 @@ function teamOneSuicide (data, points, item) {
         image: item.image,
         points: points,
         time: 0
-    };
-    app.killfeedEmit(obj);
-    overlay.updateKillfeedPlayer(obj);
+    });
 }
 
 function teamTwoSuicide (data, points, item) {
     team.twoSuicide(data.attacker_character_id, points);
     //create a JSON and send it to the web
-    const obj = {
+    killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
         loser: teamTwoObject.members[data.character_id].name,
@@ -203,15 +199,13 @@ function teamTwoSuicide (data, points, item) {
         image: item.image,
         points: points,
         time: 0
-    };
-    app.killfeedEmit(obj);
-    overlay.updateKillfeedPlayer(obj);
+    });
 }
 
 function teamOneTeamkill (data, item, points) {
     team.oneTeamKill(data.attacker_character_id, data.character_id, points);
     //create a JSON and send it to the web
-    const obj = {
+    killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
         loser: teamOneObject.members[data.character_id].name,
@@ -220,15 +214,13 @@ function teamOneTeamkill (data, item, points) {
         image: item.image,
         points: points,
         time: 0
-    };
-    app.killfeedEmit(obj);
-    overlay.updateKillfeedPlayer(obj);
+    });
 }
 
 function teamTwoTeamkill (data, item, points) {
     team.twoTeamKill(data.attacker_character_id, data.character_id, points);
     //create a JSON and send it to the web
-    const obj = {
+    killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
         loser: teamTwoObject.members[data.character_id].name,
@@ -237,9 +229,7 @@ function teamTwoTeamkill (data, item, points) {
         image: item.image,
         points: points,
         time: 0
-    };
-    app.killfeedEmit(obj);
-    overlay.updateKillfeedPlayer(obj);
+    });
 }
 
 function itsFacilityData(data) {
@@ -248,24 +238,22 @@ function itsFacilityData(data) {
         if (data.outfit_id === teamOneObject.outfit_id) {
             if (captures === 0) {
                 team.oneBaseCap(pointMap['0'].points);
-                app.sendScores(teamOneObject, teamTwoObject);
                 overlay.updateKillfeedFacility(teamOneObject.alias,points);
             } else {
                 team.oneBaseCap(pointMap['1'].points);
-                app.sendScores(teamOneObject, teamTwoObject);
                 overlay.updateKillfeedFacility(teamOneObject.alias,points);
             }
+            app.send('score', { teamOne: team.getT1(), teamTwo: team.getT2() });
             captures++;
         } else if (data.outfit_id === teamTwoObject.outfit_id) {
             if (captures === 0) {
                 team.twoBaseCap(pointMap['0'].points);
-                app.sendScores(teamOneObject, teamTwoObject);
                 overlay.updateKillfeedFacility(teamTwoObject.alias,points);
             } else {
                 team.twoBaseCap(pointMap['1'].points);
-                app.sendScores(teamOneObject, teamTwoObject);
                 overlay.updateKillfeedFacility(teamTwoObject.alias,points);
             }
+            app.send('score', { teamOne: team.getT1(), teamTwo: team.getT2() });
             captures++;
         }
     }
@@ -304,7 +292,7 @@ function subscribe(ws) {
 }
 
 function unsubscribe(ws) {
-    //unsubscribes from all events
+    // unsubscribes from all events
     ws.send('{"service":"event","action":"clearSubscribe","all":"true"}');
     console.log('Unsubscribed from facility and kill/death events between ' + teamOneObject.alias + ' and '  +teamTwoObject.alias);
 }
@@ -318,7 +306,7 @@ function startTimer(ws) {
             clearInterval(time);
             unsubscribe(ws);
             overlay.writeFinalStats(teamOneObject,teamTwoObject);
-            app.matchFinished();
+            socket.setRunning(false);
         }
         overlay.updateTime(timeCounter);
         timeCounter--;
@@ -337,7 +325,8 @@ function startUp() {
         teamOneObject = team.getT1();
         teamTwoObject = team.getT2();
         createStream();
-        app.refreshPage();
+        app.send('refresh', '');
+        socket.setRunning(true);
     }).catch(function (err) {
         console.error('Items did not initialise!!');
         console.error(err);
@@ -347,7 +336,6 @@ function startUp() {
 exports.startUp        = startUp;
 exports.createStream   = createStream;
 exports.stopTheMatch   = stopTheMatch;
-exports.sendScore      = sendScore;
 exports.getPointMaps   = getPointMaps;
 exports.updatePointMap = updatePointMap;
 exports.individualPointUpdate = individualPointUpdate;

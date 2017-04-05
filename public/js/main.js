@@ -3,39 +3,38 @@
  */
 var socket = io();
 socket.on('connect', function() {
+
     socket.on('teams', function (data) {
-        var event = data.obj;
-        console.log(event);
-        var T1 = '[' + event.teamOne.alias + '] ' + event.teamOne.name;
-        var T2 = '[' + event.teamTwo.alias + '] ' + event.teamTwo.name;
+        console.log(data);
+        var T1 = '[' + data.teamOne.alias + '] ' + data.teamOne.name;
+        var T2 = '[' + data.teamTwo.alias + '] ' + data.teamTwo.name;
         if (T1.length < 30) {
             var space = 30 - T1.length;
-            while (space != 0) {
+            while (space !== 0) {
                 T1 = T1 + "\u00A0";
                 space--;
             }
         }
         if (T2.length < 30) {
             space = 30 - T2.length;
-            while (space != 0) {
+            while (space !== 0) {
                 T2 =  T2 + "\u00A0";
                 space--;
             }
         }
-        $('#outfitT1').html(T1).addClass('faction' + event.teamOne.faction);
-        $('#outfitT2').html(T2).addClass('faction' + event.teamTwo.faction);
-        $('#Team1').addClass('faction' + event.teamOne.faction);
-        $('#Team2').addClass('faction' + event.teamTwo.faction);
+        $('#outfitT1').html(T1).addClass('faction' + data.teamOne.faction);
+        $('#outfitT2').html(T2).addClass('faction' + data.teamTwo.faction);
+        $('#Team1').addClass('faction' + data.teamOne.faction);
+        $('#Team2').addClass('faction' + data.teamTwo.faction);
     });
     socket.on ('time', function(data) {
-        var event = data.obj;
-        $('#timer').html(event.minutes + ' : ' + event.seconds);
+        console.log(data);
+        $('#timer').html(data.minutes + ' : ' + data.seconds);
     });
     socket.on('refresh', function () {
         window.location.reload();
     });
-    socket.on('killfeed', function (data) {
-        var event = data.obj;
+    socket.on('killfeed', function (event) {
         console.log(event);
         $('<tr><td class="faction' + event.winner_faction + '">' + event.winner + '</td>' +
             '<td class="faction' + event.loser_faction + '">' + event.loser + '</td>' +
@@ -44,8 +43,8 @@ socket.on('connect', function() {
             '<td>' + event.points + '</td></tr>')
             .prependTo($(killfeed));
     });
-    socket.on('score', function (data) {
-        var event = data.obj;
+
+    socket.on('score', function (event) {
         console.log(event);
         $('#Team1').empty(); $('#Team2').empty();
         $('#T1Score').empty().html(event.teamOne.points); $('#T2Score').empty().html(event.teamTwo.points);
@@ -83,4 +82,5 @@ socket.on('connect', function() {
         });
     });
 });
-socket.emit('backchat', { obj: 'Web Connection' });
+
+socket.emit('backchat', { obj: 'New Connection' });
