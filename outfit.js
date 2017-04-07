@@ -33,19 +33,19 @@ const alias = {
         name : "example2",
         actual : "Not a Real Character"
     },
-    "5428285306548260065" : {
+    "5428285306548260065x" : {
         name : "Laser",
         actual : "FCLMxPractice1VS"
     },
-    "5428285306548260161" : {
+    "5428285306548260161x" : {
         name : "Powerdown",
         actual : "FCLMxPractice2VS"
     },
-    "5428285306548260257" : {
+    "5428285306548260257x" : {
         name : "Narcasse",
         actual : "FCLMxPractice3VS"
     },
-    "5428285306548260353" : {
+    "5428285306548260353x" : {
         name : "RHSixSixOne",
         actual : "FCLMxPractice4VS"
     }
