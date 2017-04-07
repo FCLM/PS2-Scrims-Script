@@ -1,0 +1,7 @@
+All match stats will be written here
+
+x = match number, will start at 1 and every round it will increase by 1
+
+x.txt will contain the combined stats for both teams, good for book keeping post match
+xTeamOne.txt contains team ones stats formatted to be displayed on screen
+xTeamTwo.txt contains team ones stats formatted to be displayed on screen

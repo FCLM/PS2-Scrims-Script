@@ -5,10 +5,7 @@
 node_modules
 *.log
 
-# databases
-*.sqlite3
-
-# config
+# config (private files)
 /api_key.js
 /password.js
 
@@ -21,4 +18,4 @@ overlay/time.txt
 overlay/killfeed.txt
 
 #match logs
-match*.txt
+match/*.txt

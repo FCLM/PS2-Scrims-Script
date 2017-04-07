@@ -27,19 +27,19 @@
         <div class="table-responsive tableDiv">
             <table class="table">
                 <thead>
-                    <th>Category</th>
-                    <th>Value</th>
-                    <th>Update to</th>
+                <th>Category</th>
+                <th>Value</th>
+                <th>Update to</th>
                 </thead>
                 <tbody>
                 {{#each catMap}}
-                {{#if category}}
-                    <tr>
-                        <td>{{this.category}}</td>
-                        <td>{{this.points}}</td>
-                        <td><input type="text" size="8" id="{{this.id}}"></td>
-                    </tr>
-                {{/if}}
+                    {{#if category}}
+                        <tr>
+                            <td>{{this.category}}</td>
+                            <td>{{this.points}}</td>
+                            <td><input type="text" size="8" id="{{this.id}}"></td>
+                        </tr>
+                    {{/if}}
                 {{/each}}
                 </tbody>
             </table>
@@ -68,19 +68,19 @@
         <div class="table-responsive tableDiv">
             <table class="table">
                 <thead>
-                    <th>Category</th>
-                    <th>Value</th>
-                    <th>Update to</th>
+                <th>Category</th>
+                <th>Value</th>
+                <th>Update to</th>
                 </thead>
                 <tbody>
                 {{#each pointMap}}
-                {{#if action}}
-                    <tr>
-                        <td>{{this.action}}</td>
-                        <td>{{this.points}}</td>
-                        <td><input type="text" size="8" id="{{this.id}}"></td>
-                    </tr>
-                {{/if}}
+                    {{#if action}}
+                        <tr>
+                            <td>{{this.action}}</td>
+                            <td>{{this.points}}</td>
+                            <td><input type="text" size="8" id="{{this.id}}"></td>
+                        </tr>
+                    {{/if}}
                 {{/each}}
                 </tbody>
             </table>
