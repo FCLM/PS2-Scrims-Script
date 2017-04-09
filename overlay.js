@@ -6,14 +6,14 @@
 const app    = require('./app.js'),
       ps2ws  = require('./ps2ws.js'),
       fs     = require('fs'),
-      teams      = require('./team.js');
+      teams  = require('./team.js');
 
-const t1Score   = '../overlay/scoreT1.txt',
-      t1Players = '../overlay/playersT1.txt',
-      t2Score   = '../overlay/scoreT2.txt',
-      t2Players = '../overlay/playersT2.txt',
-      time      = '../overlay/time.txt',
-      killfeed  = '../overlay/killfeed.txt';
+const t1Score   = __dirname + '/overlay/scoreT1.txt',
+      t1Players = __dirname + '/overlay/playersT1.txt',
+      t2Score   = __dirname + '/overlay/scoreT2.txt',
+      t2Players = __dirname + '/overlay/playersT2.txt',
+      time      = __dirname + '/overlay/time.txt',
+      killfeed  = __dirname + '/overlay/killfeed.txt';
 
 // Three previous kills/caps stored to enable 3 events to be displayed
 let p1Kill = '',
@@ -134,11 +134,17 @@ function updateKillfeedFacility(tag, points) {
     write(killfeed, p1Kill + p2Kill + p3Kill);
 }
 
+function startKillfeed() {
+    p3Kill = ''; p2Kill = '';
+    p1Kill = ' --- Match Started --- \n';
+    write(killfeed, p1Kill + p2Kill + p3Kill);
+}
+
 function writeFinalStats() {
     const round = ps2ws.getRound();
-    const full = '../match/' + round + '.txt',
-          one  =  '../match/' + round + 'TeamOne.txt',
-          two  =  '../match/' + round + 'TeamTwo.txt';
+    const full = __dirname + '/match/' + round + '.txt',
+          one  = __dirname + '/match/' + round + 'TeamOne.txt',
+          two  = __dirname + '/match/' + round + 'TeamTwo.txt';
     const t1 = playerStats(teams.getT1());
     const t2 = playerStats(teams.getT2());
 
@@ -152,6 +158,7 @@ function playerStats(team) {
     for (keys in team.members) {
         activePlayers.push(team.members[keys])
     }
+
     let active = lengthenName(team.alias) + '  ' + lengthenStats(team.points.toString()) + '  '  + lengthenStats(team.netScore.toString())
         + '  ' + lengthenStats(team.kills.toString())  + '  ' + lengthenStats(team.deaths.toString())  + '\n\n';
 
@@ -172,6 +179,7 @@ function playerStats(team) {
 exports.initialise             = initialise;
 exports.updateScoreOverlay     = updateScoreOverlay;
 exports.updateTime             = updateTime;
+exports.startKillfeed          = startKillfeed;
 exports.updateKillfeedPlayer   = updateKillfeedPlayer;
 exports.updateKillfeedFacility = updateKillfeedFacility;
 exports.writeFinalStats        = writeFinalStats;
