@@ -107,9 +107,6 @@ function dealWithTheData(raw) {
     const data = JSON.parse(raw).payload;
     if (data.event_name === "Death") {
         itsPlayerData(data);
-    } else if (data.name === "Death") {
-        //debugging match only
-        itsPlayerData(data);
     } else {
         itsFacilityData(data);
     }
@@ -138,7 +135,7 @@ function itsPlayerData(data) {
     } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
         twoIvIOne(data, points, item);
     }
-    // Suicides (loadout id 7/14/21 means it was a max that suicided
+    // Suicides (loadout id 7/14/21 means it was a max that suicided)
     else if ((data.attacker_character_id === data.character_id) && (teamOneObject.members.hasOwnProperty(data.character_id))){
         if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
             points = pointMap['13'].points;
@@ -326,6 +323,7 @@ function startUp() {
         teamOneObject = team.getT1();
         teamTwoObject = team.getT2();
         createStream();
+        overlay.startKillfeed();
         app.send('refresh', '');
         socket.setRunning(true);
     }).catch(function (err) {
