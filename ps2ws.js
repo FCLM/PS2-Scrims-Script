@@ -84,6 +84,8 @@ function killfeedFacilityT1(points) {
         points: points
     };
     app.send('killfeed', obj);
+    overlay.updateKillfeedFacility(teamOneObject.alias, points);
+    team.oneBaseCap(points);
 }
 
 function killfeedFacilityT2(points) {
@@ -96,6 +98,8 @@ function killfeedFacilityT2(points) {
         points: points
     };
     app.send('killfeed', obj);
+    overlay.updateKillfeedFacility(teamTwoObject.alias, points);
+    team.twoBaseCap(points);
 }
 
 function dealWithTheData(raw) {
@@ -237,24 +241,16 @@ function itsFacilityData(data) {
     if (data.new_faction_id !== data.old_faction_id) {
         if (data.outfit_id === teamOneObject.outfit_id) {
             if (captures === 0) {
-                team.oneBaseCap(pointMap['0'].points);
-                overlay.updateKillfeedFacility(teamOneObject.alias, pointMap['0'].points);
                 killfeedFacilityT1(pointMap['0'].points);
             } else {
-                team.oneBaseCap(pointMap['1'].points);
-                overlay.updateKillfeedFacility(teamOneObject.alias, pointMap['1'].points);
                 killfeedFacilityT1(pointMap['1'].points);
             }
             app.send('score', { teamOne: team.getT1(), teamTwo: team.getT2() });
             captures++;
         } else if (data.outfit_id === teamTwoObject.outfit_id) {
             if (captures === 0) {
-                team.twoBaseCap(pointMap['0'].points);
-                overlay.updateKillfeedFacility(teamTwoObject.alias, pointMap['0'].points);
                 killfeedFacilityT2(pointMap['0'].points);
             } else {
-                team.twoBaseCap(pointMap['1'].points);
-                overlay.updateKillfeedFacility(teamTwoObject.alias, pointMap['1'].points);
                 killfeedFacilityT2(pointMap['1'].points);
             }
             app.send('score', { teamOne: team.getT1(), teamTwo: team.getT2() });

@@ -11,6 +11,7 @@ let t1 = {
     netScore : 0,
     kills : 0,
     deaths : 0,
+    baseCaps: 0,
     members : {},
     memberArray : []
 };
@@ -24,6 +25,7 @@ let t2 = {
     netScore : 0,
     kills : 0,
     deaths : 0,
+    baseCaps: 0,
     members : {},
     memberArray : []
 };
@@ -37,6 +39,7 @@ function resetTeams() {
     t1.netScore = 0;
     t1.kills = 0;
     t1.deaths = 0;
+    t1.baseCaps = 0;
     t1.members = {};
     t1.memberArray = [];
 
@@ -48,6 +51,7 @@ function resetTeams() {
     t2.netScore = 0;
     t2.kills = 0;
     t2.deaths = 0;
+    t2.baseCaps = 0;
     t2.members = {};
     t2.memberArray = [];
 }
@@ -66,6 +70,7 @@ function setTeamOne (obj) {
     t1.netScore = 0;
     t1.kills = 0;
     t1.deaths = 0;
+    t1.baseCaps = 0;
     t1.memberArray = obj.members;
     obj.members.forEach(function(member) {
         let obj = {
@@ -90,6 +95,7 @@ function setTeamTwo (obj) {
     t2.netScore = 0;
     t2.kills = 0;
     t2.deaths = 0;
+    t2.baseCaps = 0;
     t2.memberArray = obj.members;
     obj.members.forEach(function(member) {
         let obj = {
@@ -202,6 +208,7 @@ function twoTeamKill(killer, killed, points) {
 function oneBaseCap(points) {
     t1.points += points;
     t1.netScore += points;
+    t1.baseCaps++;
     t2.netScore -= points;
 
     // logging
@@ -212,6 +219,7 @@ function oneBaseCap(points) {
 function twoBaseCap(points) {
     t2.points += points;
     t2.netScore += points;
+    t2.baseCaps++;
     t1.netScore -= points;
 
     // logging
