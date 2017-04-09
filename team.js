@@ -213,7 +213,7 @@ function oneBaseCap(points) {
 
     // logging
     console.log(t1.name + ' captured the base +' + points);
-    console.log(t1.points + ' ' + t2.points);
+    logScore();
 }
 
 function twoBaseCap(points) {
