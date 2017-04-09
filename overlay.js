@@ -124,7 +124,7 @@ function updateKillfeedPlayer(killObj) {
     p3Kill = p2Kill;
     p2Kill = p1Kill;
     p1Kill = lengthenName(killObj.winner) + ' ' + lengthenName('[' + killObj.weapon + ']') + '  ' + lengthenName(killObj.loser) + '\n';
-    write(killed, p1Kill + p2Kill + p3Kill);
+    write(killfeed, p1Kill + p2Kill + p3Kill);
 }
 
 function updateKillfeedFacility(tag, points) {
