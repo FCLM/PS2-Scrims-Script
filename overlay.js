@@ -165,6 +165,8 @@ function playerStats(team) {
             active += memName + '  ' + points + '  ' + netScore + '  ' + kills + '  ' + deaths + '  ' + '\n';
         }
     });
+
+    active += '\nBase Captures: ' + team.baseCaps;
 }
 
 exports.initialise             = initialise;

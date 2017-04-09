@@ -6,26 +6,32 @@ socket.on('connect', function() {
 
     socket.on('teams', function (data) {
         console.log(data);
-        var T1 = '[' + data.teamOne.alias + '] ' + data.teamOne.name;
-        var T2 = '[' + data.teamTwo.alias + '] ' + data.teamTwo.name;
-        if (T1.length < 30) {
-            var space = 30 - T1.length;
-            while (space !== 0) {
-                T1 = T1 + "\u00A0";
-                space--;
+        if (data.teamOne.name !== "") {
+            var T1 = '[' + data.teamOne.alias + '] ' + data.teamOne.name;
+            var T2 = '[' + data.teamTwo.alias + '] ' + data.teamTwo.name;
+            if (T1.length < 30) {
+                var space = 30 - T1.length;
+                while (space !== 0) {
+                    T1 = T1 + "\u00A0";
+                    space--;
+                }
             }
-        }
-        if (T2.length < 30) {
-            space = 30 - T2.length;
-            while (space !== 0) {
-                T2 =  T2 + "\u00A0";
-                space--;
+            if (T2.length < 30) {
+                space = 30 - T2.length;
+                while (space !== 0) {
+                    T2 = T2 + "\u00A0";
+                    space--;
+                }
             }
+            $('#outfitT1').html(T1).addClass('faction' + data.teamOne.faction);
+            $('#outfitT2').html(T2).addClass('faction' + data.teamTwo.faction);
+            $('#Team1').addClass('faction' + data.teamOne.faction);
+            $('#Team2').addClass('faction' + data.teamTwo.faction);
         }
-        $('#outfitT1').html(T1).addClass('faction' + data.teamOne.faction);
-        $('#outfitT2').html(T2).addClass('faction' + data.teamTwo.faction);
-        $('#Team1').addClass('faction' + data.teamOne.faction);
-        $('#Team2').addClass('faction' + data.teamTwo.faction);
+        else {
+            $('#outfitT1').html("Match Not Running").addClass();
+            $('#outfitT2').html("Match Not Running").addClass();
+        }
     });
     socket.on ('time', function(data) {
         console.log(data);
@@ -37,9 +43,8 @@ socket.on('connect', function() {
     socket.on('killfeed', function (event) {
         console.log(event);
         $('<tr><td class="faction' + event.winner_faction + '">' + event.winner + '</td>' +
-            '<td class="faction' + event.loser_faction + '">' + event.loser + '</td>' +
             '<td>' + event.weapon + '</td>' +
-            '<td>' + event.image + '</td>' +
+            '<td class="faction' + event.loser_faction + '">' + event.loser + '</td>' +
             '<td>' + event.points + '</td></tr>')
             .prependTo($(killfeed));
     });
