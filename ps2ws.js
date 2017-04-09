@@ -1,6 +1,7 @@
 /**
  * Created by Dylan on 03-Apr-16.
  */
+// Modules
 const api_key   = require('./api_key.js'),
       items       = require('./items.js'),
       WebSocket   = require('ws'),
@@ -8,13 +9,12 @@ const api_key   = require('./api_key.js'),
       overlay     = require('./overlay.js'),
       team        = require('./team.js'),
       socket      = require('./socket.js');
-
+// Variables
 let  teamOneObject,
      teamTwoObject,
      captures = 0,
      roundTracker = 0,
-     timeCounter = 0,
-     time = Date.now();
+     timeCounter = 0;
 
 const pointNumbers = ['0','1','11','12','13','21','22','23'];
 
@@ -317,8 +317,6 @@ function stopTheMatch() {
 
 function startUp() {
     items.initialise().then(function() {
-        time = Date.now();
-        console.log(time + ' start match');
         console.log('=====================================================================================================================================');
         teamOneObject = team.getT1();
         teamTwoObject = team.getT2();
@@ -332,10 +330,10 @@ function startUp() {
     });
 }
 
-exports.startUp        = startUp;
-exports.createStream   = createStream;
-exports.stopTheMatch   = stopTheMatch;
-exports.getPointMaps   = getPointMaps;
-exports.updatePointMap = updatePointMap;
+exports.startUp               = startUp;
+exports.createStream          = createStream;
+exports.stopTheMatch          = stopTheMatch;
+exports.getPointMaps          = getPointMaps;
+exports.updatePointMap        = updatePointMap;
 exports.individualPointUpdate = individualPointUpdate;
-exports.getRound       = getRound;
+exports.getRound              = getRound;
