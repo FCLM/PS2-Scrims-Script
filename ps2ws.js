@@ -78,8 +78,8 @@ function killfeedFacilityT1(points) {
     const obj = {
         winner: '[' + teamOneObject.alias + ']',
         winner_faction: teamOneObject.faction,
-        loser: '-',
-        loser_faction: '',
+        loser: '[' + teamTwoObject.alias + ']',
+        loser_faction: teamTwoObject.faction,
         weapon: 'Base Capture',
         points: points
     };
@@ -90,8 +90,8 @@ function killfeedFacilityT2(points) {
     const obj = {
         winner: '[' + teamTwoObject.alias + ']',
         winner_faction: teamTwoObject.faction,
-        loser: '-',
-        loser_faction: '',
+        loser: '[' + teamOneObject.alias + ']',
+        loser_faction: teamOneObject.faction,
         weapon: 'Base Capture',
         points: points
     };
