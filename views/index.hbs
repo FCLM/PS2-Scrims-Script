@@ -31,7 +31,7 @@
 <div class="main_area container" role="main">
 
     <section>
-        <div class="table-responsive" style="display:inline-block; width:49%;">
+        <div class="table-responsive col-md-6" style="display:inline-block; height: 300px; overflow-y: auto;">
             <table class="table">
                 <thead>
                 <tr>
@@ -43,29 +43,44 @@
                 </tr>
                 </thead>
                 <tbody id="Team1">
-                <tr id="T1">
-                </tr>
                 </tbody>
             </table>
         </div>
-        <div class="table-responsive" style="display:inline-block; width:49%;">
+        <div class="table-responsive col-md-6" style="display:inline-block; height: 300px; overflow-y: auto;">
             <table class="table">
-                <thead><tr><th class="pad">Team Two: </th><th class="pad">Score: </th><th class="pad">Net Score: </th><th class="pad">Kills: </th><th class="pad">Deaths: </th></tr></thead>
-                <tbody id="Team2">
-                <tr id="T2">
+                <thead>
+                <tr>
+                    <th class="pad">Team Two: </th>
+                    <th class="pad">Score: </th>
+                    <th class="pad">Net Score: </th>
+                    <th class="pad">Kills: </th>
+                    <th class="pad">Deaths: </th>
                 </tr>
+                </thead>
+                <tbody id="Team2">
                 </tbody>
             </table>
         </div>
     </section>
+    <br>
     <div class="page-header">
         <h3>Killfeed:</h3>
     </div>
     <section>
+        <div style="height: 300px; overflow-y: auto;">
         <table class="table index-table">
-            <thead><tr><th>Winner</th><th>Loser</th><th>Weapon</th><th>Image</th><th>Points</th></tr></thead>
-            <tbody id="killfeed"></tbody>
+            <thead>
+            <tr>
+                <th>Winner: </th>
+                <th>Weapon: </th>
+                <th>Loser: </th>
+                <th>Points: </th>
+            </tr>
+            </thead>
+            <tbody id="killfeed">
+            </tbody>
         </table>
+        </div>
     </section>
 </div>
 <footer class="footer">

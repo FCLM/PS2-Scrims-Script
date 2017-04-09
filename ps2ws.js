@@ -18,7 +18,7 @@ let  teamOneObject,
 
 const pointNumbers = ['0','1','11','12','13','21','22','23'];
 
-// Point Map default to thunderdome ruleset
+// Point Map defaults to thunderdome ruleset
 let pointMap = {
     '0'  : { "action" : "First Base Capture",      points : 10, id : "class0"},
     '1'  : { "action" : "Subsequent Base Capture", points : 25, id : "class1"},
@@ -69,15 +69,33 @@ function individualPointUpdate(event) {
 
 function getRound() { return roundTracker; }
 
-function sendScore() {
-    if (roundTracker !== 0) {
-        app.send('score', { teamOne: team.getT1(), teamTwo: team.getT2() });
-    }
-}
-
 function killfeedPlayer(obj) {
     app.send('killfeed', obj);
     overlay.updateKillfeedPlayer(obj);
+}
+
+function killfeedFacilityT1(points) {
+    const obj = {
+        winner: '[' + teamOneObject.alias + ']',
+        winner_faction: teamOneObject.faction,
+        loser: '-',
+        loser_faction: '',
+        weapon: 'Base Capture',
+        points: points
+    };
+    app.send('killfeed', obj);
+}
+
+function killfeedFacilityT2(points) {
+    const obj = {
+        winner: '[' + teamTwoObject.alias + ']',
+        winner_faction: teamTwoObject.faction,
+        loser: '-',
+        loser_faction: '',
+        weapon: 'Base Capture',
+        points: points
+    };
+    app.send('killfeed', obj);
 }
 
 function dealWithTheData(raw) {
@@ -110,34 +128,33 @@ function itsPlayerData(data) {
         // defender used a max
         points = pointMap['23'].points;
     }
+    // Infantry v Infantry
     if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
         oneIvITwo(data, points, item);
     } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
         twoIvIOne(data, points, item);
-    } else if ((data.attacker_character_id === data.character_id) && (teamOneObject.members.hasOwnProperty(data.character_id))){
+    }
+    // Suicides (loadout id 7/14/21 means it was a max that suicided
+    else if ((data.attacker_character_id === data.character_id) && (teamOneObject.members.hasOwnProperty(data.character_id))){
         if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
-            // suicided as a max lol
             points = pointMap['13'].points;
         } else {
-            // just infantry suicide
             points = pointMap['22'].points;
         }
         teamOneSuicide(data, points, item);
     } else if ((data.attacker_character_id === data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
         if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
-            // suicided as a max lol
             points = pointMap['13'].points;
         } else {
-            // just infantry suicide
             points = pointMap['22'].points;
         }
         teamTwoSuicide(data, points, item);
-    } else if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
-        // Hahahaha he killed his mate
-        teamOneTeamkill(data, item, pointMap['21'].points);
+    }
+    // Team Kills
+    else if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
+        teamOneTeamkill(data, pointMap['21'].points, item);
     } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
-        // Hahahaha he killed his mate
-        teamTwoTeamkill(data, item, pointMap['21'].points);
+        teamTwoTeamkill(data, pointMap['21'].points, item);
     }
     app.send('score', { teamOne: team.getT1(), teamTwo: team.getT2() });
     overlay.updateScoreOverlay();
@@ -145,90 +162,73 @@ function itsPlayerData(data) {
 
 function oneIvITwo (data, points, item) {
     team.oneIvITwo(data.attacker_character_id, data.character_id, points, item);
-    //create a JSON and send it to the web
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
         loser: teamTwoObject.members[data.character_id].name,
         loser_faction: teamTwoObject.faction,
         weapon: item.name,
-        image: item.image,
         points: points
     });
 }
 
 function twoIvIOne (data, points, item) {
     team.twoIvIOne(data.character_id, data.character_id, points, item);
-    //create a JSON and send it to the web
     killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
         loser: teamOneObject.members[data.character_id].name,
         loser_faction: teamOneObject.faction,
         weapon: item.name,
-        image: item.image,
         points: points,
-        time: 0
     });
 }
 
 function teamOneSuicide (data, points, item) {
-    team.oneSuicide(one, points);
-    //create a JSON and send it to the web
+    team.oneSuicide(data.attacker_character_id, points);
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
         loser: teamOneObject.members[data.character_id].name,
         loser_faction: teamOneObject.faction,
         weapon: item.name,
-        image: item.image,
         points: points,
-        time: 0
     });
 }
 
 function teamTwoSuicide (data, points, item) {
     team.twoSuicide(data.attacker_character_id, points);
-    //create a JSON and send it to the web
     killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
         loser: teamTwoObject.members[data.character_id].name,
         loser_faction: teamTwoObject.faction,
         weapon: item.name,
-        image: item.image,
         points: points,
-        time: 0
     });
 }
 
-function teamOneTeamkill (data, item, points) {
+function teamOneTeamkill (data, points, item) {
     team.oneTeamKill(data.attacker_character_id, data.character_id, points);
-    //create a JSON and send it to the web
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
         loser: teamOneObject.members[data.character_id].name,
         loser_faction: teamOneObject.faction,
         weapon: item.name,
-        image: item.image,
         points: points,
-        time: 0
     });
 }
 
-function teamTwoTeamkill (data, item, points) {
+function teamTwoTeamkill (data, points,  item) {
     team.twoTeamKill(data.attacker_character_id, data.character_id, points);
-    //create a JSON and send it to the web
     killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
         loser: teamTwoObject.members[data.character_id].name,
         loser_faction: teamTwoObject.faction,
         weapon: item.name,
-        image: item.image,
         points: points,
-        time: 0
     });
 }
 
@@ -238,26 +238,31 @@ function itsFacilityData(data) {
         if (data.outfit_id === teamOneObject.outfit_id) {
             if (captures === 0) {
                 team.oneBaseCap(pointMap['0'].points);
-                overlay.updateKillfeedFacility(teamOneObject.alias,points);
+                overlay.updateKillfeedFacility(teamOneObject.alias, pointMap['0'].points);
+                killfeedFacilityT1(pointMap['0'].points);
             } else {
                 team.oneBaseCap(pointMap['1'].points);
-                overlay.updateKillfeedFacility(teamOneObject.alias,points);
+                overlay.updateKillfeedFacility(teamOneObject.alias, pointMap['1'].points);
+                killfeedFacilityT1(pointMap['1'].points);
             }
             app.send('score', { teamOne: team.getT1(), teamTwo: team.getT2() });
             captures++;
         } else if (data.outfit_id === teamTwoObject.outfit_id) {
             if (captures === 0) {
                 team.twoBaseCap(pointMap['0'].points);
-                overlay.updateKillfeedFacility(teamTwoObject.alias,points);
+                overlay.updateKillfeedFacility(teamTwoObject.alias, pointMap['0'].points);
+                killfeedFacilityT2(pointMap['0'].points);
             } else {
                 team.twoBaseCap(pointMap['1'].points);
-                overlay.updateKillfeedFacility(teamTwoObject.alias,points);
+                overlay.updateKillfeedFacility(teamTwoObject.alias, pointMap['1'].points);
+                killfeedFacilityT2(pointMap['1'].points);
             }
             app.send('score', { teamOne: team.getT1(), teamTwo: team.getT2() });
             captures++;
         }
+        //else it was captured by neither outfit
     }
-    //else it was captured by neither outfit
+    // Else it was a defense (no points awarded
 }
 
 function createStream() {
