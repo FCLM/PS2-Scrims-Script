@@ -71,8 +71,7 @@ async function fetchTeamData(teamTag, teamNumber) {
                             name: memName
                         });
                     } else {
-                        reject();
-                        console.error('ERROR: there is a character that does not have a name (has been deleted): ' + result.character_id);
+                        console.error('ERROR: ' + teamTag + ' has a character that does not have a name (has been deleted): ' + result.character_id);
                     }
                 });
                 let obj = {
