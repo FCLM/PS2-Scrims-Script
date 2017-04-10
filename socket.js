@@ -16,8 +16,9 @@ module.exports = {
 
             sock.on('backchat', function () {
                 const t1 = team.getT1(),
-                    t2 = team.getT2();
+                      t2 = team.getT2();
                 send('teams', { teamOne: t1, teamTwo: t2});
+                send('score', { teamOne: t1, teamTwo: t2 });
             });
 
             sock.on('start', function (data) {

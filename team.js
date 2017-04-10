@@ -2,6 +2,8 @@
  * Created by dylancross on 4/04/17.
  */
 
+const app = require('./app');
+
 let t1 = {
     alias : '',
     outfit_id : '',
@@ -230,6 +232,11 @@ function adjustScore(team1, team2, reason) {
 
 function logScore() {
     console.log(t1.points + ' ' + t2.points);
+    sendScores();
+}
+
+function sendScores() {
+    app.send('score', { teamOne: t1, teamTwo: t2 });
 }
 
 exports.setTeams    = setTeams;

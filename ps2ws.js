@@ -72,6 +72,8 @@ function getRound() { return roundTracker; }
 function killfeedPlayer(obj) {
     app.send('killfeed', obj);
     overlay.updateKillfeedPlayer(obj);
+    teamOneObject = team.getT1();
+    teamTwoObject = team.getT1();
 }
 
 function killfeedFacilityT1(points) {
@@ -157,7 +159,6 @@ function itsPlayerData(data) {
     } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
         teamTwoTeamkill(data, pointMap['21'].points, item);
     }
-    app.send('score', { teamOne: team.getT1(), teamTwo: team.getT2() });
     overlay.updateScoreOverlay();
 }
 

@@ -63,28 +63,31 @@ socket.on('connect', function() {
             '<td class="pad" id="outfitScore">' + event.teamTwo.netScore + '</td>' +
             '<td class="pad" id="outfitScore">' + event.teamTwo.kills + '</td>' +
             '<td class="pad" id="outfitScore">' + event.teamTwo.deaths + '</td></tr>').appendTo($(Team2));
-        event.teamOne.members.forEach(function (member) {
-            if (member.kills > 0 || member.deaths > 0) {
-                $('<tr id="' + member.name +
-                    '"><td class="pad" id="name">' + member.name +
-                    '</td><td class="pad" id="score">' + member.points +
-                    '</td><td class="pad" id="netScore">' + member.netScore +
-                    '</td><td class="pad" id="kills">' + member.kills +
-                    '<td class="pad" id="deaths">' + member.deaths +
+        var m = event.teamOne.members;
+        for (keys in m) {
+            if (m[keys].kills > 0 || m[keys].deaths > 0) {
+                $('<tr id="' + m[keys].name +
+                    '"><td class="pad" id="name">' + m[keys].name +
+                    '</td><td class="pad" id="score">' + m[keys].points +
+                    '</td><td class="pad" id="netScore">' + m[keys].netScore +
+                    '</td><td class="pad" id="kills">' + m[keys].kills +
+                    '<td class="pad" id="deaths">' + m[keys].deaths +
                     '</td></tr>').appendTo($(Team1));
             }
-        });
-        event.teamTwo.members.forEach(function (member) {
-            if (member.kills > 0 || member.deaths > 0) {
-                $('<tr id="' + member.name +
-                    '"><td class="pad" class="pad" id="name">' + member.name +
-                    '</td><td class="pad" id="score">' + member.points +
-                    '</td><td class="pad" id="netScore">' + member.netScore +
-                    '</td><td class="pad" id="kills">' + member.kills +
-                    '<td class="pad" id="deaths">' + member.deaths +
+        }
+
+        m = event.teamTwo.members;
+        for (keys in m) {
+            if (m[keys].kills > 0 || m[keys].deaths > 0) {
+                $('<tr id="' + m[keys].name +
+                    '"><td class="pad" class="pad" id="name">' + m[keys].name +
+                    '</td><td class="pad" id="score">' + m[keys].points +
+                    '</td><td class="pad" id="netScore">' + m[keys].netScore +
+                    '</td><td class="pad" id="kills">' + m[keys].kills +
+                    '<td class="pad" id="deaths">' + m[keys].deaths +
                     '</td></tr>').appendTo($(Team2));
             }
-        });
+        }
     });
 });
 

@@ -6,7 +6,7 @@
 const app    = require('./app.js'),
       ps2ws  = require('./ps2ws.js'),
       fs     = require('fs'),
-      teams  = require('./team.js');
+      team  = require('./team.js');
 
 const t1Score   = __dirname + '/overlay/scoreT1.txt',
       t1Players = __dirname + '/overlay/playersT1.txt',
@@ -58,14 +58,14 @@ function initialise() {
 
 // Takes in the two team objects, writes the current scores
 function updateScoreOverlay() {
-    let one = playerNetscore(teams.getT1());
+    let one = playerNetscore(team.getT1());
     write(t1Players, one);
-    one = teams.getT1();
+    one = team.getT1();
     write(t1Score, one.points);
 
-    let two = playerNetscore(teams.getT2());
+    let two = playerNetscore(team.getT2());
     write(t2Players, two);
-    two = teams.getT2();
+    two = team.getT2();
     write(t2Score, two.points);
 }
 
@@ -145,8 +145,8 @@ function writeFinalStats() {
     const full = __dirname + '/match/' + round + '.txt',
           one  = __dirname + '/match/' + round + 'TeamOne.txt',
           two  = __dirname + '/match/' + round + 'TeamTwo.txt';
-    const t1 = playerStats(teams.getT1());
-    const t2 = playerStats(teams.getT2());
+    const t1 = playerStats(team.getT1());
+    const t2 = playerStats(team.getT2());
 
     write(full, 'Final Scores for this match:\n\n' + t1 + '\n\n' + t2);
     write(one, t1);
