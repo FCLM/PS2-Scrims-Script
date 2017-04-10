@@ -51,7 +51,7 @@ const alias = {
     }
 };
 
-async function fetchTeamData(teamTag, teamNumber) {
+async function fetchTeamData(teamTag) {
     return new Promise((resolve, reject) => {
         teamTag = teamTag.toLowerCase();
         const url = 'https://census.daybreakgames.com/s:' + api_key.KEY + '/get/ps2/outfit/?alias_lower='+ teamTag + '&c:resolve=leader(faction_id),member_character(name)&c:hide=time_created,time_created_date';
@@ -81,8 +81,7 @@ async function fetchTeamData(teamTag, teamNumber) {
                     faction : body.outfit_list[0].leader.faction_id,
                     members : teamPlayers
                 };
-                team.setTeam(obj, teamNumber);
-                resolve(true);
+                resolve(obj);
             }
         }).catch(function (err) { // Any HTTP status >= 400 falls here
             reject(err);

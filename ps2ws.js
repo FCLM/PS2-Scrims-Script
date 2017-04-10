@@ -174,7 +174,7 @@ function oneIvITwo (data, points, item) {
 }
 
 function twoIvIOne (data, points, item) {
-    team.twoIvIOne(data.character_id, data.character_id, points, item);
+    team.twoIvIOne(data.attacker_character_id, data.character_id, points, item);
     killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
@@ -315,9 +315,11 @@ function stopTheMatch() {
     timeCounter = 0;
 }
 
-function startUp() {
+function startUp(oneObj, twoObj) {
+    // Initialising items determines whether a match can go ahead as it pulls from the API each time so requires the API to be functional
     items.initialise().then(function() {
         console.log('=====================================================================================================================================');
+        team.setTeams(oneObj, twoObj);
         teamOneObject = team.getT1();
         teamTwoObject = team.getT2();
         createStream();
@@ -329,11 +331,9 @@ function startUp() {
         console.error(err);
     });
 }
-
-exports.startUp               = startUp;
-exports.createStream          = createStream;
-exports.stopTheMatch          = stopTheMatch;
 exports.getPointMaps          = getPointMaps;
 exports.updatePointMap        = updatePointMap;
 exports.individualPointUpdate = individualPointUpdate;
 exports.getRound              = getRound;
+exports.stopTheMatch          = stopTheMatch;
+exports.startUp               = startUp;

@@ -30,84 +30,45 @@ let t2 = {
     memberArray : []
 };
 
-function resetTeams() {
-    t1.alias = '';
-    t1.outfit_id = '';
-    t1.name = '';
-    t1.faction = '';
+function setTeams(one, two) {
+    t1.alias = one.alias;
+    t1.outfit_id = one.outfit_id;
+    t1.name = one.name;
+    t1.faction = one.faction;
     t1.points = 0;
     t1.netScore = 0;
     t1.kills = 0;
     t1.deaths = 0;
     t1.baseCaps = 0;
-    t1.members = {};
-    t1.memberArray = [];
-
-    t2.alias = '';
-    t2.outfit_id = '';
-    t2.name = '';
-    t2.faction = '';
-    t2.points = 0;
-    t2.netScore = 0;
-    t2.kills = 0;
-    t2.deaths = 0;
-    t2.baseCaps = 0;
-    t2.members = {};
-    t2.memberArray = [];
-}
-
-function setTeam(obj, team) {
-    if (team === 1) { setTeamOne(obj); }
-    else if (team === 2) { setTeamTwo(obj); }
-}
-
-function setTeamOne (obj) {
-    t1.alias = obj.alias;
-    t1.outfit_id = obj.outfit_id;
-    t1.name = obj.name;
-    t1.faction = obj.faction;
-    t1.points = 0;
-    t1.netScore = 0;
-    t1.kills = 0;
-    t1.deaths = 0;
-    t1.baseCaps = 0;
-    t1.memberArray = obj.members;
-    obj.members.forEach(function(member) {
-        let obj = {
+    t1.memberArray = one.members;
+    one.members.forEach(function(member) {
+        t1.members[member.character_id] = {
             name: member.name,
             points: 0,
             netScore: 0,
             kills: 0,
             deaths: 0
         };
-        if (!t1.members.hasOwnProperty(member.character_id)) {
-            t1.members[member.character_id] = obj;
-        }
     });
-}
 
-function setTeamTwo (obj) {
-    t2.alias = obj.alias;
-    t2.outfit_id = obj.outfit_id;
-    t2.name = obj.name;
-    t2.faction = obj.faction;
+    t2.alias = two.alias;
+    t2.outfit_id = two.outfit_id;
+    t2.name = two.name;
+    t2.faction = two.faction;
     t2.points = 0;
     t2.netScore = 0;
     t2.kills = 0;
     t2.deaths = 0;
     t2.baseCaps = 0;
-    t2.memberArray = obj.members;
-    obj.members.forEach(function(member) {
-        let obj = {
+    t2.memberArray = two.members;
+    two.members.forEach(function(member) {
+        t2.members[member.character_id] = {
             name: member.name,
             points: 0,
             netScore: 0,
             kills: 0,
             deaths: 0
         };
-        if (!t2.members.hasOwnProperty(member.character_id)) {
-            t2.members[member.character_id] = obj;
-        }
     });
 }
 
@@ -160,7 +121,7 @@ function oneSuicide(one, points) {
     t1.members[one].deaths++;
 
     // logging
-    console.log(t1.members[one].name + ' Killed himself -' + points);
+    console.log(t1.members[one].name + ' killed themselves ' + points);
     logScore();
 }
 
@@ -173,7 +134,7 @@ function twoSuicide(two, points) {
     t2.members[two].deaths++;
 
     //logging
-    console.log(t2.members[two].name + ' Killed himself ' + points);
+    console.log(t2.members[two].name + ' killed themselves ' + points);
     logScore();
 }
 
@@ -271,8 +232,7 @@ function logScore() {
     console.log(t1.points + ' ' + t2.points);
 }
 
-exports.resetTeams  = resetTeams;
-exports.setTeam     = setTeam;
+exports.setTeams    = setTeams;
 exports.getT1       = getT1;
 exports.getT2       = getT2;
 exports.oneIvITwo   = oneIvITwo;
