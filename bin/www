@@ -95,3 +95,6 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+console.log('Starting server...');
+console.log('Connect to website @ localhost:' + port);
