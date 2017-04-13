@@ -116,54 +116,54 @@ function dealWithTheData(raw) {
 
 function itsPlayerData(data) {
     // deals with adding points to the correct player & team
-    console.log(data);
+    //console.log(data);
     let item = items.lookupItem(data.attacker_weapon_id);
     let points = items.lookupPointsfromCategory(item.category_id);
-    if ((data.attacker_loadout_id === 7) || (data.attacker_loadout_id === 14) || (data.attacker_loadout_id === 21)) {
+    if ((data.attacker_loadout_id === '7') || (data.attacker_loadout_id === '14') || (data.attacker_loadout_id === '21')) {
         // Attacker using a max
-        if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
+        if ((data.character_loadout_id === '7') || (data.character_loadout_id === '14') || (data.character_loadout_id === '21')) {
             // Attacker used a max to kill a max
             points = pointMap['12'].points;
         } else {
             // max v infantry
             points = pointMap['11'].points;
         }
-    } else if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
+    } else if ((data.character_loadout_id === '7') || (data.character_loadout_id === '14') || (data.character_loadout_id === '21')) {
         // defender used a max
         points = pointMap['23'].points;
     }
     // Infantry v Infantry
     if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
-        console.log("one IVI two");
+        //console.log("one IVI two");
         oneIvITwo(data, points, item);
     } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
-        console.log("Two IVI one");
+        //console.log("Two IVI one");
         twoIvIOne(data, points, item);
     }
     // Suicides (loadout id 7/14/21 means it was a max that suicided)
     else if ((data.attacker_character_id === data.character_id) && (teamOneObject.members.hasOwnProperty(data.character_id))){
-        if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
+        if ((data.character_loadout_id === '7') || (data.character_loadout_id === '14') || (data.character_loadout_id === '21')) {
             points = pointMap['13'].points;
         } else {
             points = pointMap['22'].points;
         }
-        console.log("one suicide");
+        //console.log("one suicide");
         teamOneSuicide(data, points, item);
     } else if ((data.attacker_character_id === data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
-        if ((data.character_loadout_id === 7) || (data.character_loadout_id === 14) || (data.character_loadout_id === 21)) {
+        if ((data.character_loadout_id === '7') || (data.character_loadout_id === '14') || (data.character_loadout_id === '21')) {
             points = pointMap['13'].points;
         } else {
             points = pointMap['22'].points;
         }
-        console.log("two suicide");
+        //console.log("two suicide");
         teamTwoSuicide(data, points, item);
     }
     // Team Kills
     else if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
-        console.log("one tk");
+        //console.log("one tk");
         teamOneTeamkill(data, pointMap['21'].points, item);
     } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
-        console.log("two tk");
+        //console.log("two tk");
         teamTwoTeamkill(data, pointMap['21'].points, item);
     }
     overlay.updateScoreOverlay();
