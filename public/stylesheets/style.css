@@ -66,6 +66,12 @@
   overflow-y: auto;
 }
 
+#apiErrors {
+  text-align: left;
+  color: red;
+  font-style: italic;
+}
+
 /* Footer related styles (For credits)
 Slight hack (ends main page x pixels above, then puts footer there)
 -------------------------------------------------- */

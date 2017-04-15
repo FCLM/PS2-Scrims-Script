@@ -163,3 +163,40 @@ socket.on('connect', function() {
 });
 
 socket.emit('backchat', { obj: 'Admin - Web Connection' });
+function checkAPI() {
+    $.ajax({
+        url: "http://census.daybreakgames.com/get/ps2:v2/world/?c:limit=100",
+        dataType: 'jsonp'
+    }).done(function (data) {
+        if (data.error) {
+            $('<p>' + "API OFFLINE" + '</p>').appendTo($(apiErrors));
+        } else {
+           // Jaeger Online Status
+            if (data.world_list[0].state !== "online" && data.world_list[0].state !== "locked") {
+                $('<p>' + data.world_list[0].name.en + " : " + data.world_list[0].state + '</p>').appendTo($(apiErrors));
+            }
+            // Briggs Online Status
+            if (data.world_list[1].state !== "online") {
+                $('<p>' + data.world_list[1].name.en + " : " + data.world_list[1].state + '</p>').appendTo($(apiErrors));
+            }
+            // Emerald Online Status
+            if (data.world_list[2].state !== "online") {
+                $('<p>' + data.world_list[2].name.en + " : " + data.world_list[2].state + '</p>').appendTo($(apiErrors));
+            }
+            // Cobalt Online Status
+            if (data.world_list[3].state !== "online") {
+                $('<p>' + data.world_list[3].name.en + " : " + data.world_list[3].state + '</p>').appendTo($(apiErrors));
+            }
+            // Connery Online Status
+            if (data.world_list[4].state !== "online") {
+                $('<p>' + data.world_list[4].name.en + " : " + data.world_list[4].state + '</p>').appendTo($(apiErrors));
+            }
+            // Miller Online Status
+            if (data.world_list[5].state !== "online") {
+                $('<p>' + data.world_list[5].name.en + " : " + data.world_list[5].state + '</p>').appendTo($(apiErrors));
+            }
+        }
+    });
+}
+
+window.onload = checkAPI();
