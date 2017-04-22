@@ -49,7 +49,7 @@ module.exports = {
                 if (event.auth === password.KEY) {
                     if (running !== true) {
                         console.log('Admin entered New Round command, new round starting: ' + data);
-                        ps2ws.createStream();
+                        ps2ws.newRound();
                         running = true;
                     }
                     else {

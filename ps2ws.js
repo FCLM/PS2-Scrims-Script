@@ -344,9 +344,21 @@ function startUp(oneObj, twoObj) {
         console.error(err);
     });
 }
+
+function newRound() {
+    console.log('=====================================================================================================================================');
+    teamOneObject = team.getT1();
+    teamTwoObject = team.getT2();
+    createStream();
+    overlay.startKillfeed();
+    app.send('refresh', '');
+    socket.setRunning(true);
+}
+
 exports.getPointMaps          = getPointMaps;
 exports.updatePointMap        = updatePointMap;
 exports.individualPointUpdate = individualPointUpdate;
 exports.getRound              = getRound;
 exports.stopTheMatch          = stopTheMatch;
 exports.startUp               = startUp;
+exports.newRound              = newRound;
