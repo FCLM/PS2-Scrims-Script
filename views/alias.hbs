@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" style="min-height: 96%;">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{{ title }}</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="../stylesheets/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="page-header">
+    <h1 style="text-align: center">{{ title }}</h1>
+</div>
+
+<div id="adminPanel">
+    <div class="col-md-12" style="text-align: center">
+        <p class="inline">Password: </p> <input type="text" size="8" id="password">
+    </div>
+    <!-- Weapon Rules -->
+    <div>
+        <h3>Current Aliases:</h3>
+        <div class="table-responsive tableDiv">
+            <table class="table">
+                <thead>
+                <th>character_id</th>
+                <th>Actual Name</th>
+                <th>Alias</th>
+                </thead>
+                <tbody>
+                {{#each alias}}
+                    <tr>
+                        <td>{{this.character_id}}</td>
+                        <td>{{this.actual}}</td>
+                        <td>{{this.alias}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <p style="text-align: center">You can only edit the rule set when a match is NOT running</p>
+    <hr class="feature-divider">
+    <p>Created by Dylan C (DylanNZ), Jared H (MonoNZ) and Richard H (Dalordish) of
+        <a href="https://fifthcolumngaming.com">[FCLM] Fifth Column</a> ·
+        For any changes to the script send a message to DylanNZ on <a href="https://www.reddit.com/message/compose?to=Dylan_NZL">Reddit</a> ·
+        Credit to x who developed the original concept
+    </p>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="../js/adminControls.js"></script>
+</body>
+</html>

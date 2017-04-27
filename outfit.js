@@ -24,30 +24,14 @@ function removeNameParts(name) {
 
 // add the character ids and the desired name as well as the actual characters name for reference later
 // commas on all curly brackets except for the last set
-const alias = {
+let alias = {
     "1234564321" : {
         name : "example",
-        actual : "Not a Real Character"
-    },
-    "12345643221321" : {
-        name : "example2",
         actual : "Not a Real Character"
     },
     "5428285306548260065x" : {
         name : "Laser",
         actual : "FCLMxPractice1VS"
-    },
-    "5428285306548260161x" : {
-        name : "Powerdown",
-        actual : "FCLMxPractice2VS"
-    },
-    "5428285306548260257x" : {
-        name : "Narcasse",
-        actual : "FCLMxPractice3VS"
-    },
-    "5428285306548260353x" : {
-        name : "RHSixSixOne",
-        actual : "FCLMxPractice4VS"
     }
 };
 
@@ -88,5 +72,11 @@ async function fetchTeamData(teamTag) {
         });
     })
 }
-exports.fetchTeamData = fetchTeamData;
+
+function getAlias() {
+    return alias;
+}
+
+exports.fetchTeamData   = fetchTeamData;
 exports.removeNameParts = removeNameParts;
+exports.getAlias        = getAlias;

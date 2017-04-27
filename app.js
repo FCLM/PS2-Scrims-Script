@@ -13,6 +13,7 @@ const ps2ws         = require('./ps2ws.js'),
     routes        = require('./routes/index.js'),
     adminControls = require('./routes/admin.js'),
     rules         = require('./routes/rules.js'),
+    playerAlias   = require('./routes/alias.js'),
     api_key       = require('./api_key.js'),
     password      = require('./password.js'),
     team          = require('./team.js'),
@@ -47,6 +48,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/admin', adminControls);
 app.use('/rules', rules);
+app.use('/alias', playerAlias);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
