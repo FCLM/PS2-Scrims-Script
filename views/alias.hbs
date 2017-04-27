@@ -4,16 +4,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>{{ title }}</title>
+    <meta name="description" content="Scrim Tracker for Planetside 2">
+    <meta name="author" content="DylanNZ">
+    <title>Scrim Tracker Aliases</title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="../stylesheets/style.css" rel="stylesheet">
 </head>
 <body>
 <div class="page-header">
-    <h1 style="text-align: center">{{ title }}</h1>
+    <h1 style="text-align: center">PS2 Scrim Tracker Alias Editor</h1>
 </div>
 
 <div id="adminPanel">
@@ -21,14 +21,15 @@
         <p class="inline">Password: </p> <input type="text" size="8" id="password">
     </div>
     <!-- Weapon Rules -->
-    <div>
+    <div class="col-md-8">
         <h3>Current Aliases:</h3>
         <div class="table-responsive tableDiv">
             <table class="table">
                 <thead>
-                <th>character_id</th>
+                <th>Character ID</th>
                 <th>Actual Name</th>
                 <th>Alias</th>
+                <th></th>
                 </thead>
                 <tbody>
                 {{#each alias}}
@@ -36,11 +37,33 @@
                         <td>{{this.character_id}}</td>
                         <td>{{this.actual}}</td>
                         <td>{{this.alias}}</td>
+                        <td><input id="deleteAlias{{this.character_id}}" type="submit" value="Delete Alias" onclick="return submitForm(this)"></td>
                     </tr>
                 {{/each}}
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <div class="col-md-4">
+        <h3>Add alias:</h3>
+        <form id="addAlias">
+            <p class="inline">Character ID: </p><input type="text" size="20" id="character_id" placeholder="5428180936948328209">
+            <br><br>
+            <p class="inline">Actual Name: </p><input type="text" size="20" id="actual" placeholder="FCLMxPractice1">
+            <br><br>
+            <p class="inline">New Alias: </p><input type="text" size="20" id="alias" placeholder="DylanNZ">
+            <br><br>
+            <input id="aliasAdd" type="submit" value="Add New Alias" onclick="return submitForm(this)">
+        </form>
+        <hr class="feature-divider">
+        <p>Note: this only works if the character id is correct. Which you can find it in a few places but the easiest place id
+            to find it on the <a href="https://www.planetside2.com/players/">players site</a> where the character id
+            appears as the numbers in the URL</p>
+    </div>
+
+    <div class="col-md-12">
+
     </div>
 </div>
 

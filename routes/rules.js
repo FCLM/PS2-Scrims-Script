@@ -11,7 +11,6 @@ router.get('/', function(req, res, next) {
     const pointMap = ps2ws.getPointMaps();
     const pointMapName = pointMap.name;
     res.render('rules', {
-        title: 'PS2 Scrim Script: Admin Controls',
         catMapName: catMapName,
         catMap: catMap,
         pointMapName: pointMapName,

@@ -10,7 +10,6 @@ router.get('/', function(req, res, next) {
     const catMap = items.getCategoryMaps();
 
     res.render('admin', {
-        title: 'PS2 Scrim Script: Admin Controls',
         catMap: catMap.name,
         pointMap: pointMap.name
     });

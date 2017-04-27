@@ -17,10 +17,7 @@ router.get('/', function(req, res, next) {
         };
         alias.push(obj);
     }
-    res.render('alias', {
-        title: 'PS2 Scrim Script: Admin Controls',
-        alias: alias
-    });
+    res.render('alias', { alias: alias });
 });
 
 module.exports = router;
