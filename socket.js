@@ -2,10 +2,11 @@
  * Created by dylancross on 5/04/17.
  */
 const app = require('./app.js'),
-    team     = require('./team.js'),
-    password = require('./password.js'),
-    ps2ws    = require('./ps2ws.js'),
-    items     = require('./items.js');
+      team     = require('./team.js'),
+      outfit   = require('./outfit.js'),
+      password = require('./password.js'),
+      ps2ws    = require('./ps2ws.js'),
+      items    = require('./items.js');
 
 let running = false; // stores whether a match is running or not
 
@@ -113,6 +114,32 @@ module.exports = {
                 if (event.auth === password.KEY && running === false) {
                     console.log('Admin updated class rules: ' + data);
                     ps2ws.individualPointUpdate(event);
+                }
+            });
+
+            sock.on('addAlias', function (data) {
+                send('redirect', '');
+                const event = data.obj;
+                if (event.auth === password.KEY && running === false) {
+                    console.log('Admin updated aliases: ' + data);
+                    outfit.addAlias(event.character_id, event.name, event.alias);
+                }
+            });
+
+            sock.on('deleteAlias', function (data) {
+                send('redirect', '');
+                const event = data.obj;
+                if (event.auth === password.KEY && running === false) {
+                    console.log('Admin updated aliases: ' + data);
+                    outfit.deleteAlias(event.character_id);
+                }
+            });
+            sock.on('', function (data) {
+                send('redirect', '');
+                const event = data.obj;
+                if (event.auth === password.KEY && running === false) {
+                    console.log('Admin updated aliases: ' + data);
+
                 }
             });
         });

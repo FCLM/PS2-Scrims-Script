@@ -77,6 +77,27 @@ function getAlias() {
     return alias;
 }
 
+function addAlias(mID, mName, mAlias) {
+    // Check if the the id past is valid and that it doesn't exist
+    if (mID === "" || mID === undefined || alias.hasOwnProperty(mID)) { return; }
+    // Check the name is there
+    if (mName === "" || mName === undefined) { return; }
+    // Check the alias is there
+    if (mAlias === "" || mAlias === undefined) { return; }
+
+    alias[mID] = {
+        name : mName,
+        alias : mAlias
+    };
+}
+
+function deleteAlias(mID) {
+    if (mID === "" || mID === undefined || !alias.hasOwnProperty(mID)) { return; }
+    delete alias[mID];
+}
+
 exports.fetchTeamData   = fetchTeamData;
 exports.removeNameParts = removeNameParts;
 exports.getAlias        = getAlias;
+exports.addAlias        = addAlias;
+exports.deleteAlias     = deleteAlias;
