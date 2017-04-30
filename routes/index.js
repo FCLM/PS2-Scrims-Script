@@ -4,7 +4,7 @@ const io = require('socket.io');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'PlanetSide 2 Scrim Script' });
+    res.render('index', null);
 });
 
 module.exports = router;

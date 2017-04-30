@@ -47,6 +47,22 @@ function submitForm (button)
             reason: reason
         };
         socket.emit('adjust', { obj: obj});
+    } else if (button.value === "Add New Alias") {
+        pw = $('#password').val();
+        obj = {
+            auth: pw,
+            character_id: $('#character_id').val(),
+            name: $('#actual').val(),
+            alias: $('#alias').val()
+        };
+        socket.emit('addAlias', { obj : obj });
+    } else if (button.value === "Delete Alias") {
+        pw = $('#password').val();
+        obj = {
+            auth: pw,
+            character_id: button.id.substr(6)
+        };
+        socket.emit('deleteAlias', { obj: obj });
     }
     return false;
 }
