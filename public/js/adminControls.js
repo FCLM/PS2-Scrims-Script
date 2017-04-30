@@ -165,7 +165,7 @@ socket.on('connect', function() {
 socket.emit('backchat', { obj: 'Admin - Web Connection' });
 function checkAPI() {
     $.ajax({
-        url: "http://census.daybreakgames.com/get/ps2:v2/world/?c:limit=100",
+        url: "https://census.daybreakgames.com/get/ps2:v2/world/?c:limit=100",
         dataType: 'jsonp'
     }).done(function (data) {
         if (data.error) {
