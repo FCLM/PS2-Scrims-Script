@@ -193,39 +193,45 @@ function twoBaseCap(points) {
 // Adjust the scores, possibly due to sanctions imposed by an admin or other reasons...
 function adjustScore(team1, team2, reason) {
     if (team1 !== '' && t1.outfit_id !== '') {
-        t1.points += team1;
-        t1.netScore += team1;
-        t2.netScore -= team1;
-        // Check if team has already been sanctioned
-        if (!t1.members.hasOwnProperty(reason)) {
-            t1.members[reason].points += team1;
-            t1.members[reason].netScore += team1;
-        } else {
-            t1.members[reason] = {
-                name: reason,
-                points: team1,
-                netScore: team1,
-                kills: 0,
-                deaths: 0
-            };
+        if (!isNaN(team1)) {
+            team1 = parseInt(team1);
+            t1.points += team1;
+            t1.netScore += team1;
+            t2.netScore -= team1;
+            // Check if team has already been sanctioned
+            if (t1.members.hasOwnProperty(reason)) {
+                t1.members[reason].points += team1;
+                t1.members[reason].netScore += team1;
+            } else {
+                t1.members[reason] = {
+                    name: reason,
+                    points: team1,
+                    netScore: team1,
+                    kills: 0,
+                    deaths: 0
+                };
+            }
         }
     }
     if (team2 !== '' && t2.outfit_id !== '') {
-        t2.points += team2;
-        t2.netScore += team2;
-        t1.netScore -= team2;
-        // Check if team has already been sanctioned
-        if (!t2.members.hasOwnProperty(reason)) {
-            t2.members[reason].points += team2;
-            t2.members[reason].netScore += team2;
-        } else {
-            t2.members[reason] = {
-                name: reason,
-                points: team2,
-                netScore: team2,
-                kills: 0,
-                deaths: 0
-            };
+        if (!isNaN(team2)) {
+            team2 = parseInt(team2);
+            t2.points += team2;
+            t2.netScore += team2;
+            t1.netScore -= team2;
+            // Check if team has already been sanctioned
+            if (t2.members.hasOwnProperty(reason)) {
+                t2.members[reason].points += team2;
+                t2.members[reason].netScore += team2;
+            } else {
+                t2.members[reason] = {
+                    name: reason,
+                    points: team2,
+                    netScore: team2,
+                    kills: 0,
+                    deaths: 0
+                };
+            }
         }
     }
 }

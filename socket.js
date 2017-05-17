@@ -49,7 +49,7 @@ module.exports = {
                 const event = data.obj;
                 if (event.auth === password.KEY) {
                     if (running !== true) {
-                        console.log('Admin entered New Round command, new round starting: ' + data);
+                        console.log('Admin entered New Round command, new round starting: ' + JSON.stringify(event));
                         ps2ws.newRound();
                         running = true;
                     }
@@ -63,7 +63,7 @@ module.exports = {
                 send('redirect', '');
                 const event = data.obj;
                 if (event.auth === password.KEY) {
-                    console.log('Admin entered Stop command, match stopping: ' + data);
+                    console.log('Admin entered Stop command, match stopping: ' + JSON.stringify(event));
                     ps2ws.stopTheMatch();
                 }
             });
@@ -72,7 +72,7 @@ module.exports = {
                 send('redirect', '');
                 const event = data.obj;
                 if (event.auth === password.KEY) {
-                    console.log('Admin adjusted score: ' + data);
+                    console.log('Admin adjusted score: ' + JSON.stringify(event));
                     team.adjustScore(event.t1, event.t2, event.reason);
                 }
             });
@@ -84,7 +84,7 @@ module.exports = {
                     if (event.ruleset === "weaponThunderdome") { items.updateCategoryMap(0);  }
                     if (event.ruleset === "weaponEmerald") { items.updateCategoryMap(1); }
                     if (event.ruleset === "weaponOvO") { items.updateCategoryMap(2); }
-                    console.log('Admin set default weapon rules: ' + data);
+                    console.log('Admin set default weapon rules: ' + JSON.stringify(event));
                 }
             });
 
@@ -95,7 +95,7 @@ module.exports = {
                     if (event.ruleset === "classThunderdome") { ps2ws.updatePointMap(0); }
                     if (event.ruleset === "classEmerald") { ps2ws.updatePointMap(1); }
                     if (event.ruleset === "classOvO") { ps2ws.updatePointMap(2); }
-                    console.log('Admin set default class rules: ' + data);
+                    console.log('Admin set default class rules: ' + JSON.stringify(event));
                 }
             });
 
@@ -103,7 +103,7 @@ module.exports = {
                 send('redirect', '');
                 const event = data.obj;
                 if (event.auth === password.KEY && running === false) {
-                    console.log('Admin updated weapon rules ' + data);
+                    console.log('Admin updated weapon rules ' + JSON.stringify(event));
                     items.individualCategoryUpdate(event);
                 }
             });
@@ -112,7 +112,7 @@ module.exports = {
                 send('redirect', '');
                 const event = data.obj;
                 if (event.auth === password.KEY && running === false) {
-                    console.log('Admin updated class rules: ' + data);
+                    console.log('Admin updated class rules: ' + JSON.stringify(event));
                     ps2ws.individualPointUpdate(event);
                 }
             });
@@ -121,25 +121,17 @@ module.exports = {
                 send('redirect', '');
                 const event = data.obj;
                 if (event.auth === password.KEY && running === false) {
-                    console.log('Admin updated aliases: ' + data);
+                    console.log('Admin updated aliases: ' + JSON.stringify(event));
                     outfit.addAlias(event.character_id, event.name, event.alias);
                 }
             });
 
             sock.on('deleteAlias', function (data) {
-                send('redirect', '');
+                send('rerender', '');
                 const event = data.obj;
                 if (event.auth === password.KEY && running === false) {
-                    console.log('Admin updated aliases: ' + data);
+                    console.log('Admin updated aliases: ' + JSON.stringify(event));
                     outfit.deleteAlias(event.character_id);
-                }
-            });
-            sock.on('', function (data) {
-                send('redirect', '');
-                const event = data.obj;
-                if (event.auth === password.KEY && running === false) {
-                    console.log('Admin updated aliases: ' + data);
-
                 }
             });
         });

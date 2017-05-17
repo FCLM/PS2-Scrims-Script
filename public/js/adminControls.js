@@ -172,8 +172,13 @@ function valueChange(button) {
 
 socket.on('connect', function() {
     socket.on ('redirect', function() {
-        //redirect to index.hbs
+        //redirect to index.html
         console.log('Session started, redirecting to index.hbs');
+        window.location.replace("/");
+    });
+    socket.on ('rerender', function() {
+        // Refresh alias page to get the newly added alias.
+        console.log('Updating alias');
         window.location.replace("/");
     });
 });
