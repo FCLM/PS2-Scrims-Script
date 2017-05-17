@@ -78,60 +78,75 @@ module.exports = {
             });
 
             sock.on('weaponDefault', function (data) {
-                send('redirect', '');
                 const event = data.obj;
                 if (event.auth === password.KEY && running === false) {
+                    send('rerender', '');
                     if (event.ruleset === "weaponThunderdome") { items.updateCategoryMap(0);  }
                     if (event.ruleset === "weaponEmerald") { items.updateCategoryMap(1); }
                     if (event.ruleset === "weaponOvO") { items.updateCategoryMap(2); }
                     console.log('Admin set default weapon rules: ' + JSON.stringify(event));
+                } else {
+                    // wrong password redirect
+                    send('redirect', '');
                 }
             });
 
             sock.on('classDefault', function (data) {
-                send('redirect', '');
                 const event = data.obj;
                 if (event.auth === password.KEY && running === false) {
+                    send('rerender', '');
                     if (event.ruleset === "classThunderdome") { ps2ws.updatePointMap(0); }
                     if (event.ruleset === "classEmerald") { ps2ws.updatePointMap(1); }
                     if (event.ruleset === "classOvO") { ps2ws.updatePointMap(2); }
                     console.log('Admin set default class rules: ' + JSON.stringify(event));
+                } else {
+                    // wrong password redirect
+                    send('redirect', '');
                 }
             });
 
             sock.on('weaponUpdate', function (data) {
-                send('redirect', '');
                 const event = data.obj;
                 if (event.auth === password.KEY && running === false) {
+                    send('rerender', '');
                     console.log('Admin updated weapon rules ' + JSON.stringify(event));
                     items.individualCategoryUpdate(event);
                 }
             });
 
             sock.on('classUpdate', function (data) {
-                send('redirect', '');
                 const event = data.obj;
                 if (event.auth === password.KEY && running === false) {
+                    send('rerender', '');
                     console.log('Admin updated class rules: ' + JSON.stringify(event));
                     ps2ws.individualPointUpdate(event);
+                } else {
+                    // wrong password redirect
+                    send('redirect', '');
                 }
             });
 
             sock.on('addAlias', function (data) {
-                send('rerender', '');
                 const event = data.obj;
                 if (event.auth === password.KEY && running === false) {
+                    send('rerender', '');
                     console.log('Admin updated aliases: ' + JSON.stringify(event));
                     outfit.addAlias(event.character_id, event.name, event.alias);
+                } else {
+                    // wrong password redirect
+                    send('redirect', '');
                 }
             });
 
             sock.on('deleteAlias', function (data) {
-                send('rerender', '');
                 const event = data.obj;
                 if (event.auth === password.KEY && running === false) {
+                    send('rerender', '');
                     console.log('Admin updated aliases: ' + JSON.stringify(event));
                     outfit.deleteAlias(event.character_id);
+                } else {
+                    // wrong password redirect
+                    send('redirect', '');
                 }
             });
         });
