@@ -118,7 +118,7 @@ module.exports = {
             });
 
             sock.on('addAlias', function (data) {
-                send('redirect', '');
+                send('rerender', '');
                 const event = data.obj;
                 if (event.auth === password.KEY && running === false) {
                     console.log('Admin updated aliases: ' + JSON.stringify(event));

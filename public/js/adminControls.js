@@ -179,7 +179,7 @@ socket.on('connect', function() {
     socket.on ('rerender', function() {
         // Refresh alias page to get the newly added alias.
         console.log('Updating alias');
-        window.location.replace("/");
+        window.location.reload();
     });
 });
 
