@@ -30,7 +30,7 @@ let alias = {
         actual : "Not a Real Character"
     },
     "5428285306548260065x" : {
-        name : "Laser",
+        name : "DylanNZ",
         actual : "FCLMxPractice1VS"
     }
 };
@@ -77,17 +77,17 @@ function getAlias() {
     return alias;
 }
 
-function addAlias(mID, mName, mAlias) {
+function addAlias(mID, mActual, mAlias) {
     // Check if the the id past is valid and that it doesn't exist
     if (mID === "" || mID === undefined || alias.hasOwnProperty(mID)) { return; }
     // Check the name is there
-    if (mName === "" || mName === undefined) { return; }
+    if (mActual === "" || mActual === undefined) { return; }
     // Check the alias is there
     if (mAlias === "" || mAlias === undefined) { return; }
 
     alias[mID] = {
-        name : mName,
-        alias : mAlias
+        name : mAlias,
+        actual : mActual
     };
 }
 
